@@ -196,24 +196,59 @@ function Blueprint() {
           </div>
         </div>
         <div className="relative aspect-square">
-          <div className="absolute inset-0 rounded-3xl border border-gold p-8 bg-card/50 backdrop-blur">
+          <div className="absolute inset-0 rounded-3xl border border-gold p-6 bg-card/50 backdrop-blur">
             <div className="h-full w-full rounded-2xl border border-gold/30 relative overflow-hidden">
               <div className="absolute inset-0 grid-noise opacity-60" />
+
+              {/* scanline */}
+              <div className="pointer-events-none absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-gold to-transparent animate-scanline" />
+
+              {/* orbital rings */}
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="relative">
-                  <div className="h-48 w-48 rounded-full border border-gold flex items-center justify-center">
-                    <div className="h-32 w-32 rounded-full bg-gold-gradient/20 border border-gold flex items-center justify-center">
-                      <div className="h-16 w-16 rounded-full bg-gold-gradient glow-gold" />
-                    </div>
+                <div className="absolute h-[88%] w-[88%] rounded-full border border-gold/15 animate-spin-slow">
+                  <span className="absolute -top-1 left-1/2 h-2 w-2 -translate-x-1/2 rounded-full bg-gold shadow-gold" />
+                </div>
+                <div className="absolute h-[70%] w-[70%] rounded-full border border-gold/25 animate-spin-reverse">
+                  <span className="absolute top-1/2 -right-1 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-gold-soft" />
+                </div>
+                <div className="absolute h-[54%] w-[54%] rounded-full border border-dashed border-gold/30 animate-spin-slow" style={{ animationDuration: '12s' }} />
+
+                {/* Logo core */}
+                <div className="relative z-10 flex flex-col items-center">
+                  <div className="relative">
+                    <div className="absolute inset-0 rounded-full bg-gold-gradient opacity-20 blur-2xl animate-ai-pulse" />
+                    <img
+                      src={aiLabsLogo.url}
+                      alt="Oryntal AI Labs"
+                      className="relative h-36 w-36 md:h-44 md:w-44 rounded-full object-cover ring-2 ring-gold animate-ai-pulse"
+                    />
                   </div>
-                  <div className="absolute -top-4 -left-4 h-3 w-3 bg-gold rounded-full animate-pulse" />
-                  <div className="absolute -bottom-4 -right-4 h-3 w-3 bg-gold rounded-full animate-pulse" />
+                  <div className="mt-5 text-center">
+                    <div className="font-display text-base md:text-lg text-gold tracking-[0.25em] uppercase">Oryntal AI Labs</div>
+                    <div className="mt-1 font-mono text-[10px] text-muted-foreground tracking-widest">R&D · NEURAL SYSTEMS</div>
+                  </div>
                 </div>
               </div>
+
+              {/* data ticker */}
+              <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between font-mono text-[9px] text-gold/80 tracking-widest">
+                <span className="animate-flicker">◉ MODEL.SYNC</span>
+                <span className="animate-flicker" style={{ animationDelay: '0.4s' }}>LLM · ACTIVE</span>
+                <span className="animate-flicker" style={{ animationDelay: '0.8s' }}>v.2026</span>
+              </div>
+
               <div className="absolute top-4 left-4 font-mono text-[10px] text-gold tracking-wider">SYS.01 / CORE</div>
-              <div className="absolute bottom-4 right-4 font-mono text-[10px] text-gold tracking-wider">v.2026</div>
+              <div className="absolute top-4 right-4 h-2 w-2 rounded-full bg-gold animate-pulse" />
             </div>
           </div>
+
+          {/* CTA below the panel */}
+          <Link
+            to="/contact"
+            className="absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-gold bg-background/90 backdrop-blur px-6 py-2.5 text-[11px] uppercase tracking-[0.25em] text-gold hover:bg-gold-gradient hover:text-primary-foreground transition-all shadow-gold"
+          >
+            For More AI Business LLM Models →
+          </Link>
         </div>
       </div>
     </section>
