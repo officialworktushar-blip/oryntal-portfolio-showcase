@@ -20,13 +20,75 @@ function HomePage() {
   return (
     <>
       <Hero />
+      <TrustedBy />
       <InfrastructureGrid />
       <Blueprint />
       <SelectedWorks />
-      <Milestones />
+      <Method />
       <FAQGrid />
       <CTA />
     </>
+  );
+}
+
+const clientsLocal = [
+  "Rahman Textiles Ltd.",
+  "Dhaka Mart BD",
+  "Bengal Foods",
+  "Padma Logistics",
+  "Nexus Pharma BD",
+  "Aarong Crafts Co.",
+];
+const clientsForeign = [
+  "Helix Networks — USA",
+  "Northwind Goods — UK",
+  "Atlas Energy — Canada",
+  "Lumen Co. — Germany",
+  "Crest Finance — Singapore",
+  "Sentinel B2B — Australia",
+];
+
+function TrustedBy() {
+  return (
+    <section className="py-20 border-t border-gold">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-10">
+          <div>
+            <div className="text-xs uppercase tracking-[0.3em] text-gold mb-2">§ 01.5 — Trusted Partners</div>
+            <h2 className="font-display text-3xl md:text-4xl">
+              GST registered. <span className="text-gold italic">Globally engaged.</span>
+            </h2>
+          </div>
+          <div className="font-mono text-xs text-muted-foreground border border-gold rounded-full px-4 py-1.5">
+            GSTIN · Verified Entity
+          </div>
+        </div>
+        <div className="grid md:grid-cols-2 gap-px bg-gold/15 border border-gold rounded-2xl overflow-hidden">
+          <div className="bg-background p-8">
+            <div className="font-mono text-[10px] uppercase tracking-widest text-gold mb-6">Local — Bangladesh & India</div>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
+              {clientsLocal.map((c) => (
+                <li key={c} className="flex items-center gap-2 text-sm">
+                  <span className="h-1.5 w-1.5 rounded-full bg-gold" />
+                  <span className="text-foreground/90">{c}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="bg-background p-8">
+            <div className="font-mono text-[10px] uppercase tracking-widest text-gold mb-6">International</div>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
+              {clientsForeign.map((c) => (
+                <li key={c} className="flex items-center gap-2 text-sm">
+                  <span className="h-1.5 w-1.5 rounded-full bg-gold" />
+                  <span className="text-foreground/90">{c}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -176,10 +238,48 @@ function Blueprint() {
 }
 
 const works = [
-  { t: "Helix AI Concierge", c: "AI · SaaS", d: "Multi-tenant agent platform handling 12k support tickets weekly.", tag: "AI" },
-  { t: "Northwind Commerce", c: "Shopify · Plus", d: "Headless re-platform, +47% conversion in 90 days.", tag: "Shopify" },
-  { t: "Pulse Ops Engine", c: "Automation", d: "Replaces 4 SaaS tools with one n8n-orchestrated pipeline.", tag: "Automation" },
-  { t: "Atlas Field App", c: "Mobile · iOS/Android", d: "Offline-first inspection app for 1,200 field engineers.", tag: "App" },
+  {
+    t: "Helix AI Concierge",
+    c: "AI · SaaS",
+    pain: "Support team drowning in 12k weekly tickets, 36-hour reply times.",
+    fix: "Built a multi-tenant LLM agent with RAG over their docs — now answers 78% of tickets in under 4 seconds.",
+    tag: "AI",
+  },
+  {
+    t: "Northwind Commerce",
+    c: "Shopify · Plus",
+    pain: "Legacy theme killed mobile conversion; checkout abandoned at 71%.",
+    fix: "Headless Shopify replatform with one-page checkout — conversion lifted 47% in 90 days.",
+    tag: "Shopify",
+  },
+  {
+    t: "Pulse Ops Engine",
+    c: "Automation",
+    pain: "Ops team paying for 4 SaaS tools and still copy-pasting between them.",
+    fix: "Consolidated into one n8n pipeline. $180k/yr saved, zero manual data entry.",
+    tag: "Automation",
+  },
+  {
+    t: "Atlas Field App",
+    c: "Mobile · iOS / Android",
+    pain: "1,200 field engineers losing inspection data when signal dropped.",
+    fix: "Offline-first React Native app with conflict-free sync — 4.8★ store rating in 6 months.",
+    tag: "App",
+  },
+  {
+    t: "Rahman Textiles Portal",
+    c: "Full Stack · ERP",
+    pain: "Order tracking lived in WhatsApp and Excel; nothing reconciled at month-end.",
+    fix: "Custom portal with live production tracking and GST-ready invoicing — closing books in 2 days, not 2 weeks.",
+    tag: "Full Stack",
+  },
+  {
+    t: "Bengal Foods Storefront",
+    c: "WordPress · WooCommerce",
+    pain: "Site loading in 8+ seconds; Google ads burning budget on bouncing traffic.",
+    fix: "Rebuilt on a performance-tuned WordPress stack — 1.4s LCP, ROAS up 2.3x.",
+    tag: "WordPress",
+  },
 ];
 
 function SelectedWorks() {
@@ -193,18 +293,27 @@ function SelectedWorks() {
           </div>
           <Link to="/projects" className="text-sm uppercase tracking-widest text-gold border-b border-gold pb-1">All Projects →</Link>
         </div>
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {works.map((w, i) => (
-            <div key={w.t} className="group relative overflow-hidden rounded-2xl border border-gold bg-card p-8 hover:-translate-y-1 transition-transform">
+            <div key={w.t} className="group relative overflow-hidden rounded-2xl border border-gold bg-card p-7 hover:-translate-y-1 transition-transform">
               <div className="absolute top-0 right-0 h-32 w-32 bg-gold-gradient opacity-5 blur-3xl group-hover:opacity-20 transition-opacity" />
-              <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center justify-between mb-6">
                 <span className="font-mono text-xs text-muted-foreground">CASE {String(i + 1).padStart(2, "0")}</span>
-                <span className="text-xs uppercase tracking-widest text-gold border border-gold rounded-full px-3 py-1">{w.tag}</span>
+                <span className="text-[10px] uppercase tracking-widest text-gold border border-gold rounded-full px-2.5 py-0.5">{w.tag}</span>
               </div>
               <div className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-2">{w.c}</div>
-              <h3 className="font-display text-3xl mb-3">{w.t}</h3>
-              <p className="text-muted-foreground">{w.d}</p>
-              <div className="mt-8 h-px bg-gold/30 group-hover:bg-gold transition-colors" />
+              <h3 className="font-display text-2xl mb-4">{w.t}</h3>
+              <div className="space-y-3">
+                <div>
+                  <div className="font-mono text-[10px] uppercase tracking-widest text-destructive/80 mb-1">Pain Point</div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{w.pain}</p>
+                </div>
+                <div>
+                  <div className="font-mono text-[10px] uppercase tracking-widest text-gold mb-1">What We Built</div>
+                  <p className="text-sm text-foreground/90 leading-relaxed">{w.fix}</p>
+                </div>
+              </div>
+              <div className="mt-6 h-px bg-gold/30 group-hover:bg-gold transition-colors" />
             </div>
           ))}
         </div>
@@ -213,38 +322,61 @@ function SelectedWorks() {
   );
 }
 
-const milestones = [
-  ["Week 0", "Kickoff", "Goals locked. Slack opened. Architecture sketched in 48 hours."],
-  ["Week 1–2", "Foundations", "Repo, CI, design system, integrations scaffolded and demoed."],
-  ["Week 3–6", "Build", "Feature sprints. Friday demos. Real users in staging by week four."],
-  ["Week 7", "Hardening", "Performance, security, observability — production-grade polish."],
-  ["Week 8", "Launch", "Coordinated rollout. We stay on call for two weeks post-ship."],
+const methodSteps = [
+  {
+    n: "01",
+    t: "Listen for the friction",
+    d: "Every business hides its pain points inside tiny phrases — 'we usually copy-paste this', 'the team waits until Friday', 'the spreadsheet always breaks'. We sit with founders and operators, watch real workflows, and write down every place time, money, or attention leaks.",
+  },
+  {
+    n: "02",
+    t: "Measure the cost",
+    d: "A pain point only matters if it costs something — hours, revenue, retention, or sanity. We attach a number to every issue we find, then rank them by ROI. We don't build what's interesting; we build what moves the metric.",
+  },
+  {
+    n: "03",
+    t: "Architect the system",
+    d: "This is where Oryntal AI Labs comes in. Our R&D arm prototypes the AI agents, automations, and integrations that will absorb the work. We sketch the system on paper before a single line of code — so you see the solution before you fund it.",
+  },
+  {
+    n: "04",
+    t: "Ship, measure, compound",
+    d: "We deploy in weeks, not quarters. Every system ships with telemetry baked in, so the impact is visible from day one. Then we compound — each automation becomes the foundation for the next.",
+  },
 ];
 
-function Milestones() {
+function Method() {
   return (
-    <section className="py-32 border-t border-gold">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="text-center max-w-2xl mx-auto mb-20">
-          <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">§ 05 — Delivery Milestones</div>
-          <h2 className="font-display text-4xl md:text-5xl">A linear process. <span className="text-gold italic">Zero theatre.</span></h2>
-        </div>
-        <div className="relative">
-          <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gold/30 hidden md:block" />
-          <div className="space-y-12">
-            {milestones.map((m, i) => (
-              <div key={m[1]} className={`grid md:grid-cols-2 gap-8 items-center ${i % 2 ? "md:flex-row-reverse" : ""}`}>
-                <div className={i % 2 ? "md:order-2 md:text-left" : "md:text-right"}>
-                  <div className="font-mono text-xs text-gold uppercase tracking-widest mb-2">{m[0]}</div>
-                  <h3 className="font-display text-3xl mb-2">{m[1]}</h3>
-                  <p className="text-muted-foreground max-w-md md:inline-block">{m[2]}</p>
-                </div>
-                <div className={`relative ${i % 2 ? "md:order-1" : ""}`}>
-                  <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-4 w-4 rounded-full bg-gold-gradient glow-gold" />
-                </div>
-              </div>
-            ))}
+    <section className="py-32 border-t border-gold relative overflow-hidden">
+      <div className="absolute inset-0 grid-noise opacity-20" />
+      <div className="relative mx-auto max-w-7xl px-6">
+        <div className="grid lg:grid-cols-3 gap-12 mb-16">
+          <div className="lg:col-span-2">
+            <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">§ 05 — How We Work</div>
+            <h2 className="font-display text-4xl md:text-5xl leading-tight">
+              We don't sell software. <br />
+              We find the <span className="text-gold italic">pain</span>, then build the <span className="text-gold italic">cure.</span>
+            </h2>
           </div>
+          <div className="space-y-4 text-muted-foreground leading-relaxed">
+            <p>
+              <span className="text-gold font-medium">Oryntal</span> is the studio — strategy, engineering, and delivery for clients who need a system shipped.
+            </p>
+            <p>
+              <span className="text-gold font-medium">Oryntal AI Labs</span> is our research arm — where we prototype the AI agents and automation patterns that later power those systems in production.
+            </p>
+          </div>
+        </div>
+        <div className="grid md:grid-cols-2 gap-px bg-gold/15 border border-gold rounded-2xl overflow-hidden">
+          {methodSteps.map((s) => (
+            <div key={s.n} className="bg-background p-8">
+              <div className="flex items-baseline gap-4 mb-4">
+                <span className="font-mono text-3xl text-gold">{s.n}</span>
+                <h3 className="font-display text-2xl">{s.t}</h3>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed">{s.d}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
