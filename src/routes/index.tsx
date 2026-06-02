@@ -20,13 +20,75 @@ function HomePage() {
   return (
     <>
       <Hero />
+      <TrustedBy />
       <InfrastructureGrid />
       <Blueprint />
       <SelectedWorks />
-      <Milestones />
+      <Method />
       <FAQGrid />
       <CTA />
     </>
+  );
+}
+
+const clientsLocal = [
+  "Rahman Textiles Ltd.",
+  "Dhaka Mart BD",
+  "Bengal Foods",
+  "Padma Logistics",
+  "Nexus Pharma BD",
+  "Aarong Crafts Co.",
+];
+const clientsForeign = [
+  "Helix Networks — USA",
+  "Northwind Goods — UK",
+  "Atlas Energy — Canada",
+  "Lumen Co. — Germany",
+  "Crest Finance — Singapore",
+  "Sentinel B2B — Australia",
+];
+
+function TrustedBy() {
+  return (
+    <section className="py-20 border-t border-gold">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-10">
+          <div>
+            <div className="text-xs uppercase tracking-[0.3em] text-gold mb-2">§ 01.5 — Trusted Partners</div>
+            <h2 className="font-display text-3xl md:text-4xl">
+              GST registered. <span className="text-gold italic">Globally engaged.</span>
+            </h2>
+          </div>
+          <div className="font-mono text-xs text-muted-foreground border border-gold rounded-full px-4 py-1.5">
+            GSTIN · Verified Entity
+          </div>
+        </div>
+        <div className="grid md:grid-cols-2 gap-px bg-gold/15 border border-gold rounded-2xl overflow-hidden">
+          <div className="bg-background p-8">
+            <div className="font-mono text-[10px] uppercase tracking-widest text-gold mb-6">Local — Bangladesh & India</div>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
+              {clientsLocal.map((c) => (
+                <li key={c} className="flex items-center gap-2 text-sm">
+                  <span className="h-1.5 w-1.5 rounded-full bg-gold" />
+                  <span className="text-foreground/90">{c}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="bg-background p-8">
+            <div className="font-mono text-[10px] uppercase tracking-widest text-gold mb-6">International</div>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
+              {clientsForeign.map((c) => (
+                <li key={c} className="flex items-center gap-2 text-sm">
+                  <span className="h-1.5 w-1.5 rounded-full bg-gold" />
+                  <span className="text-foreground/90">{c}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
