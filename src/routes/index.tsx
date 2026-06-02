@@ -51,12 +51,13 @@ function TrustedBy() {
   return (
     <section className="py-10 border-t border-gold/40">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="flex items-center gap-6 rounded-full border border-gold/40 bg-card/40 px-6 py-3 overflow-hidden">
+        <div className="flex items-center gap-6 rounded-full border border-gold/40 bg-card/40 px-6 py-4 overflow-hidden">
           <div className="shrink-0 pr-6 border-r border-gold/30">
-            <div className="text-sm font-display leading-tight">
-              Trusted by <span className="text-gold">50+</span>
+            <div className="font-display leading-tight">
+              <span className="text-xs uppercase tracking-widest text-muted-foreground">Trusted by</span>
               <br />
-              <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Organisations</span>
+              <span className="text-2xl md:text-3xl font-bold text-gold drop-shadow-sm">50+</span>
+              <span className="text-xs uppercase tracking-widest text-muted-foreground ml-1.5">Organisations</span>
             </div>
           </div>
           <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
