@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import logoMark from "@/assets/oryntal-mark.asset.json";
+import aiLabsLogo from "@/assets/oryntal-ai-labs-logo.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
