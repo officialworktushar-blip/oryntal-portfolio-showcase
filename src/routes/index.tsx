@@ -31,60 +31,42 @@ function HomePage() {
   );
 }
 
-const clientsIndia = [
-  "Rahman Textiles Ltd.",
-  "Indigo Mart India",
+const trustedBrands = [
+  "Rahman Textiles",
+  "Indigo Mart",
   "Bengal Foods",
   "Padma Logistics",
-  "Nexus Pharma India",
-  "Aarong Crafts Co.",
-];
-const clientsForeign = [
-  "Helix Networks — USA",
-  "Northwind Goods — UK",
-  "Atlas Energy — Canada",
-  "Lumen Co. — Germany",
-  "Crest Finance — Singapore",
-  "Sentinel B2B — Australia",
+  "Nexus Pharma",
+  "Aarong Crafts",
+  "Helix Networks",
+  "Northwind Goods",
+  "Atlas Energy",
+  "Lumen Co.",
+  "Crest Finance",
+  "Sentinel B2B",
 ];
 
 function TrustedBy() {
+  const loop = [...trustedBrands, ...trustedBrands];
   return (
-    <section className="py-20 border-t border-gold">
+    <section className="py-10 border-t border-gold/40">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-10">
-          <div>
-            <div className="text-xs uppercase tracking-[0.3em] text-gold mb-2">§ 01.5 — Trusted Partners</div>
-            <h2 className="font-display text-3xl md:text-4xl">
-              GST registered. <span className="text-gold italic">Globally engaged.</span>
-            </h2>
+        <div className="flex items-center gap-6 rounded-full border border-gold/40 bg-card/40 px-6 py-3 overflow-hidden">
+          <div className="shrink-0 pr-6 border-r border-gold/30">
+            <div className="text-sm font-display leading-tight">
+              Trusted by <span className="text-gold">50+</span>
+              <br />
+              <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Organisations</span>
+            </div>
           </div>
-          <div className="font-mono text-xs text-muted-foreground border border-gold rounded-full px-4 py-1.5">
-            GSTIN · Verified Entity
-          </div>
-        </div>
-        <div className="grid md:grid-cols-2 gap-px bg-gold/15 border border-gold rounded-2xl overflow-hidden">
-          <div className="bg-background p-8">
-            <div className="font-mono text-[10px] uppercase tracking-widest text-gold mb-6">India</div>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
-              {clientsIndia.map((c) => (
-                <li key={c} className="flex items-center gap-2 text-sm">
-                  <span className="h-1.5 w-1.5 rounded-full bg-gold" />
-                  <span className="text-foreground/90">{c}</span>
-                </li>
+          <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+            <div className="flex gap-12 animate-marquee whitespace-nowrap">
+              {loop.map((b, i) => (
+                <span key={i} className="font-display text-base md:text-lg text-foreground/70 hover:text-gold transition-colors">
+                  {b}
+                </span>
               ))}
-            </ul>
-          </div>
-          <div className="bg-background p-8">
-            <div className="font-mono text-[10px] uppercase tracking-widest text-gold mb-6">International</div>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
-              {clientsForeign.map((c) => (
-                <li key={c} className="flex items-center gap-2 text-sm">
-                  <span className="h-1.5 w-1.5 rounded-full bg-gold" />
-                  <span className="text-foreground/90">{c}</span>
-                </li>
-              ))}
-            </ul>
+            </div>
           </div>
         </div>
       </div>
