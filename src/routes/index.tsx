@@ -109,7 +109,7 @@ function Hero() {
         <div className="text-center max-w-5xl mx-auto">
           <div className="inline-flex items-center gap-2 rounded-full border border-gold px-4 py-1.5 mb-8 animate-float-up">
             <span className="h-1.5 w-1.5 rounded-full bg-gold animate-pulse" />
-            <span className="text-xs uppercase tracking-[0.3em] text-gold">Oryntal AI Labs</span>
+            <span className="text-xs uppercase tracking-[0.3em] text-gold">Oryntal Portfolio</span>
           </div>
           <h1 className="font-display text-5xl md:text-7xl lg:text-8xl leading-[1.05] animate-float-up">
             We architect <br />
