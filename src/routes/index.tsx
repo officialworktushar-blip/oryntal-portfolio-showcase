@@ -238,10 +238,48 @@ function Blueprint() {
 }
 
 const works = [
-  { t: "Helix AI Concierge", c: "AI · SaaS", d: "Multi-tenant agent platform handling 12k support tickets weekly.", tag: "AI" },
-  { t: "Northwind Commerce", c: "Shopify · Plus", d: "Headless re-platform, +47% conversion in 90 days.", tag: "Shopify" },
-  { t: "Pulse Ops Engine", c: "Automation", d: "Replaces 4 SaaS tools with one n8n-orchestrated pipeline.", tag: "Automation" },
-  { t: "Atlas Field App", c: "Mobile · iOS/Android", d: "Offline-first inspection app for 1,200 field engineers.", tag: "App" },
+  {
+    t: "Helix AI Concierge",
+    c: "AI · SaaS",
+    pain: "Support team drowning in 12k weekly tickets, 36-hour reply times.",
+    fix: "Built a multi-tenant LLM agent with RAG over their docs — now answers 78% of tickets in under 4 seconds.",
+    tag: "AI",
+  },
+  {
+    t: "Northwind Commerce",
+    c: "Shopify · Plus",
+    pain: "Legacy theme killed mobile conversion; checkout abandoned at 71%.",
+    fix: "Headless Shopify replatform with one-page checkout — conversion lifted 47% in 90 days.",
+    tag: "Shopify",
+  },
+  {
+    t: "Pulse Ops Engine",
+    c: "Automation",
+    pain: "Ops team paying for 4 SaaS tools and still copy-pasting between them.",
+    fix: "Consolidated into one n8n pipeline. $180k/yr saved, zero manual data entry.",
+    tag: "Automation",
+  },
+  {
+    t: "Atlas Field App",
+    c: "Mobile · iOS / Android",
+    pain: "1,200 field engineers losing inspection data when signal dropped.",
+    fix: "Offline-first React Native app with conflict-free sync — 4.8★ store rating in 6 months.",
+    tag: "App",
+  },
+  {
+    t: "Rahman Textiles Portal",
+    c: "Full Stack · ERP",
+    pain: "Order tracking lived in WhatsApp and Excel; nothing reconciled at month-end.",
+    fix: "Custom portal with live production tracking and GST-ready invoicing — closing books in 2 days, not 2 weeks.",
+    tag: "Full Stack",
+  },
+  {
+    t: "Bengal Foods Storefront",
+    c: "WordPress · WooCommerce",
+    pain: "Site loading in 8+ seconds; Google ads burning budget on bouncing traffic.",
+    fix: "Rebuilt on a performance-tuned WordPress stack — 1.4s LCP, ROAS up 2.3x.",
+    tag: "WordPress",
+  },
 ];
 
 function SelectedWorks() {
