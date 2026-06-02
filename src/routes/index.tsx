@@ -54,10 +54,10 @@ function TrustedBy() {
         <div className="flex items-center gap-6 rounded-full border border-gold/40 bg-card/40 px-6 py-4 overflow-hidden">
           <div className="shrink-0 pr-6 border-r border-gold/30">
             <div className="font-display leading-tight">
-              <span className="text-xs uppercase tracking-widest text-muted-foreground">Trusted by</span>
+              <span className="text-sm uppercase tracking-widest text-muted-foreground font-semibold">Trusted by</span>
               <br />
-              <span className="text-2xl md:text-3xl font-bold text-gold drop-shadow-sm">50+</span>
-              <span className="text-xs uppercase tracking-widest text-muted-foreground ml-1.5">Organisations</span>
+              <span className="text-3xl md:text-4xl font-bold text-gold drop-shadow-sm">50+</span>
+              <span className="text-sm uppercase tracking-widest text-muted-foreground font-semibold ml-2">Organisations</span>
             </div>
           </div>
           <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
@@ -86,8 +86,8 @@ function Hero() {
       <div className="absolute inset-0 grid-noise opacity-40" />
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-gold-gradient opacity-[0.08] blur-3xl" />
       <div className="relative mx-auto max-w-7xl px-6 pt-32 pb-32 md:pt-40 md:pb-40">
-        <div className="flex justify-center mb-8 animate-float-up">
-          <img src={logoMark.url} alt="Oryntal" className="h-20 w-20 rounded-full ring-2 ring-gold glow-gold" />
+        <div className="flex justify-center mb-10 animate-float-up">
+          <img src={logoMark.url} alt="Oryntal" className="h-32 w-32 rounded-full ring-[3px] ring-gold glow-gold shadow-[0_0_40px_rgba(217,185,120,0.35)]" />
         </div>
         <div className="text-center max-w-5xl mx-auto">
           <div className="inline-flex items-center gap-2 rounded-full border border-gold px-4 py-1.5 mb-8 animate-float-up">
