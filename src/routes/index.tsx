@@ -31,12 +31,12 @@ function HomePage() {
   );
 }
 
-const clientsLocal = [
+const clientsIndia = [
   "Rahman Textiles Ltd.",
-  "Dhaka Mart BD",
+  "Indigo Mart India",
   "Bengal Foods",
   "Padma Logistics",
-  "Nexus Pharma BD",
+  "Nexus Pharma India",
   "Aarong Crafts Co.",
 ];
 const clientsForeign = [
@@ -65,9 +65,9 @@ function TrustedBy() {
         </div>
         <div className="grid md:grid-cols-2 gap-px bg-gold/15 border border-gold rounded-2xl overflow-hidden">
           <div className="bg-background p-8">
-            <div className="font-mono text-[10px] uppercase tracking-widest text-gold mb-6">Local — Bangladesh & India</div>
+            <div className="font-mono text-[10px] uppercase tracking-widest text-gold mb-6">India</div>
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
-              {clientsLocal.map((c) => (
+              {clientsIndia.map((c) => (
                 <li key={c} className="flex items-center gap-2 text-sm">
                   <span className="h-1.5 w-1.5 rounded-full bg-gold" />
                   <span className="text-foreground/90">{c}</span>
@@ -304,9 +304,9 @@ function SelectedWorks() {
               <div className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-2">{w.c}</div>
               <h3 className="font-display text-2xl mb-4">{w.t}</h3>
               <div className="space-y-3">
-                <div>
+                <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-3">
                   <div className="font-mono text-[10px] uppercase tracking-widest text-destructive/80 mb-1">Pain Point</div>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{w.pain}</p>
+                  <p className="text-sm font-semibold text-foreground leading-relaxed">{w.pain}</p>
                 </div>
                 <div>
                   <div className="font-mono text-[10px] uppercase tracking-widest text-gold mb-1">What We Built</div>
