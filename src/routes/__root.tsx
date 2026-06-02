@@ -79,14 +79,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { title: "Oryntal AI Labs — Engineering Intelligent Systems" },
+      { name: "description", content: "Oryntal is a digital agency building AI, automation, full-stack, Shopify, WordPress and mobile products for ambitious teams." },
+      { name: "author", content: "Oryntal AI Labs" },
+      { property: "og:title", content: "Oryntal AI Labs" },
+      { property: "og:description", content: "AI, automation, and full-stack craft for ambitious teams." },
     ],
     links: [
       {
@@ -120,8 +117,11 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <Header />
+      <main className="pt-16 min-h-screen">
+        <Outlet />
+      </main>
+      <Footer />
     </QueryClientProvider>
   );
 }
