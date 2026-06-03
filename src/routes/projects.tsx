@@ -1,5 +1,40 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import meet2pro from "@/assets/meet2pro.png.asset.json";
+import qr2review from "@/assets/qr2review.png.asset.json";
+import aiSos from "@/assets/ai-sos.png.asset.json";
+
+interface LLMModel {
+  name: string;
+  tagline: string;
+  image: string;
+  painPoint: string;
+  solution: string;
+}
+
+const llmModels: LLMModel[] = [
+  {
+    name: "Meet2Pro",
+    tagline: "From Conversation to Action",
+    image: meet2pro.url,
+    painPoint: "Consultants and agency owners lose hours every week turning meeting notes into proposals and follow-up emails — and critical details slip through the cracks.",
+    solution: "Transcribes any meeting, extracts key points and decisions, then instantly generates professional proposals and follow-up emails ready to send.",
+  },
+  {
+    name: "QR2Review",
+    tagline: "Smart Reviews. Better Ranking.",
+    image: qr2review.url,
+    painPoint: "Local businesses struggle to collect genuine Google reviews — customers forget, the process is friction-heavy, and search ranking suffers as a result.",
+    solution: "One QR scan, pick a star rating, and AI writes a natural, genuine review posted directly to your Google Business Profile in a single click.",
+  },
+  {
+    name: "AI SOS",
+    tagline: "Your safety. Our priority.",
+    image: aiSos.url,
+    painPoint: "In an emergency, every second counts — but people can't always reach a phone, dial a number, or type a message when they need help most.",
+    solution: "Listens in real time for distress sounds, then instantly shares your live location with trusted contacts or emergency services. Silent. Automatic. Always on.",
+  },
+];
 
 export const Route = createFileRoute("/projects")({
   head: () => ({
