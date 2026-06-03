@@ -88,7 +88,7 @@ function ContactPage() {
                   {budgets.map((b) => (
                     <label key={b} className="cursor-pointer">
                       <input type="radio" name="budget" value={b} className="peer sr-only" />
-                      <span className="block px-4 py-2 rounded-full text-xs uppercase tracking-widest border border-gold text-muted-foreground hover:text-gold peer-checked:bg-gold-gradient peer-checked:text-primary-foreground peer-checked:border-transparent peer-checked:hover:text-primary-foreground peer-checked:hover:brightness-110 transition-all">
+                      <span className="block px-4 py-2 rounded-full text-xs uppercase tracking-widest border border-gold text-muted-foreground hover:text-gold hover:border-gold hover:bg-gold/10 peer-checked:bg-gold-gradient peer-checked:text-primary-foreground peer-checked:border-transparent peer-checked:hover:text-primary-foreground peer-checked:hover:brightness-110 transition-all">
                         {b}
                       </span>
                     </label>
