@@ -1,5 +1,40 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import meet2pro from "@/assets/meet2pro.png.asset.json";
+import qr2review from "@/assets/qr2review.png.asset.json";
+import aiSos from "@/assets/ai-sos.png.asset.json";
+
+interface LLMModel {
+  name: string;
+  tagline: string;
+  image: string;
+  painPoint: string;
+  solution: string;
+}
+
+const llmModels: LLMModel[] = [
+  {
+    name: "Meet2Pro",
+    tagline: "From Conversation to Action",
+    image: meet2pro.url,
+    painPoint: "Consultants and agency owners lose hours every week turning meeting notes into proposals and follow-up emails — and critical details slip through the cracks.",
+    solution: "Transcribes any meeting, extracts key points and decisions, then instantly generates professional proposals and follow-up emails ready to send.",
+  },
+  {
+    name: "QR2Review",
+    tagline: "Smart Reviews. Better Ranking.",
+    image: qr2review.url,
+    painPoint: "Local businesses struggle to collect genuine Google reviews — customers forget, the process is friction-heavy, and search ranking suffers as a result.",
+    solution: "One QR scan, pick a star rating, and AI writes a natural, genuine review posted directly to your Google Business Profile in a single click.",
+  },
+  {
+    name: "AI SOS",
+    tagline: "Your safety. Our priority.",
+    image: aiSos.url,
+    painPoint: "In an emergency, every second counts — but people can't always reach a phone, dial a number, or type a message when they need help most.",
+    solution: "Listens in real time for distress sounds, then instantly shares your live location with trusted contacts or emergency services. Silent. Automatic. Always on.",
+  },
+];
 
 export const Route = createFileRoute("/projects")({
   head: () => ({
@@ -78,6 +113,66 @@ function ProjectsPage() {
         </div>
       </section>
 
+      {(filter === "All" || filter === "AI") && (
+        <section className="py-20 border-b border-gold/40 relative overflow-hidden">
+          <div className="absolute inset-0 grid-noise opacity-20 pointer-events-none" />
+          <div className="relative mx-auto max-w-7xl px-6">
+            <div className="flex items-end justify-between flex-wrap gap-4 mb-12">
+              <div>
+                <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">Oryntal AI Labs · LLM Models</div>
+                <h2 className="font-display text-4xl md:text-5xl leading-tight">
+                  Production-grade <span className="text-gold italic">AI products.</span>
+                </h2>
+              </div>
+              <p className="text-sm text-muted-foreground max-w-xs">
+                A growing family of business-ready LLM models built in-house. <span className="text-gold">More models coming soon.</span>
+              </p>
+            </div>
+
+            <div className="grid lg:grid-cols-3 gap-6">
+              {llmModels.map((m) => (
+                <article key={m.name} className="group relative overflow-hidden rounded-2xl border border-gold bg-card hover:-translate-y-1 transition-transform flex flex-col">
+                  <div className="relative aspect-[3/4] overflow-hidden border-b border-gold/40 bg-background">
+                    <img
+                      src={m.image}
+                      alt={`${m.name} — ${m.tagline}`}
+                      loading="lazy"
+                      className="absolute inset-0 h-full w-full object-cover group-hover:scale-[1.02] transition-transform duration-700"
+                    />
+                  </div>
+                  <div className="p-6 flex-1 flex flex-col">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-[10px] uppercase tracking-widest text-gold border border-gold rounded-full px-2.5 py-0.5">LLM Model</span>
+                      <span className="font-mono text-xs text-muted-foreground">2026</span>
+                    </div>
+                    <h3 className="font-display text-2xl mb-1">{m.name}</h3>
+                    <p className="text-sm text-gold mb-5">{m.tagline}</p>
+                    <div className="space-y-4 text-sm leading-relaxed">
+                      <div>
+                        <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">The Pain</div>
+                        <p className="text-foreground/80">{m.painPoint}</p>
+                      </div>
+                      <div>
+                        <div className="text-[10px] uppercase tracking-widest text-gold mb-1">The Fix</div>
+                        <p className="text-foreground/80">{m.solution}</p>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              ))}
+
+              <article className="group relative overflow-hidden rounded-2xl border border-dashed border-gold/60 bg-gradient-to-br from-gold/5 to-transparent p-8 flex flex-col items-center justify-center text-center min-h-[280px] lg:col-span-3">
+                <div className="text-5xl mb-4 animate-ai-pulse">✦</div>
+                <h3 className="font-display text-2xl md:text-3xl mb-2">More AI Models Coming Soon</h3>
+                <p className="text-muted-foreground max-w-md">
+                  We're shipping new business-ready LLM models every quarter. Have a workflow you want automated? <a href="/contact" className="text-gold hover:underline">Tell us about it →</a>
+                </p>
+              </article>
+            </div>
+          </div>
+        </section>
+      )}
+
       <section className="py-20">
         <div className="mx-auto max-w-7xl px-6">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -103,6 +198,7 @@ function ProjectsPage() {
           )}
         </div>
       </section>
+
     </>
   );
 }
