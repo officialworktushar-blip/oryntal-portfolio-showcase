@@ -60,15 +60,20 @@ function TrustedBy() {
               <span className="block text-sm md:text-base uppercase tracking-[0.2em] text-muted-foreground font-bold mt-1">Organisations</span>
             </div>
           </div>
-          <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
-            <div className="flex gap-12 animate-marquee whitespace-nowrap">
+          <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+            <div className="flex gap-5 md:gap-6 animate-marquee whitespace-nowrap">
               {loop.map((b, i) => (
-                <span key={i} className="font-display text-lg md:text-xl text-foreground/70 hover:text-gold transition-colors">
+                <span
+                  key={i}
+                  className="inline-flex items-center rounded-full border border-gold/50 bg-gradient-to-b from-gold/15 to-gold/5 px-5 py-2.5 font-display text-lg md:text-xl font-semibold text-gold tracking-wide shadow-[0_0_18px_-6px_rgba(217,185,120,0.45)] hover:from-gold/30 hover:to-gold/10 hover:text-foreground hover:border-gold transition-all"
+                >
+                  <span className="mr-2 h-1.5 w-1.5 rounded-full bg-gold animate-pulse" />
                   {b}
                 </span>
               ))}
             </div>
           </div>
+
         </div>
       </div>
     </section>
