@@ -50,21 +50,20 @@ const trustedBrands = [
 function TrustedBy() {
   const loop = [...trustedBrands, ...trustedBrands];
   return (
-    <section className="py-10 border-t border-gold/40">
+    <section className="py-14 md:py-20 border-t border-gold/40">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="flex items-center gap-6 rounded-full border border-gold/40 bg-card/40 px-6 py-4 overflow-hidden">
-          <div className="shrink-0 pr-6 border-r border-gold/30">
-            <div className="font-display leading-tight">
-              <span className="text-sm uppercase tracking-widest text-muted-foreground font-semibold">Trusted by</span>
-              <br />
-              <span className="text-3xl md:text-4xl font-bold text-gold drop-shadow-sm">50+</span>
-              <span className="text-sm uppercase tracking-widest text-muted-foreground font-semibold ml-2">Organisations</span>
+        <div className="flex items-center gap-6 md:gap-8 rounded-full border-2 border-gold bg-card/60 px-8 md:px-10 py-6 md:py-8 overflow-hidden shadow-gold">
+          <div className="shrink-0 pr-6 md:pr-8 border-r-2 border-gold/40">
+            <div className="leading-tight">
+              <span className="block text-sm md:text-base uppercase tracking-[0.2em] text-muted-foreground font-bold">Trusted by</span>
+              <span className="block text-5xl md:text-6xl lg:text-7xl font-black text-gold drop-shadow-sm leading-none mt-1">50+</span>
+              <span className="block text-sm md:text-base uppercase tracking-[0.2em] text-muted-foreground font-bold mt-1">Organisations</span>
             </div>
           </div>
           <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
             <div className="flex gap-12 animate-marquee whitespace-nowrap">
               {loop.map((b, i) => (
-                <span key={i} className="font-display text-base md:text-lg text-foreground/70 hover:text-gold transition-colors">
+                <span key={i} className="font-display text-lg md:text-xl text-foreground/70 hover:text-gold transition-colors">
                   {b}
                 </span>
               ))}

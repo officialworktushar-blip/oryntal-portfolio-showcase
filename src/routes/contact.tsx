@@ -64,36 +64,36 @@ function ContactPage() {
 
                 <div>
                   <label className="block text-xs uppercase tracking-widest text-gold mb-3">What do you need?</label>
-                  <div className="flex flex-wrap gap-2">
-                    {services.map((s) => (
-                      <button
-                        type="button"
-                        key={s}
-                        onClick={() => toggle(s)}
-                        className={`px-4 py-2 rounded-full text-xs uppercase tracking-widest border transition-all ${
-                          selected.includes(s)
-                            ? "bg-gold-gradient text-primary-foreground border-transparent"
-                            : "border-gold text-muted-foreground hover:text-gold"
-                        }`}
-                      >
-                        {s}
-                      </button>
-                    ))}
-                  </div>
+                <div className="flex flex-wrap gap-2">
+                  {services.map((s) => (
+                    <button
+                      type="button"
+                      key={s}
+                      onClick={() => toggle(s)}
+                      className={`px-4 py-2 rounded-full text-xs uppercase tracking-widest border transition-all ${
+                        selected.includes(s)
+                          ? "bg-gold-gradient text-primary-foreground border-transparent hover:brightness-110"
+                          : "border-gold text-muted-foreground hover:text-gold"
+                      }`}
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
                 </div>
 
                 <div>
                   <label className="block text-xs uppercase tracking-widest text-gold mb-3">Budget</label>
-                  <div className="flex flex-wrap gap-2">
-                    {budgets.map((b) => (
-                      <label key={b} className="cursor-pointer">
-                        <input type="radio" name="budget" value={b} className="peer sr-only" />
-                        <span className="block px-4 py-2 rounded-full text-xs uppercase tracking-widest border border-gold text-muted-foreground hover:text-gold peer-checked:bg-gold-gradient peer-checked:text-primary-foreground peer-checked:border-transparent transition-all">
-                          {b}
-                        </span>
-                      </label>
-                    ))}
-                  </div>
+                <div className="flex flex-wrap gap-2">
+                  {budgets.map((b) => (
+                    <label key={b} className="cursor-pointer">
+                      <input type="radio" name="budget" value={b} className="peer sr-only" />
+                      <span className="block px-4 py-2 rounded-full text-xs uppercase tracking-widest border border-gold text-muted-foreground hover:text-gold peer-checked:bg-gold-gradient peer-checked:text-primary-foreground peer-checked:border-transparent peer-checked:hover:text-primary-foreground peer-checked:hover:brightness-110 transition-all">
+                        {b}
+                      </span>
+                    </label>
+                  ))}
+                </div>
                 </div>
 
                 <div>
