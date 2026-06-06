@@ -9,6 +9,28 @@ import ragVoice from "@/assets/rag-voice.jpg.asset.json";
 import telegramAgent from "@/assets/telegram-agent.jpg.asset.json";
 import linkedinAutomation from "@/assets/linkedin-automation.jpg.asset.json";
 import socialMediaManager from "@/assets/social-media-manager.jpg.asset.json";
+import eshopwebStore from "@/assets/site-shots/eshopweb-store.asset.json";
+import freezeAndFeast from "@/assets/site-shots/freeze-and-feast.asset.json";
+import vanSeatCoversUk from "@/assets/site-shots/van-seat-covers-uk.asset.json";
+import varmaSteels from "@/assets/site-shots/varma-steels.asset.json";
+import jaanisesConstruction from "@/assets/site-shots/jaanises-construction.asset.json";
+import oneMedicalAesthetics from "@/assets/site-shots/one-medical-aesthetics.asset.json";
+import ascentioShot from "@/assets/site-shots/ascentio.asset.json";
+import kilkennyCycleClinic from "@/assets/site-shots/kilkenny-cycle-clinic.asset.json";
+import theKaftanCompany from "@/assets/site-shots/the-kaftan-company.asset.json";
+import netoseShot from "@/assets/site-shots/netose.asset.json";
+import sacredSpaceWithArushi from "@/assets/site-shots/sacred-space-with-arushi.asset.json";
+import bhrcDominion from "@/assets/site-shots/bhrc-dominion.asset.json";
+import zenSupplyChain from "@/assets/site-shots/zen-supply-chain.asset.json";
+import eleganceUniverse from "@/assets/site-shots/elegance-universe.asset.json";
+import annaJanelleJewelry from "@/assets/site-shots/anna-janelle-jewelry.asset.json";
+import clouShot from "@/assets/site-shots/clou.asset.json";
+import bonusBank from "@/assets/site-shots/bonus-bank.asset.json";
+import britishRacingHallOfFame from "@/assets/site-shots/british-racing-hall-of-fame.asset.json";
+import antoineLours from "@/assets/site-shots/antoine-lours.asset.json";
+import nightfallGroup from "@/assets/site-shots/nightfall-group.asset.json";
+import hiltonHyland from "@/assets/site-shots/hilton-hyland.asset.json";
+import blueMarineFoundation from "@/assets/site-shots/blue-marine-foundation.asset.json";
 
 interface LLMModel {
   name: string;
@@ -23,22 +45,28 @@ const llmModels: LLMModel[] = [
     name: "Meet2Pro",
     tagline: "From Conversation to Action",
     image: meet2pro.url,
-    painPoint: "Consultants and agency owners lose hours every week turning meeting notes into proposals and follow-up emails — and critical details slip through the cracks.",
-    solution: "Transcribes any meeting, extracts key points and decisions, then instantly generates professional proposals and follow-up emails ready to send.",
+    painPoint:
+      "Consultants and agency owners lose hours every week turning meeting notes into proposals and follow-up emails — and critical details slip through the cracks.",
+    solution:
+      "Transcribes any meeting, extracts key points and decisions, then instantly generates professional proposals and follow-up emails ready to send.",
   },
   {
     name: "QR2Review",
     tagline: "Smart Reviews. Better Ranking.",
     image: qr2review.url,
-    painPoint: "Local businesses struggle to collect genuine Google reviews — customers forget, the process is friction-heavy, and search ranking suffers as a result.",
-    solution: "One QR scan, pick a star rating, and AI writes a natural, genuine review posted directly to your Google Business Profile in a single click.",
+    painPoint:
+      "Local businesses struggle to collect genuine Google reviews — customers forget, the process is friction-heavy, and search ranking suffers as a result.",
+    solution:
+      "One QR scan, pick a star rating, and AI writes a natural, genuine review posted directly to your Google Business Profile in a single click.",
   },
   {
     name: "AI SOS",
     tagline: "Your safety. Our priority.",
     image: aiSos.url,
-    painPoint: "In an emergency, every second counts — but people can't always reach a phone, dial a number, or type a message when they need help most.",
-    solution: "Listens in real time for distress sounds, then instantly shares your live location with trusted contacts or emergency services. Silent. Automatic. Always on.",
+    painPoint:
+      "In an emergency, every second counts — but people can't always reach a phone, dial a number, or type a message when they need help most.",
+    solution:
+      "Listens in real time for distress sounds, then instantly shares your live location with trusted contacts or emergency services. Silent. Automatic. Always on.",
   },
 ];
 
@@ -55,43 +83,55 @@ const automations: AutomationItem[] = [
     name: "Bulk Spam-Free Automation",
     tagline: "Send at scale. Land in the inbox.",
     image: bulkSpamFree.url,
-    painPoint: "Cold outreach blasts trigger spam filters, burn sender domains, and tank reply rates within a week of going live.",
-    solution: "Warm-up rotation, inbox-aware throttling, and AI-personalised copy that keeps deliverability above 95% across thousands of sends per day.",
+    painPoint:
+      "Cold outreach blasts trigger spam filters, burn sender domains, and tank reply rates within a week of going live.",
+    solution:
+      "Warm-up rotation, inbox-aware throttling, and AI-personalised copy that keeps deliverability above 95% across thousands of sends per day.",
   },
   {
     name: "WhatsApp RAG Agent",
     tagline: "Your knowledge base, on WhatsApp.",
     image: whatsappRag.url,
-    painPoint: "Support teams answer the same WhatsApp questions hundreds of times a day while real product issues sit in the queue.",
-    solution: "A retrieval-augmented agent connected to your docs, SOPs, and CRM — replies on WhatsApp with grounded answers and hands off to humans only when needed.",
+    painPoint:
+      "Support teams answer the same WhatsApp questions hundreds of times a day while real product issues sit in the queue.",
+    solution:
+      "A retrieval-augmented agent connected to your docs, SOPs, and CRM — replies on WhatsApp with grounded answers and hands off to humans only when needed.",
   },
   {
     name: "RAG Voice Agent",
     tagline: "Answers the phone. Knows your business.",
     image: ragVoice.url,
-    painPoint: "Missed calls = lost revenue, but hiring a 24/7 receptionist is expensive and inconsistent at answering product questions.",
-    solution: "A natural-sounding voice agent that retrieves from your knowledge base in real time, books appointments, and forwards qualified calls to your team.",
+    painPoint:
+      "Missed calls = lost revenue, but hiring a 24/7 receptionist is expensive and inconsistent at answering product questions.",
+    solution:
+      "A natural-sounding voice agent that retrieves from your knowledge base in real time, books appointments, and forwards qualified calls to your team.",
   },
   {
     name: "Telegram Agent",
     tagline: "Automate your community, not just replies.",
     image: telegramAgent.url,
-    painPoint: "Telegram groups and channels need constant moderation, onboarding, and content — and admins burn out within months.",
-    solution: "An always-on Telegram agent that onboards members, moderates, broadcasts updates, and answers FAQs with context from your private knowledge base.",
+    painPoint:
+      "Telegram groups and channels need constant moderation, onboarding, and content — and admins burn out within months.",
+    solution:
+      "An always-on Telegram agent that onboards members, moderates, broadcasts updates, and answers FAQs with context from your private knowledge base.",
   },
   {
     name: "LinkedIn Post Automation",
     tagline: "Show up every day. Without showing up.",
     image: linkedinAutomation.url,
-    painPoint: "Founders know LinkedIn drives inbound, but writing and scheduling posts consistently is the first thing that slips when work gets busy.",
-    solution: "AI generates posts in your voice from your blog, podcasts, and meetings — then queues, schedules, and publishes them on autopilot.",
+    painPoint:
+      "Founders know LinkedIn drives inbound, but writing and scheduling posts consistently is the first thing that slips when work gets busy.",
+    solution:
+      "AI generates posts in your voice from your blog, podcasts, and meetings — then queues, schedules, and publishes them on autopilot.",
   },
   {
     name: "Social Media Manager",
     tagline: "One brain. Every platform.",
     image: socialMediaManager.url,
-    painPoint: "Juggling Instagram, X, TikTok, LinkedIn, and Facebook means five tools, five calendars, and five tones of voice — and nothing actually gets posted.",
-    solution: "One AI manager plans, writes, repurposes, schedules, and reports across every channel — keeping brand voice consistent and your calendar full.",
+    painPoint:
+      "Juggling Instagram, X, TikTok, LinkedIn, and Facebook means five tools, five calendars, and five tones of voice — and nothing actually gets posted.",
+    solution:
+      "One AI manager plans, writes, repurposes, schedules, and reports across every channel — keeping brand voice consistent and your calendar full.",
   },
 ];
 
@@ -99,9 +139,17 @@ export const Route = createFileRoute("/projects")({
   head: () => ({
     meta: [
       { title: "Projects — Oryntal AI Labs" },
-      { name: "description", content: "Selected work across AI, automation, full-stack, Shopify, WordPress, and mobile applications." },
+      {
+        name: "description",
+        content:
+          "Selected work across AI, automation, full-stack, Shopify, WordPress, and mobile applications.",
+      },
       { property: "og:title", content: "Projects — Oryntal AI Labs" },
-      { property: "og:description", content: "Selected work across AI, automation, full-stack, Shopify, WordPress, and mobile applications." },
+      {
+        property: "og:description",
+        content:
+          "Selected work across AI, automation, full-stack, Shopify, WordPress, and mobile applications.",
+      },
     ],
   }),
   component: ProjectsPage,
@@ -110,33 +158,237 @@ export const Route = createFileRoute("/projects")({
 const categories = ["All", "AI", "Automation", "Full Stack", "Shopify", "WordPress", "App"] as const;
 type Cat = (typeof categories)[number];
 
-interface Project {
-  title: string;
-  client: string;
-  category: Exclude<Cat, "All">;
-  year: string;
+interface WebsiteShowcase {
+  name: string;
+  category: Extract<Cat, "Full Stack" | "Shopify" | "WordPress">;
+  type: string;
+  image: string;
+  url: string;
   description: string;
-  metrics: string;
 }
 
-const projects: Project[] = [
-  { title: "Helix AI Concierge", client: "Helix Networks", category: "AI", year: "2026", description: "Multi-tenant LLM agent platform with custom RAG, handling support across 14 enterprise accounts.", metrics: "12k tickets/wk" },
-  { title: "Northwind Commerce", client: "Northwind Goods", category: "Shopify", year: "2026", description: "Headless Shopify Plus replatform with custom checkout and subscription engine.", metrics: "+47% CVR" },
-  { title: "Pulse Ops Engine", client: "Pulse Logistics", category: "Automation", year: "2025", description: "n8n-orchestrated automation replacing four SaaS tools with one unified pipeline.", metrics: "$180k/yr saved" },
-  { title: "Atlas Field", client: "Atlas Energy", category: "App", year: "2025", description: "Offline-first React Native inspection app deployed to 1,200 field engineers.", metrics: "4.8★ rating" },
-  { title: "Vantage Editorial", client: "Vantage Media", category: "WordPress", year: "2025", description: "Custom Gutenberg blocks and headless WordPress with Next.js frontend.", metrics: "92 PageSpeed" },
-  { title: "Sentinel Lead Scoring", client: "Sentinel B2B", category: "AI", year: "2025", description: "Fine-tuned classification model integrated into HubSpot for predictive lead scoring.", metrics: "3.2x SQL volume" },
-  { title: "Crest Analytics", client: "Crest Finance", category: "Full Stack", year: "2025", description: "Real-time analytics dashboard on Cloudflare edge with sub-100ms global latency.", metrics: "<100ms P95" },
-  { title: "Lumen Studio", client: "Lumen Co.", category: "Shopify", year: "2024", description: "Conversion-tuned Shopify theme with custom product configurator.", metrics: "+38% AOV" },
-  { title: "Forge Sync", client: "Forge Manufacturing", category: "Automation", year: "2024", description: "ERP-to-Slack pipeline alerting ops teams in real time on production anomalies.", metrics: "11 min → 30s" },
-  { title: "Bloom Mobile", client: "Bloom Health", category: "App", year: "2024", description: "Patient-facing iOS and Android app with biometric auth and HealthKit sync.", metrics: "50k installs" },
-  { title: "Quartz CRM", client: "Quartz Realty", category: "Full Stack", year: "2024", description: "Custom CRM on TanStack Start with property syndication APIs.", metrics: "12-team rollout" },
-  { title: "Meridian Publishing", client: "Meridian Press", category: "WordPress", year: "2024", description: "Multisite WordPress with paid memberships and Stripe billing.", metrics: "8k subscribers" },
+const websiteShowcases: WebsiteShowcase[] = [
+  {
+    name: "Mercury Embroidery",
+    category: "Full Stack",
+    type: "Modern React Website",
+    image: eshopwebStore.url,
+    url: "http://mercuryembroidery.com/",
+    description:
+      "A modern business website for custom embroidery services, built to present products clearly and support a smooth enquiry journey.",
+  },
+  {
+    name: "eShop Web",
+    category: "Full Stack",
+    type: "E-Commerce Website",
+    image: eshopwebStore.url,
+    url: "https://eshopweb.store/",
+    description:
+      "A multi-category online store with promotional banners, category browsing, and a shopping-focused layout designed for conversion.",
+  },
+  {
+    name: "Freeze & Feast",
+    category: "Full Stack",
+    type: "Restaurant Website",
+    image: freezeAndFeast.url,
+    url: "https://freezeandfeast.com/en",
+    description:
+      "A restaurant and meal-delivery website that highlights ready-to-heat meals, app downloads, and fast ordering actions.",
+  },
+  {
+    name: "Van Seat Covers UK",
+    category: "Full Stack",
+    type: "Car Seat Website",
+    image: vanSeatCoversUk.url,
+    url: "https://www.vanseatcoversuk.co.uk/",
+    description:
+      "A product-led automotive website focused on custom-fit van seat covers with strong catalog visibility and easy shopping paths.",
+  },
+  {
+    name: "Varma Steels",
+    category: "Full Stack",
+    type: "Industrial Website",
+    image: varmaSteels.url,
+    url: "https://varmasteels.com/",
+    description:
+      "A polished industrial website for steel and construction materials, built to communicate trust, scale, and product depth.",
+  },
+  {
+    name: "Jaanises Construction",
+    category: "Full Stack",
+    type: "Real Estate Website",
+    image: jaanisesConstruction.url,
+    url: "https://jaanisesconsturction.com/",
+    description:
+      "A construction and property-focused website showcasing services, project credibility, and strong lead-generation call-to-actions.",
+  },
+  {
+    name: "One Medical Aesthetics",
+    category: "Full Stack",
+    type: "Healthcare Website",
+    image: oneMedicalAesthetics.url,
+    url: "https://oneaesthetics.ca/",
+    description:
+      "A healthcare aesthetics website with a clean clinic presentation, service navigation, and an appointment-first user experience.",
+  },
+  {
+    name: "Ascentio",
+    category: "Full Stack",
+    type: "Sports Website",
+    image: ascentioShot.url,
+    url: "https://www.ascentio.eu/",
+    description:
+      "A premium sports and training website crafted to position camps, memberships, and coaching as a high-value experience.",
+  },
+  {
+    name: "Kilkenny Cycle Clinic",
+    category: "Full Stack",
+    type: "Cycle Store Website",
+    image: kilkennyCycleClinic.url,
+    url: "https://kilkennycycleclinic.ie/",
+    description:
+      "A bike retail website with a clean product showcase, category browsing, and a streamlined storefront for cycling enthusiasts.",
+  },
+  {
+    name: "The Kaftan Company",
+    category: "Shopify",
+    type: "E-Commerce 2.0",
+    image: theKaftanCompany.url,
+    url: "https://www.thekaftancompany.com/?srsltid=AfmBOooNagH4Cb7bkBYtWpPFaI6aI-JyAdSmshZ9iXNz2sk1zKDvARSs",
+    description:
+      "A fashion-forward Shopify storefront built to highlight seasonal collections, category discovery, and a premium shopping journey.",
+  },
+  {
+    name: "Netose",
+    category: "Shopify",
+    type: "E-Commerce Business",
+    image: netoseShot.url,
+    url: "https://netose.in/",
+    description:
+      "A beauty-focused Shopify store featuring product storytelling, collection navigation, and strong promotional merchandising.",
+  },
+  {
+    name: "Sacred Space with Arushi",
+    category: "Shopify",
+    type: "Yoga Classes Website",
+    image: sacredSpaceWithArushi.url,
+    url: "https://sacredspacewitharushi.com/sacred-space-with-arushi/",
+    description:
+      "A wellness website for yoga and healing sessions, designed around calm visuals, trust-building copy, and consultation bookings.",
+  },
+  {
+    name: "BHRC Dominion",
+    category: "Shopify",
+    type: "Cosmetic Website",
+    image: bhrcDominion.url,
+    url: "https://bhrcdominion.com/",
+    description:
+      "A cosmetic and aesthetics website built to present treatments, locations, and luxury beauty branding with clarity.",
+  },
+  {
+    name: "Zen Supply Chain",
+    category: "Shopify",
+    type: "Manufacturing Website",
+    image: zenSupplyChain.url,
+    url: "https://zensupplychain.co.uk/",
+    description:
+      "A logistics and manufacturing website focused on operational credibility, service positioning, and quote-driven lead capture.",
+  },
+  {
+    name: "Elegance Universe",
+    category: "Shopify",
+    type: "Boutique Website",
+    image: eleganceUniverse.url,
+    url: "https://eleganceuniverse.com/",
+    description:
+      "A boutique storefront designed to elevate beauty products with a clean shopping flow and collection-first presentation.",
+  },
+  {
+    name: "Anna Janelle Jewelry",
+    category: "Shopify",
+    type: "Jewelry Website",
+    image: annaJanelleJewelry.url,
+    url: "https://annajanellejewelry.com/",
+    description:
+      "A refined jewelry storefront that pairs elegant branding with collection browsing and premium product presentation.",
+  },
+  {
+    name: "Clou",
+    category: "WordPress",
+    type: "Design Brand Website",
+    image: clouShot.url,
+    url: "https://clou.nl/",
+    description:
+      "A visually rich brand website for interior and bathroom products, built with strong imagery and a sophisticated product-led experience.",
+  },
+  {
+    name: "Bonus Bank",
+    category: "WordPress",
+    type: "Bank Website",
+    image: bonusBank.url,
+    url: "https://bonusbank.com.br/",
+    description:
+      "A banking website structured to communicate financial offers, account access, and product benefits in a clear digital experience.",
+  },
+  {
+    name: "British Racing Hall of Fame",
+    category: "WordPress",
+    type: "Heritage Website",
+    image: britishRacingHallOfFame.url,
+    url: "https://horseracinghof.com/",
+    description:
+      "A heritage-driven website with a cinematic presentation, created to celebrate racing history, honourees, and event features.",
+  },
+  {
+    name: "Antoine Lours",
+    category: "WordPress",
+    type: "Chef Website",
+    image: antoineLours.url,
+    url: "https://antoinelours.com/",
+    description:
+      "An editorial chef website with bold typography and immersive imagery, built to express culinary identity and personal brand.",
+  },
+  {
+    name: "Nightfall Group",
+    category: "WordPress",
+    type: "Hotel Website",
+    image: nightfallGroup.url,
+    url: "https://nightfallgroup.com/",
+    description:
+      "A luxury hospitality and villa-booking website designed for premium lead capture, high-end visuals, and concierge-led conversion.",
+  },
+  {
+    name: "Hilton & Hyland",
+    category: "WordPress",
+    type: "Real Estate Property Website",
+    image: hiltonHyland.url,
+    url: "https://hiltonhyland.com/",
+    description:
+      "A luxury real estate website built to showcase prestige properties, strong brand positioning, and high-value property discovery.",
+  },
+  {
+    name: "Blue Marine Foundation",
+    category: "WordPress",
+    type: "Ocean Conservation Website",
+    image: blueMarineFoundation.url,
+    url: "https://www.bluemarinefoundation.com/",
+    description:
+      "A purpose-driven nonprofit website using immersive ocean visuals to support awareness, resources, and public engagement.",
+  },
 ];
+
+function showcaseCardLabel(category: WebsiteShowcase["category"]) {
+  if (category === "Shopify") return "Shopify Website";
+  if (category === "WordPress") return "WordPress Website";
+  return "Full Stack Website";
+}
 
 function ProjectsPage() {
   const [filter, setFilter] = useState<Cat>("All");
-  const filtered = filter === "All" ? projects : projects.filter((p) => p.category === filter);
+  const visibleWebsiteShowcases =
+    filter === "All"
+      ? websiteShowcases
+      : websiteShowcases.filter((site) => site.category === filter);
 
   return (
     <>
@@ -145,11 +397,12 @@ function ProjectsPage() {
         <div className="relative mx-auto max-w-7xl px-6 py-24 md:py-32">
           <div className="text-xs uppercase tracking-[0.3em] text-gold mb-4">Portfolio · 2024 – 2026</div>
           <h1 className="font-display text-5xl md:text-7xl max-w-4xl leading-tight">
-            Twelve recent <span className="text-gold italic">commissions.</span><br />
-            Each one shipped, measured, and still running.
+            Real websites, <span className="text-gold italic">live projects.</span>
+            <br />
+            Built across AI, automation, Shopify, WordPress, and full stack.
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
-            Filter by discipline. Every project is a real engagement — no concept work, no unreleased mocks.
+            Browse live client work by category. Each card links directly to the website and shows a real screenshot.
           </p>
         </div>
       </section>
@@ -190,7 +443,10 @@ function ProjectsPage() {
 
             <div className="grid lg:grid-cols-3 gap-6">
               {llmModels.map((m) => (
-                <article key={m.name} className="group relative overflow-hidden rounded-2xl border border-gold bg-card hover:-translate-y-1 transition-transform flex flex-col">
+                <article
+                  key={m.name}
+                  className="group relative overflow-hidden rounded-2xl border border-gold bg-card hover:-translate-y-1 transition-transform flex flex-col"
+                >
                   <div className="relative aspect-[3/4] overflow-hidden border-b border-gold/40 bg-background">
                     <img
                       src={m.image}
@@ -201,7 +457,9 @@ function ProjectsPage() {
                   </div>
                   <div className="p-6 flex-1 flex flex-col">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-[10px] uppercase tracking-widest text-gold border border-gold rounded-full px-2.5 py-0.5">LLM Model</span>
+                      <span className="text-[10px] uppercase tracking-widest text-gold border border-gold rounded-full px-2.5 py-0.5">
+                        LLM Model
+                      </span>
                       <span className="font-mono text-xs text-muted-foreground">2026</span>
                     </div>
                     <h3 className="font-display text-2xl mb-1">{m.name}</h3>
@@ -224,7 +482,10 @@ function ProjectsPage() {
                 <div className="text-5xl mb-4 animate-ai-pulse">✦</div>
                 <h3 className="font-display text-2xl md:text-3xl mb-2">More AI Models Coming Soon</h3>
                 <p className="text-muted-foreground max-w-md">
-                  We're shipping new business-ready LLM models every quarter. Have a workflow you want automated? <a href="/contact" className="text-gold hover:underline">Tell us about it →</a>
+                  We&apos;re shipping new business-ready LLM models every quarter. Have a workflow you want automated?{" "}
+                  <a href="/contact" className="text-gold hover:underline">
+                    Tell us about it →
+                  </a>
                 </p>
               </article>
             </div>
@@ -250,7 +511,10 @@ function ProjectsPage() {
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {automations.map((a) => (
-                <article key={a.name} className="group relative overflow-hidden rounded-2xl border border-gold bg-card hover:-translate-y-1 transition-transform flex flex-col">
+                <article
+                  key={a.name}
+                  className="group relative overflow-hidden rounded-2xl border border-gold bg-card hover:-translate-y-1 transition-transform flex flex-col"
+                >
                   <div className="relative aspect-[4/3] overflow-hidden border-b border-gold/40 bg-background">
                     <img
                       src={a.image}
@@ -263,7 +527,9 @@ function ProjectsPage() {
                   </div>
                   <div className="p-6 flex-1 flex flex-col">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-[10px] uppercase tracking-widest text-gold border border-gold rounded-full px-2.5 py-0.5">Automation</span>
+                      <span className="text-[10px] uppercase tracking-widest text-gold border border-gold rounded-full px-2.5 py-0.5">
+                        Automation
+                      </span>
                       <span className="font-mono text-xs text-muted-foreground">2026</span>
                     </div>
                     <h3 className="font-display text-2xl mb-1">{a.name}</h3>
@@ -286,7 +552,10 @@ function ProjectsPage() {
                 <div className="text-5xl mb-4 animate-ai-pulse">⚙</div>
                 <h3 className="font-display text-2xl md:text-3xl mb-2">More Automations Coming Soon</h3>
                 <p className="text-muted-foreground max-w-md">
-                  Have a repetitive workflow eating your week? <a href="/contact" className="text-gold hover:underline">Let's automate it →</a>
+                  Have a repetitive workflow eating your week?{" "}
+                  <a href="/contact" className="text-gold hover:underline">
+                    Let&apos;s automate it →
+                  </a>
                 </p>
               </article>
             </div>
@@ -294,34 +563,65 @@ function ProjectsPage() {
         </section>
       )}
 
+      {(filter === "All" || filter === "Full Stack" || filter === "Shopify" || filter === "WordPress") && (
+        <section className="py-20 border-b border-gold/40 relative overflow-hidden">
+          <div className="absolute inset-0 grid-noise opacity-20 pointer-events-none" />
+          <div className="relative mx-auto max-w-7xl px-6">
+            <div className="flex items-end justify-between flex-wrap gap-4 mb-12">
+              <div>
+                <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">Live Website Portfolio</div>
+                <h2 className="font-display text-4xl md:text-5xl leading-tight">
+                  Website builds with <span className="text-gold italic">real screenshots.</span>
+                </h2>
+              </div>
+              <p className="text-sm text-muted-foreground max-w-sm">
+                Every card below links directly to the live website and uses a matching screenshot from that project.
+              </p>
+            </div>
 
+            <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+              {visibleWebsiteShowcases.map((site) => (
+                <article
+                  key={site.name}
+                  className="group overflow-hidden rounded-2xl border border-gold bg-card transition-transform hover:-translate-y-1"
+                >
+                  <div className="relative aspect-[16/10] overflow-hidden border-b border-gold/40 bg-background">
+                    <img
+                      src={site.image}
+                      alt={`${site.name} homepage screenshot`}
+                      loading="lazy"
+                      className="absolute inset-0 h-full w-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-700"
+                    />
+                  </div>
 
-      <section className="py-20">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map((p, i) => (
-              <article key={p.title} className="group relative overflow-hidden rounded-2xl border border-gold bg-card p-7 hover:-translate-y-1 transition-transform">
-                <div className="absolute top-0 right-0 h-40 w-40 bg-gold-gradient opacity-5 blur-3xl group-hover:opacity-20 transition-opacity" />
-                <div className="flex items-center justify-between mb-6">
-                  <span className="font-mono text-xs text-muted-foreground">№ {String(i + 1).padStart(3, "0")}</span>
-                  <span className="text-[10px] uppercase tracking-widest text-gold border border-gold rounded-full px-2.5 py-0.5">{p.category}</span>
-                </div>
-                <div className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-1">{p.client} · {p.year}</div>
-                <h2 className="font-display text-2xl mb-3">{p.title}</h2>
-                <p className="text-sm text-muted-foreground leading-relaxed">{p.description}</p>
-                <div className="mt-6 pt-6 border-t border-gold/30 flex items-center justify-between">
-                  <span className="text-gold font-mono text-sm">{p.metrics}</span>
-                  <span className="text-xs uppercase tracking-widest text-muted-foreground group-hover:text-gold transition-colors">Case →</span>
-                </div>
-              </article>
-            ))}
+                  <div className="p-6 flex flex-col gap-4">
+                    <div className="flex items-center justify-between gap-3 flex-wrap">
+                      <span className="text-[10px] uppercase tracking-widest text-gold border border-gold rounded-full px-2.5 py-0.5">
+                        {showcaseCardLabel(site.category)}
+                      </span>
+                      <span className="font-mono text-xs text-muted-foreground">{site.type}</span>
+                    </div>
+
+                    <div>
+                      <h3 className="font-display text-2xl mb-2">{site.name}</h3>
+                      <p className="text-sm text-muted-foreground leading-relaxed">{site.description}</p>
+                    </div>
+
+                    <a
+                      href={site.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center justify-center rounded-xl border border-gold bg-gold/10 px-4 py-3 text-sm font-semibold text-gold transition-colors hover:bg-gold hover:text-primary-foreground"
+                    >
+                      Visit Website ↗
+                    </a>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
-          {filtered.length === 0 && (
-            <p className="text-center text-muted-foreground py-20">No projects in this category yet.</p>
-          )}
-        </div>
-      </section>
-
+        </section>
+      )}
     </>
   );
 }
