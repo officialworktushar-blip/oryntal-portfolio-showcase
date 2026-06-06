@@ -3,6 +3,12 @@ import { useState } from "react";
 import meet2pro from "@/assets/meet2pro.png.asset.json";
 import qr2review from "@/assets/qr2review.png.asset.json";
 import aiSos from "@/assets/ai-sos.png.asset.json";
+import bulkSpamFree from "@/assets/bulk-spam-free.jpg.asset.json";
+import whatsappRag from "@/assets/whatsapp-rag.jpg.asset.json";
+import ragVoice from "@/assets/rag-voice.jpg.asset.json";
+import telegramAgent from "@/assets/telegram-agent.jpg.asset.json";
+import linkedinAutomation from "@/assets/linkedin-automation.jpg.asset.json";
+import socialMediaManager from "@/assets/social-media-manager.jpg.asset.json";
 
 interface LLMModel {
   name: string;
@@ -33,6 +39,59 @@ const llmModels: LLMModel[] = [
     image: aiSos.url,
     painPoint: "In an emergency, every second counts — but people can't always reach a phone, dial a number, or type a message when they need help most.",
     solution: "Listens in real time for distress sounds, then instantly shares your live location with trusted contacts or emergency services. Silent. Automatic. Always on.",
+  },
+];
+
+interface AutomationItem {
+  name: string;
+  tagline: string;
+  image: string;
+  painPoint: string;
+  solution: string;
+}
+
+const automations: AutomationItem[] = [
+  {
+    name: "Bulk Spam-Free Automation",
+    tagline: "Send at scale. Land in the inbox.",
+    image: bulkSpamFree.url,
+    painPoint: "Cold outreach blasts trigger spam filters, burn sender domains, and tank reply rates within a week of going live.",
+    solution: "Warm-up rotation, inbox-aware throttling, and AI-personalised copy that keeps deliverability above 95% across thousands of sends per day.",
+  },
+  {
+    name: "WhatsApp RAG Agent",
+    tagline: "Your knowledge base, on WhatsApp.",
+    image: whatsappRag.url,
+    painPoint: "Support teams answer the same WhatsApp questions hundreds of times a day while real product issues sit in the queue.",
+    solution: "A retrieval-augmented agent connected to your docs, SOPs, and CRM — replies on WhatsApp with grounded answers and hands off to humans only when needed.",
+  },
+  {
+    name: "RAG Voice Agent",
+    tagline: "Answers the phone. Knows your business.",
+    image: ragVoice.url,
+    painPoint: "Missed calls = lost revenue, but hiring a 24/7 receptionist is expensive and inconsistent at answering product questions.",
+    solution: "A natural-sounding voice agent that retrieves from your knowledge base in real time, books appointments, and forwards qualified calls to your team.",
+  },
+  {
+    name: "Telegram Agent",
+    tagline: "Automate your community, not just replies.",
+    image: telegramAgent.url,
+    painPoint: "Telegram groups and channels need constant moderation, onboarding, and content — and admins burn out within months.",
+    solution: "An always-on Telegram agent that onboards members, moderates, broadcasts updates, and answers FAQs with context from your private knowledge base.",
+  },
+  {
+    name: "LinkedIn Post Automation",
+    tagline: "Show up every day. Without showing up.",
+    image: linkedinAutomation.url,
+    painPoint: "Founders know LinkedIn drives inbound, but writing and scheduling posts consistently is the first thing that slips when work gets busy.",
+    solution: "AI generates posts in your voice from your blog, podcasts, and meetings — then queues, schedules, and publishes them on autopilot.",
+  },
+  {
+    name: "Social Media Manager",
+    tagline: "One brain. Every platform.",
+    image: socialMediaManager.url,
+    painPoint: "Juggling Instagram, X, TikTok, LinkedIn, and Facebook means five tools, five calendars, and five tones of voice — and nothing actually gets posted.",
+    solution: "One AI manager plans, writes, repurposes, schedules, and reports across every channel — keeping brand voice consistent and your calendar full.",
   },
 ];
 
@@ -172,6 +231,70 @@ function ProjectsPage() {
           </div>
         </section>
       )}
+
+      {(filter === "All" || filter === "Automation") && (
+        <section className="py-20 border-b border-gold/40 relative overflow-hidden">
+          <div className="absolute inset-0 grid-noise opacity-20 pointer-events-none" />
+          <div className="relative mx-auto max-w-7xl px-6">
+            <div className="flex items-end justify-between flex-wrap gap-4 mb-12">
+              <div>
+                <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">Oryntal · Automation Suite</div>
+                <h2 className="font-display text-4xl md:text-5xl leading-tight">
+                  Workflows that <span className="text-gold italic">run themselves.</span>
+                </h2>
+              </div>
+              <p className="text-sm text-muted-foreground max-w-xs">
+                Production automations we deploy for clients. <span className="text-gold">More agents shipping every month.</span>
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {automations.map((a) => (
+                <article key={a.name} className="group relative overflow-hidden rounded-2xl border border-gold bg-card hover:-translate-y-1 transition-transform flex flex-col">
+                  <div className="relative aspect-[4/3] overflow-hidden border-b border-gold/40 bg-background">
+                    <img
+                      src={a.image}
+                      alt={`${a.name} — ${a.tagline}`}
+                      loading="lazy"
+                      width={1024}
+                      height={1024}
+                      className="absolute inset-0 h-full w-full object-cover group-hover:scale-[1.02] transition-transform duration-700"
+                    />
+                  </div>
+                  <div className="p-6 flex-1 flex flex-col">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-[10px] uppercase tracking-widest text-gold border border-gold rounded-full px-2.5 py-0.5">Automation</span>
+                      <span className="font-mono text-xs text-muted-foreground">2026</span>
+                    </div>
+                    <h3 className="font-display text-2xl mb-1">{a.name}</h3>
+                    <p className="text-sm text-gold mb-5">{a.tagline}</p>
+                    <div className="space-y-4 text-sm leading-relaxed">
+                      <div>
+                        <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">The Pain</div>
+                        <p className="text-foreground/80">{a.painPoint}</p>
+                      </div>
+                      <div>
+                        <div className="text-[10px] uppercase tracking-widest text-gold mb-1">The Fix</div>
+                        <p className="text-foreground/80">{a.solution}</p>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              ))}
+
+              <article className="group relative overflow-hidden rounded-2xl border border-dashed border-gold/60 bg-gradient-to-br from-gold/5 to-transparent p-8 flex flex-col items-center justify-center text-center min-h-[240px] md:col-span-2 lg:col-span-3">
+                <div className="text-5xl mb-4 animate-ai-pulse">⚙</div>
+                <h3 className="font-display text-2xl md:text-3xl mb-2">More Automations Coming Soon</h3>
+                <p className="text-muted-foreground max-w-md">
+                  Have a repetitive workflow eating your week? <a href="/contact" className="text-gold hover:underline">Let's automate it →</a>
+                </p>
+              </article>
+            </div>
+          </div>
+        </section>
+      )}
+
+
 
       <section className="py-20">
         <div className="mx-auto max-w-7xl px-6">
