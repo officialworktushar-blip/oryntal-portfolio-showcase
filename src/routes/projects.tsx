@@ -42,6 +42,59 @@ const llmModels: LLMModel[] = [
   },
 ];
 
+interface AutomationItem {
+  name: string;
+  tagline: string;
+  image: string;
+  painPoint: string;
+  solution: string;
+}
+
+const automations: AutomationItem[] = [
+  {
+    name: "Bulk Spam-Free Automation",
+    tagline: "Send at scale. Land in the inbox.",
+    image: bulkSpamFree.url,
+    painPoint: "Cold outreach blasts trigger spam filters, burn sender domains, and tank reply rates within a week of going live.",
+    solution: "Warm-up rotation, inbox-aware throttling, and AI-personalised copy that keeps deliverability above 95% across thousands of sends per day.",
+  },
+  {
+    name: "WhatsApp RAG Agent",
+    tagline: "Your knowledge base, on WhatsApp.",
+    image: whatsappRag.url,
+    painPoint: "Support teams answer the same WhatsApp questions hundreds of times a day while real product issues sit in the queue.",
+    solution: "A retrieval-augmented agent connected to your docs, SOPs, and CRM — replies on WhatsApp with grounded answers and hands off to humans only when needed.",
+  },
+  {
+    name: "RAG Voice Agent",
+    tagline: "Answers the phone. Knows your business.",
+    image: ragVoice.url,
+    painPoint: "Missed calls = lost revenue, but hiring a 24/7 receptionist is expensive and inconsistent at answering product questions.",
+    solution: "A natural-sounding voice agent that retrieves from your knowledge base in real time, books appointments, and forwards qualified calls to your team.",
+  },
+  {
+    name: "Telegram Agent",
+    tagline: "Automate your community, not just replies.",
+    image: telegramAgent.url,
+    painPoint: "Telegram groups and channels need constant moderation, onboarding, and content — and admins burn out within months.",
+    solution: "An always-on Telegram agent that onboards members, moderates, broadcasts updates, and answers FAQs with context from your private knowledge base.",
+  },
+  {
+    name: "LinkedIn Post Automation",
+    tagline: "Show up every day. Without showing up.",
+    image: linkedinAutomation.url,
+    painPoint: "Founders know LinkedIn drives inbound, but writing and scheduling posts consistently is the first thing that slips when work gets busy.",
+    solution: "AI generates posts in your voice from your blog, podcasts, and meetings — then queues, schedules, and publishes them on autopilot.",
+  },
+  {
+    name: "Social Media Manager",
+    tagline: "One brain. Every platform.",
+    image: socialMediaManager.url,
+    painPoint: "Juggling Instagram, X, TikTok, LinkedIn, and Facebook means five tools, five calendars, and five tones of voice — and nothing actually gets posted.",
+    solution: "One AI manager plans, writes, repurposes, schedules, and reports across every channel — keeping brand voice consistent and your calendar full.",
+  },
+];
+
 export const Route = createFileRoute("/projects")({
   head: () => ({
     meta: [
