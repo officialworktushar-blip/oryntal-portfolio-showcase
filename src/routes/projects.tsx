@@ -3,6 +3,12 @@ import { useState } from "react";
 import meet2pro from "@/assets/meet2pro.png.asset.json";
 import qr2review from "@/assets/qr2review.png.asset.json";
 import aiSos from "@/assets/ai-sos.png.asset.json";
+import bulkSpamFree from "@/assets/bulk-spam-free.jpg.asset.json";
+import whatsappRag from "@/assets/whatsapp-rag.jpg.asset.json";
+import ragVoice from "@/assets/rag-voice.jpg.asset.json";
+import telegramAgent from "@/assets/telegram-agent.jpg.asset.json";
+import linkedinAutomation from "@/assets/linkedin-automation.jpg.asset.json";
+import socialMediaManager from "@/assets/social-media-manager.jpg.asset.json";
 
 interface LLMModel {
   name: string;
