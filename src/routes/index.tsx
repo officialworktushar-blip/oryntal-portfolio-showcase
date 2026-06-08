@@ -2,6 +2,13 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import logoMark from "@/assets/oryntal-mark.asset.json";
 import aiLabsLogo from "@/assets/oryntal-ai-labs-logo.asset.json";
+import meet2pro from "@/assets/meet2pro.png.asset.json";
+import qr2review from "@/assets/qr2review.png.asset.json";
+import whatsappRag from "@/assets/whatsapp-rag.jpg.asset.json";
+import eshopwebStore from "@/assets/site-shots/eshopweb-store.asset.json";
+import theKaftanCompany from "@/assets/site-shots/the-kaftan-company.asset.json";
+import clouShot from "@/assets/site-shots/clou.asset.json";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -262,46 +269,58 @@ function Blueprint() {
 
 const works = [
   {
-    t: "Helix AI Concierge",
-    c: "AI · SaaS",
-    pain: "Support team drowning in 12k weekly tickets, 36-hour reply times.",
-    fix: "Built a multi-tenant LLM agent with RAG over their docs — now answers 78% of tickets in under 4 seconds.",
+    t: "Meet2Pro",
+    c: "AI · LLM Product",
+    image: meet2pro.url,
+    pain: "Consultants and agency owners lose hours every week converting raw meeting notes into proposals and follow-ups — and critical commitments slip through the cracks.",
+    fix: "An end-to-end meeting intelligence agent that transcribes calls, distils decisions, and auto-drafts proposals and follow-up emails ready to send.",
     tag: "AI",
+    href: "/projects",
   },
   {
-    t: "Northwind Commerce",
-    c: "Shopify · Plus",
-    pain: "Legacy theme killed mobile conversion; checkout abandoned at 71%.",
-    fix: "Headless Shopify replatform with one-page checkout — conversion lifted 47% in 90 days.",
-    tag: "Shopify",
+    t: "QR2Review",
+    c: "AI · Local Growth",
+    image: qr2review.url,
+    pain: "Local businesses struggle to collect authentic Google reviews — customers forget, friction is high, and search visibility quietly erodes month after month.",
+    fix: "A single QR scan generates a natural, AI-written review tuned to the customer's rating and posts it straight to the Google Business Profile.",
+    tag: "AI",
+    href: "/projects",
   },
   {
-    t: "Pulse Ops Engine",
-    c: "Automation",
-    pain: "Ops team paying for 4 SaaS tools and still copy-pasting between them.",
-    fix: "Consolidated into one n8n pipeline. $180k/yr saved, zero manual data entry.",
+    t: "WhatsApp RAG Agent",
+    c: "Automation · Conversational AI",
+    image: whatsappRag.url,
+    pain: "Support teams answer the same WhatsApp questions hundreds of times a day, while genuine product issues stall in an overloaded queue.",
+    fix: "A retrieval-augmented WhatsApp agent grounded in your docs, SOPs, and CRM — resolves repetitive queries instantly and escalates only what truly needs a human.",
     tag: "Automation",
+    href: "/projects",
   },
   {
-    t: "Atlas Field App",
-    c: "Mobile · iOS / Android",
-    pain: "1,200 field engineers losing inspection data when signal dropped.",
-    fix: "Offline-first React Native app with conflict-free sync — 4.8★ store rating in 6 months.",
-    tag: "App",
-  },
-  {
-    t: "Rahman Textiles Portal",
-    c: "Full Stack · ERP",
-    pain: "Order tracking lived in WhatsApp and Excel; nothing reconciled at month-end.",
-    fix: "Custom portal with live production tracking and GST-ready invoicing — closing books in 2 days, not 2 weeks.",
+    t: "eShop Web",
+    c: "Full Stack · E-Commerce",
+    image: eshopwebStore.url,
+    pain: "A multi-category retailer was losing buyers to a slow, fragmented storefront with weak merchandising and a clunky checkout path.",
+    fix: "A performance-tuned, conversion-led e-commerce build with promotional surfaces, category clarity, and a frictionless purchase journey.",
     tag: "Full Stack",
+    href: "https://eshopweb.store/",
   },
   {
-    t: "Bengal Foods Storefront",
+    t: "The Kaftan Company",
+    c: "Shopify · Fashion DTC",
+    image: theKaftanCompany.url,
+    pain: "A premium fashion label needed a storefront worthy of its product — the existing theme flattened the brand and buried seasonal drops.",
+    fix: "A bespoke Shopify 2.0 build engineered around collection storytelling, editorial visuals, and a checkout tuned for premium-segment conversion.",
+    tag: "Shopify",
+    href: "https://www.thekaftancompany.com/",
+  },
+  {
+    t: "Clou",
     c: "WordPress · WooCommerce",
-    pain: "Site loading in 8+ seconds; Google ads burning budget on bouncing traffic.",
-    fix: "Rebuilt on a performance-tuned WordPress stack — 1.4s LCP, ROAS up 2.3x.",
+    image: clouShot.url,
+    pain: "A design-led product brand needed an e-commerce experience as refined as its catalogue — the prior site diluted the brand and underperformed on conversion.",
+    fix: "A WordPress + WooCommerce build with cinematic product presentation, structured catalogue depth, and a checkout architected for considered purchases.",
     tag: "WordPress",
+    href: "https://clou.nl/",
   },
 ];
 
@@ -317,33 +336,59 @@ function SelectedWorks() {
           <Link to="/projects" className="text-sm uppercase tracking-widest text-gold border-b border-gold pb-1">All Projects →</Link>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {works.map((w, i) => (
-            <div key={w.t} className="group relative overflow-hidden rounded-2xl border border-gold bg-card p-7 hover:-translate-y-1 transition-transform">
-              <div className="absolute top-0 right-0 h-32 w-32 bg-gold-gradient opacity-5 blur-3xl group-hover:opacity-20 transition-opacity" />
-              <div className="flex items-center justify-between mb-6">
-                <span className="font-mono text-xs text-muted-foreground">CASE {String(i + 1).padStart(2, "0")}</span>
-                <span className="text-[10px] uppercase tracking-widest text-gold border border-gold rounded-full px-2.5 py-0.5">{w.tag}</span>
-              </div>
-              <div className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-2">{w.c}</div>
-              <h3 className="font-display text-2xl mb-4">{w.t}</h3>
-              <div className="space-y-3">
-                <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-3">
-                  <div className="font-mono text-[10px] uppercase tracking-widest text-destructive/80 mb-1">Pain Point</div>
-                  <p className="text-sm font-semibold text-foreground leading-relaxed">{w.pain}</p>
+          {works.map((w, i) => {
+            const isExternal = w.href.startsWith("http");
+            const CardInner = (
+              <>
+                <div className="relative aspect-[16/10] overflow-hidden border-b border-gold/40 bg-background">
+                  <img
+                    src={w.image}
+                    alt={w.t}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute top-3 right-3 text-[10px] uppercase tracking-widest text-gold border border-gold bg-background/80 backdrop-blur rounded-full px-2.5 py-0.5">
+                    {w.tag}
+                  </div>
                 </div>
-                <div>
-                  <div className="font-mono text-[10px] uppercase tracking-widest text-gold mb-1">What We Built</div>
-                  <p className="text-sm text-foreground/90 leading-relaxed">{w.fix}</p>
+                <div className="p-7">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="font-mono text-xs text-muted-foreground">CASE {String(i + 1).padStart(2, "0")}</span>
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-gold/80">{w.c}</span>
+                  </div>
+                  <h3 className="font-display text-2xl mb-4">{w.t}</h3>
+                  <div className="space-y-3">
+                    <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-3">
+                      <div className="font-mono text-[10px] uppercase tracking-widest text-destructive/80 mb-1">Pain Point</div>
+                      <p className="text-sm font-semibold text-foreground leading-relaxed">{w.pain}</p>
+                    </div>
+                    <div>
+                      <div className="font-mono text-[10px] uppercase tracking-widest text-gold mb-1">What We Built</div>
+                      <p className="text-sm text-foreground/90 leading-relaxed">{w.fix}</p>
+                    </div>
+                  </div>
+                  <div className="mt-6 h-px bg-gold/30 group-hover:bg-gold transition-colors" />
                 </div>
-              </div>
-              <div className="mt-6 h-px bg-gold/30 group-hover:bg-gold transition-colors" />
-            </div>
-          ))}
+              </>
+            );
+            const cls =
+              "group relative block overflow-hidden rounded-2xl border border-gold bg-card hover:-translate-y-1 transition-transform";
+            return isExternal ? (
+              <a key={w.t} href={w.href} target="_blank" rel="noopener noreferrer" className={cls}>
+                {CardInner}
+              </a>
+            ) : (
+              <Link key={w.t} to={w.href} className={cls}>
+                {CardInner}
+              </Link>
+            );
+          })}
         </div>
       </div>
     </section>
   );
 }
+
 
 const methodSteps = [
   {
