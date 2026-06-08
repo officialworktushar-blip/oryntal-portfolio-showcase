@@ -2,6 +2,13 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import logoMark from "@/assets/oryntal-mark.asset.json";
 import aiLabsLogo from "@/assets/oryntal-ai-labs-logo.asset.json";
+import meet2pro from "@/assets/meet2pro.png.asset.json";
+import qr2review from "@/assets/qr2review.png.asset.json";
+import whatsappRag from "@/assets/whatsapp-rag.jpg.asset.json";
+import eshopwebStore from "@/assets/site-shots/eshopweb-store.asset.json";
+import theKaftanCompany from "@/assets/site-shots/the-kaftan-company.asset.json";
+import clouShot from "@/assets/site-shots/clou.asset.json";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
