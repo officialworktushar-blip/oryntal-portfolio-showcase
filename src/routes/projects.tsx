@@ -571,11 +571,13 @@ function ProjectsPage() {
               <div>
                 <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">Live Website Portfolio</div>
                 <h2 className="font-display text-4xl md:text-5xl leading-tight">
-                  Website builds with <span className="text-gold italic">real screenshots.</span>
+                  Pixels become <span className="text-gold italic">businesses.</span>
+                  <br />
+                  Designs become <span className="text-gold italic">revenue.</span>
                 </h2>
               </div>
               <p className="text-sm text-muted-foreground max-w-sm">
-                Every card below links directly to the live website and uses a matching screenshot from that project.
+                Every brand below trusted us to ship the website their customers actually buy from. Click any card to see it live.
               </p>
             </div>
 
