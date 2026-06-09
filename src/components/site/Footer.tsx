@@ -6,7 +6,7 @@ export function Footer() {
     <footer className="border-t border-gold mt-32">
       <div className="mx-auto max-w-7xl px-6 py-16 grid gap-12 md:grid-cols-4">
         <div className="md:col-span-2">
-          <img src={logoFull.url} alt="Oryntal AI Labs" className="h-24 w-auto -ml-2" />
+          <img src={assetUrl(logoFull)} alt="Oryntal AI Labs" className="h-24 w-auto -ml-2" />
           <p className="mt-4 max-w-sm text-sm text-muted-foreground leading-relaxed">
             We architect intelligent systems that ship — AI, automation, and full-stack craft for ambitious teams worldwide.
           </p>

@@ -44,7 +44,7 @@ const llmModels: LLMModel[] = [
   {
     name: "Meet2Pro",
     tagline: "From Conversation to Action",
-    image: meet2pro.url,
+    image: assetUrl(meet2pro),
     painPoint:
       "Consultants and agency owners lose hours every week turning meeting notes into proposals and follow-up emails — and critical details slip through the cracks.",
     solution:
@@ -53,7 +53,7 @@ const llmModels: LLMModel[] = [
   {
     name: "QR2Review",
     tagline: "Smart Reviews. Better Ranking.",
-    image: qr2review.url,
+    image: assetUrl(qr2review),
     painPoint:
       "Local businesses struggle to collect genuine Google reviews — customers forget, the process is friction-heavy, and search ranking suffers as a result.",
     solution:
@@ -62,7 +62,7 @@ const llmModels: LLMModel[] = [
   {
     name: "AI SOS",
     tagline: "Your safety. Our priority.",
-    image: aiSos.url,
+    image: assetUrl(aiSos),
     painPoint:
       "In an emergency, every second counts — but people can't always reach a phone, dial a number, or type a message when they need help most.",
     solution:
@@ -82,7 +82,7 @@ const automations: AutomationItem[] = [
   {
     name: "Bulk Spam-Free Automation",
     tagline: "Send at scale. Land in the inbox.",
-    image: bulkSpamFree.url,
+    image: assetUrl(bulkSpamFree),
     painPoint:
       "Cold outreach blasts trigger spam filters, burn sender domains, and tank reply rates within a week of going live.",
     solution:
@@ -91,7 +91,7 @@ const automations: AutomationItem[] = [
   {
     name: "WhatsApp RAG Agent",
     tagline: "Your knowledge base, on WhatsApp.",
-    image: whatsappRag.url,
+    image: assetUrl(whatsappRag),
     painPoint:
       "Support teams answer the same WhatsApp questions hundreds of times a day while real product issues sit in the queue.",
     solution:
@@ -100,7 +100,7 @@ const automations: AutomationItem[] = [
   {
     name: "RAG Voice Agent",
     tagline: "Answers the phone. Knows your business.",
-    image: ragVoice.url,
+    image: assetUrl(ragVoice),
     painPoint:
       "Missed calls = lost revenue, but hiring a 24/7 receptionist is expensive and inconsistent at answering product questions.",
     solution:
@@ -109,7 +109,7 @@ const automations: AutomationItem[] = [
   {
     name: "Telegram Agent",
     tagline: "Automate your community, not just replies.",
-    image: telegramAgent.url,
+    image: assetUrl(telegramAgent),
     painPoint:
       "Telegram groups and channels need constant moderation, onboarding, and content — and admins burn out within months.",
     solution:
@@ -118,7 +118,7 @@ const automations: AutomationItem[] = [
   {
     name: "LinkedIn Post Automation",
     tagline: "Show up every day. Without showing up.",
-    image: linkedinAutomation.url,
+    image: assetUrl(linkedinAutomation),
     painPoint:
       "Founders know LinkedIn drives inbound, but writing and scheduling posts consistently is the first thing that slips when work gets busy.",
     solution:
@@ -127,7 +127,7 @@ const automations: AutomationItem[] = [
   {
     name: "Social Media Manager",
     tagline: "One brain. Every platform.",
-    image: socialMediaManager.url,
+    image: assetUrl(socialMediaManager),
     painPoint:
       "Juggling Instagram, X, TikTok, LinkedIn, and Facebook means five tools, five calendars, and five tones of voice — and nothing actually gets posted.",
     solution:
@@ -172,7 +172,7 @@ const websiteShowcases: WebsiteShowcase[] = [
     name: "Mercury Embroidery",
     category: "Full Stack",
     type: "Modern React Website",
-    image: eshopwebStore.url,
+    image: assetUrl(eshopwebStore),
     url: "http://mercuryembroidery.com/",
     description:
       "A modern business website for custom embroidery services, built to present products clearly and support a smooth enquiry journey.",
@@ -181,7 +181,7 @@ const websiteShowcases: WebsiteShowcase[] = [
     name: "eShop Web",
     category: "Full Stack",
     type: "E-Commerce Website",
-    image: eshopwebStore.url,
+    image: assetUrl(eshopwebStore),
     url: "https://eshopweb.store/",
     description:
       "A multi-category online store with promotional banners, category browsing, and a shopping-focused layout designed for conversion.",
@@ -190,7 +190,7 @@ const websiteShowcases: WebsiteShowcase[] = [
     name: "Freeze & Feast",
     category: "Full Stack",
     type: "Restaurant Website",
-    image: freezeAndFeast.url,
+    image: assetUrl(freezeAndFeast),
     url: "https://freezeandfeast.com/en",
     description:
       "A restaurant and meal-delivery website that highlights ready-to-heat meals, app downloads, and fast ordering actions.",
@@ -199,7 +199,7 @@ const websiteShowcases: WebsiteShowcase[] = [
     name: "Van Seat Covers UK",
     category: "Full Stack",
     type: "Car Seat Website",
-    image: vanSeatCoversUk.url,
+    image: assetUrl(vanSeatCoversUk),
     url: "https://www.vanseatcoversuk.co.uk/",
     description:
       "A product-led automotive website focused on custom-fit van seat covers with strong catalog visibility and easy shopping paths.",
@@ -208,7 +208,7 @@ const websiteShowcases: WebsiteShowcase[] = [
     name: "Varma Steels",
     category: "Full Stack",
     type: "Industrial Website",
-    image: varmaSteels.url,
+    image: assetUrl(varmaSteels),
     url: "https://varmasteels.com/",
     description:
       "A polished industrial website for steel and construction materials, built to communicate trust, scale, and product depth.",
@@ -217,7 +217,7 @@ const websiteShowcases: WebsiteShowcase[] = [
     name: "Jaanises Construction",
     category: "Full Stack",
     type: "Real Estate Website",
-    image: jaanisesConstruction.url,
+    image: assetUrl(jaanisesConstruction),
     url: "https://jaanisesconsturction.com/",
     description:
       "A construction and property-focused website showcasing services, project credibility, and strong lead-generation call-to-actions.",
@@ -226,7 +226,7 @@ const websiteShowcases: WebsiteShowcase[] = [
     name: "One Medical Aesthetics",
     category: "Full Stack",
     type: "Healthcare Website",
-    image: oneMedicalAesthetics.url,
+    image: assetUrl(oneMedicalAesthetics),
     url: "https://oneaesthetics.ca/",
     description:
       "A healthcare aesthetics website with a clean clinic presentation, service navigation, and an appointment-first user experience.",
@@ -235,7 +235,7 @@ const websiteShowcases: WebsiteShowcase[] = [
     name: "Ascentio",
     category: "Full Stack",
     type: "Sports Website",
-    image: ascentioShot.url,
+    image: assetUrl(ascentioShot),
     url: "https://www.ascentio.eu/",
     description:
       "A premium sports and training website crafted to position camps, memberships, and coaching as a high-value experience.",
@@ -244,7 +244,7 @@ const websiteShowcases: WebsiteShowcase[] = [
     name: "Kilkenny Cycle Clinic",
     category: "Full Stack",
     type: "Cycle Store Website",
-    image: kilkennyCycleClinic.url,
+    image: assetUrl(kilkennyCycleClinic),
     url: "https://kilkennycycleclinic.ie/",
     description:
       "A bike retail website with a clean product showcase, category browsing, and a streamlined storefront for cycling enthusiasts.",
@@ -253,7 +253,7 @@ const websiteShowcases: WebsiteShowcase[] = [
     name: "The Kaftan Company",
     category: "Shopify",
     type: "E-Commerce 2.0",
-    image: theKaftanCompany.url,
+    image: assetUrl(theKaftanCompany),
     url: "https://www.thekaftancompany.com/?srsltid=AfmBOooNagH4Cb7bkBYtWpPFaI6aI-JyAdSmshZ9iXNz2sk1zKDvARSs",
     description:
       "A fashion-forward Shopify storefront built to highlight seasonal collections, category discovery, and a premium shopping journey.",
@@ -262,7 +262,7 @@ const websiteShowcases: WebsiteShowcase[] = [
     name: "Netose",
     category: "Shopify",
     type: "E-Commerce Business",
-    image: netoseShot.url,
+    image: assetUrl(netoseShot),
     url: "https://netose.in/",
     description:
       "A beauty-focused Shopify store featuring product storytelling, collection navigation, and strong promotional merchandising.",
@@ -271,7 +271,7 @@ const websiteShowcases: WebsiteShowcase[] = [
     name: "Sacred Space with Arushi",
     category: "Shopify",
     type: "Yoga Classes Website",
-    image: sacredSpaceWithArushi.url,
+    image: assetUrl(sacredSpaceWithArushi),
     url: "https://sacredspacewitharushi.com/sacred-space-with-arushi/",
     description:
       "A wellness website for yoga and healing sessions, designed around calm visuals, trust-building copy, and consultation bookings.",
@@ -280,7 +280,7 @@ const websiteShowcases: WebsiteShowcase[] = [
     name: "BHRC Dominion",
     category: "Shopify",
     type: "Cosmetic Website",
-    image: bhrcDominion.url,
+    image: assetUrl(bhrcDominion),
     url: "https://bhrcdominion.com/",
     description:
       "A cosmetic and aesthetics website built to present treatments, locations, and luxury beauty branding with clarity.",
@@ -289,7 +289,7 @@ const websiteShowcases: WebsiteShowcase[] = [
     name: "Zen Supply Chain",
     category: "Shopify",
     type: "Manufacturing Website",
-    image: zenSupplyChain.url,
+    image: assetUrl(zenSupplyChain),
     url: "https://zensupplychain.co.uk/",
     description:
       "A logistics and manufacturing website focused on operational credibility, service positioning, and quote-driven lead capture.",
@@ -298,7 +298,7 @@ const websiteShowcases: WebsiteShowcase[] = [
     name: "Elegance Universe",
     category: "Shopify",
     type: "Boutique Website",
-    image: eleganceUniverse.url,
+    image: assetUrl(eleganceUniverse),
     url: "https://eleganceuniverse.com/",
     description:
       "A boutique storefront designed to elevate beauty products with a clean shopping flow and collection-first presentation.",
@@ -307,7 +307,7 @@ const websiteShowcases: WebsiteShowcase[] = [
     name: "Anna Janelle Jewelry",
     category: "Shopify",
     type: "Jewelry Website",
-    image: annaJanelleJewelry.url,
+    image: assetUrl(annaJanelleJewelry),
     url: "https://annajanellejewelry.com/",
     description:
       "A refined jewelry storefront that pairs elegant branding with collection browsing and premium product presentation.",
@@ -316,7 +316,7 @@ const websiteShowcases: WebsiteShowcase[] = [
     name: "Clou",
     category: "WordPress",
     type: "Design Brand Website",
-    image: clouShot.url,
+    image: assetUrl(clouShot),
     url: "https://clou.nl/",
     description:
       "A visually rich brand website for interior and bathroom products, built with strong imagery and a sophisticated product-led experience.",
@@ -325,7 +325,7 @@ const websiteShowcases: WebsiteShowcase[] = [
     name: "Bonus Bank",
     category: "WordPress",
     type: "Bank Website",
-    image: bonusBank.url,
+    image: assetUrl(bonusBank),
     url: "https://bonusbank.com.br/",
     description:
       "A banking website structured to communicate financial offers, account access, and product benefits in a clear digital experience.",
@@ -334,7 +334,7 @@ const websiteShowcases: WebsiteShowcase[] = [
     name: "British Racing Hall of Fame",
     category: "WordPress",
     type: "Heritage Website",
-    image: britishRacingHallOfFame.url,
+    image: assetUrl(britishRacingHallOfFame),
     url: "https://horseracinghof.com/",
     description:
       "A heritage-driven website with a cinematic presentation, created to celebrate racing history, honourees, and event features.",
@@ -343,7 +343,7 @@ const websiteShowcases: WebsiteShowcase[] = [
     name: "Antoine Lours",
     category: "WordPress",
     type: "Chef Website",
-    image: antoineLours.url,
+    image: assetUrl(antoineLours),
     url: "https://antoinelours.com/",
     description:
       "An editorial chef website with bold typography and immersive imagery, built to express culinary identity and personal brand.",
@@ -352,7 +352,7 @@ const websiteShowcases: WebsiteShowcase[] = [
     name: "Nightfall Group",
     category: "WordPress",
     type: "Hotel Website",
-    image: nightfallGroup.url,
+    image: assetUrl(nightfallGroup),
     url: "https://nightfallgroup.com/",
     description:
       "A luxury hospitality and villa-booking website designed for premium lead capture, high-end visuals, and concierge-led conversion.",
@@ -361,7 +361,7 @@ const websiteShowcases: WebsiteShowcase[] = [
     name: "Hilton & Hyland",
     category: "WordPress",
     type: "Real Estate Property Website",
-    image: hiltonHyland.url,
+    image: assetUrl(hiltonHyland),
     url: "https://hiltonhyland.com/",
     description:
       "A luxury real estate website built to showcase prestige properties, strong brand positioning, and high-value property discovery.",
@@ -370,7 +370,7 @@ const websiteShowcases: WebsiteShowcase[] = [
     name: "Blue Marine Foundation",
     category: "WordPress",
     type: "Ocean Conservation Website",
-    image: blueMarineFoundation.url,
+    image: assetUrl(blueMarineFoundation),
     url: "https://www.bluemarinefoundation.com/",
     description:
       "A purpose-driven nonprofit website using immersive ocean visuals to support awareness, resources, and public engagement.",

@@ -99,7 +99,7 @@ function Hero() {
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-gold-gradient opacity-[0.08] blur-3xl" />
       <div className="relative mx-auto max-w-7xl px-6 pt-32 pb-32 md:pt-40 md:pb-40">
         <div className="flex justify-center mb-10 animate-float-up">
-          <img src={logoMark.url} alt="Oryntal" className="h-32 w-32 rounded-full ring-[3px] ring-gold glow-gold shadow-[0_0_40px_rgba(217,185,120,0.35)]" />
+          <img src={assetUrl(logoMark)} alt="Oryntal" className="h-32 w-32 rounded-full ring-[3px] ring-gold glow-gold shadow-[0_0_40px_rgba(217,185,120,0.35)]" />
         </div>
         <div className="text-center max-w-5xl mx-auto">
           <div className="inline-flex items-center gap-2 rounded-full border border-gold px-4 py-1.5 mb-8 animate-float-up">
@@ -230,7 +230,7 @@ function Blueprint() {
                   <div className="relative">
                     <div className="absolute inset-0 rounded-full bg-gold-gradient opacity-20 blur-2xl animate-ai-pulse" />
                     <img
-                      src={aiLabsLogo.url}
+                      src={assetUrl(aiLabsLogo)}
                       alt="Oryntal AI Labs"
                       className="relative h-36 w-36 md:h-44 md:w-44 rounded-full object-cover ring-2 ring-gold animate-ai-pulse"
                     />
@@ -271,7 +271,7 @@ const works = [
   {
     t: "Meet2Pro",
     c: "AI · LLM Product",
-    image: meet2pro.url,
+    image: assetUrl(meet2pro),
     pain: "Consultants and agency owners lose hours every week converting raw meeting notes into proposals and follow-ups — and critical commitments slip through the cracks.",
     fix: "An end-to-end meeting intelligence agent that transcribes calls, distils decisions, and auto-drafts proposals and follow-up emails ready to send.",
     tag: "AI",
@@ -280,7 +280,7 @@ const works = [
   {
     t: "QR2Review",
     c: "AI · Local Growth",
-    image: qr2review.url,
+    image: assetUrl(qr2review),
     pain: "Local businesses struggle to collect authentic Google reviews — customers forget, friction is high, and search visibility quietly erodes month after month.",
     fix: "A single QR scan generates a natural, AI-written review tuned to the customer's rating and posts it straight to the Google Business Profile.",
     tag: "AI",
@@ -289,7 +289,7 @@ const works = [
   {
     t: "WhatsApp RAG Agent",
     c: "Automation · Conversational AI",
-    image: whatsappRag.url,
+    image: assetUrl(whatsappRag),
     pain: "Support teams answer the same WhatsApp questions hundreds of times a day, while genuine product issues stall in an overloaded queue.",
     fix: "A retrieval-augmented WhatsApp agent grounded in your docs, SOPs, and CRM — resolves repetitive queries instantly and escalates only what truly needs a human.",
     tag: "Automation",
@@ -298,7 +298,7 @@ const works = [
   {
     t: "eShop Web",
     c: "Full Stack · E-Commerce",
-    image: eshopwebStore.url,
+    image: assetUrl(eshopwebStore),
     pain: "A multi-category retailer was losing buyers to a slow, fragmented storefront with weak merchandising and a clunky checkout path.",
     fix: "A performance-tuned, conversion-led e-commerce build with promotional surfaces, category clarity, and a frictionless purchase journey.",
     tag: "Full Stack",
@@ -307,7 +307,7 @@ const works = [
   {
     t: "The Kaftan Company",
     c: "Shopify · Fashion DTC",
-    image: theKaftanCompany.url,
+    image: assetUrl(theKaftanCompany),
     pain: "A premium fashion label needed a storefront worthy of its product — the existing theme flattened the brand and buried seasonal drops.",
     fix: "A bespoke Shopify 2.0 build engineered around collection storytelling, editorial visuals, and a checkout tuned for premium-segment conversion.",
     tag: "Shopify",
@@ -316,7 +316,7 @@ const works = [
   {
     t: "Clou",
     c: "WordPress · WooCommerce",
-    image: clouShot.url,
+    image: assetUrl(clouShot),
     pain: "A design-led product brand needed an e-commerce experience as refined as its catalogue — the prior site diluted the brand and underperformed on conversion.",
     fix: "A WordPress + WooCommerce build with cinematic product presentation, structured catalogue depth, and a checkout architected for considered purchases.",
     tag: "WordPress",
