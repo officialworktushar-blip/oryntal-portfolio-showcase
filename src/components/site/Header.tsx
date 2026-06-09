@@ -1,3 +1,4 @@
+import { assetUrl } from "@/lib/asset-url";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import logoMark from "@/assets/oryntal-mark.asset.json";
@@ -14,7 +15,7 @@ export function Header() {
     <header className="fixed top-0 z-50 w-full border-b border-gold backdrop-blur-xl bg-background/70">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         <Link to="/" className="flex items-center gap-3 group">
-          <img src={logoMark.url} alt="Oryntal" className="h-9 w-9 rounded-full ring-1 ring-gold transition-transform group-hover:scale-110" />
+          <img src={assetUrl(logoMark)} alt="Oryntal" className="h-9 w-9 rounded-full ring-1 ring-gold transition-transform group-hover:scale-110" />
           <span className="font-display text-xl tracking-widest text-gold">ORYNTAL</span>
         </Link>
         <nav className="hidden md:flex items-center gap-10">
