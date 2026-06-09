@@ -1,3 +1,4 @@
+import { assetUrl } from "@/lib/asset-url";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import logoMark from "@/assets/oryntal-mark.asset.json";
