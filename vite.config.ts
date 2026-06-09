@@ -12,4 +12,9 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  // Force-enable Nitro outside the Lovable sandbox so self-hosted deploys
+  // (Vercel, Netlify, Cloudflare Pages) get a real SSR server build instead
+  // of a bare client bundle. Nitro auto-detects the target via NITRO_PRESET
+  // or platform env vars (e.g. process.env.VERCEL → "vercel" preset).
+  nitro: true,
 });
