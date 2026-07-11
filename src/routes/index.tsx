@@ -14,16 +14,16 @@ import clouShot from "@/assets/site-shots/clou.asset.json";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Oryntal AI Labs — We Architect Intelligent Systems" },
-      { name: "description", content: "AI, automation, and full-stack engineering. Oryntal ships products that compound value for ambitious teams." },
-      { property: "og:title", content: "Oryntal AI Labs" },
-      { property: "og:description", content: "We architect intelligent systems that ship." },
+      { title: "Oryntal AI Labs — Collapse Complexity into a Singularity" },
+      { name: "description", content: "A gravitational studio for AI, automation, and full-stack systems. We pull scattered workflows into a single, inevitable point of truth." },
+      { property: "og:title", content: "Oryntal AI Labs — Collapse Complexity" },
+      { property: "og:description", content: "Raw operations are mere matter. We compress chaos into a single point of truth." },
     ],
   }),
   component: HomePage,
 });
 
-const phrases = ["Intelligent Systems.", "Automated Workflows.", "Full-Stack Craft.", "Shipped Products."];
+const phrases = ["Intelligent Systems.", "Autonomous Workflows.", "Full-Stack Gravity.", "Inevitable Outcomes."];
 
 function HomePage() {
   return (
