@@ -139,17 +139,17 @@ const automations: AutomationItem[] = [
 export const Route = createFileRoute("/projects")({
   head: () => ({
     meta: [
-      { title: "Projects — Oryntal AI Labs" },
+      { title: "The Archive — Matter in Orbit | Oryntal AI Labs" },
       {
         name: "description",
         content:
-          "Selected work across AI, automation, full-stack, Shopify, WordPress, and mobile applications.",
+          "Selected bodies of work across AI, automation, full-stack, Shopify, WordPress, and mobile — systems the gravitational field refuses to release.",
       },
-      { property: "og:title", content: "Projects — Oryntal AI Labs" },
+      { property: "og:title", content: "The Archive — Matter in Orbit" },
       {
         property: "og:description",
         content:
-          "Selected work across AI, automation, full-stack, Shopify, WordPress, and mobile applications.",
+          "Selected bodies of work across AI, automation, full-stack, Shopify, WordPress, and mobile.",
       },
     ],
   }),
