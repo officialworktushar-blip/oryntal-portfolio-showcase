@@ -352,10 +352,10 @@ function SelectedWorks() {
       <div className="mx-auto max-w-7xl px-6">
         <div className="flex items-end justify-between flex-wrap gap-6 mb-16">
           <div>
-            <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">§ 04 — Selected Works</div>
-            <h2 className="font-display text-4xl md:text-5xl">A few we're <span className="text-gold italic">proud of.</span></h2>
+            <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">§ 04 — Matter in Orbit</div>
+            <h2 className="font-display text-4xl md:text-5xl">Systems the field <span className="text-gold italic">refuses to release.</span></h2>
           </div>
-          <Link to="/projects" className="text-sm uppercase tracking-widest text-gold border-b border-gold pb-1">All Projects →</Link>
+          <Link to="/projects" className="text-sm uppercase tracking-widest text-gold border-b border-gold pb-1">Enter the Archive →</Link>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {works.map((w, i) => {
