@@ -165,7 +165,6 @@ function Hero() {
 
 
 const services = [
-const services = [
   { t: "AI Engineering", d: "LLM agents, RAG cores, and fine-tuned models — the gravitational mass that pulls decisions toward the right answer.", n: "01" },
   { t: "Automation", d: "n8n, custom pipelines, and event-driven flows that run silently in orbit — while you sleep, sell, and scale.", n: "02" },
   { t: "Full Stack", d: "Production React, Node, and edge-native systems engineered to hold under real gravitational load.", n: "03" },
