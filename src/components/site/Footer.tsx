@@ -9,7 +9,7 @@ export function Footer() {
         <div className="md:col-span-2">
           <img src={assetUrl(logoFull)} alt="Oryntal AI Labs" className="h-24 w-auto -ml-2" />
           <p className="mt-4 max-w-sm text-sm text-muted-foreground leading-relaxed">
-            We architect intelligent systems that ship — AI, automation, and full-stack craft for ambitious teams worldwide.
+            The gravitational studio. We collapse scattered operations — AI, automation, full-stack — into a single, inevitable point of truth.
           </p>
         </div>
         <div>
@@ -28,8 +28,8 @@ export function Footer() {
           </ul>
         </div>
       </div>
-      <div className="border-t border-gold py-6 text-center text-xs text-muted-foreground tracking-widest">
-        © {new Date().getFullYear()} ORYNTAL AI LABS — ENGINEERED WITH PRECISION
+      <div className="border-t border-gold py-6 text-center text-xs text-muted-foreground tracking-[0.3em]">
+        © {new Date().getFullYear()} ORYNTAL AI LABS — GRAVITY, ENGINEERED
       </div>
     </footer>
   );

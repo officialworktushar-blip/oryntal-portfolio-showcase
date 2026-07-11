@@ -14,16 +14,16 @@ import clouShot from "@/assets/site-shots/clou.asset.json";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Oryntal AI Labs — We Architect Intelligent Systems" },
-      { name: "description", content: "AI, automation, and full-stack engineering. Oryntal ships products that compound value for ambitious teams." },
-      { property: "og:title", content: "Oryntal AI Labs" },
-      { property: "og:description", content: "We architect intelligent systems that ship." },
+      { title: "Oryntal AI Labs — Collapse Complexity into a Singularity" },
+      { name: "description", content: "A gravitational studio for AI, automation, and full-stack systems. We pull scattered workflows into a single, inevitable point of truth." },
+      { property: "og:title", content: "Oryntal AI Labs — Collapse Complexity" },
+      { property: "og:description", content: "Raw operations are mere matter. We compress chaos into a single point of truth." },
     ],
   }),
   component: HomePage,
 });
 
-const phrases = ["Intelligent Systems.", "Automated Workflows.", "Full-Stack Craft.", "Shipped Products."];
+const phrases = ["Intelligent Systems.", "Autonomous Workflows.", "Full-Stack Gravity.", "Inevitable Outcomes."];
 
 function HomePage() {
   return (
@@ -63,9 +63,9 @@ function TrustedBy() {
         <div className="flex items-center gap-6 md:gap-8 rounded-full border-2 border-gold bg-card/60 px-8 md:px-10 py-6 md:py-8 overflow-hidden shadow-gold">
           <div className="shrink-0 pr-6 md:pr-8 border-r-2 border-gold/40">
             <div className="leading-tight">
-              <span className="block text-sm md:text-base uppercase tracking-[0.2em] text-muted-foreground font-bold">Trusted by</span>
+              <span className="block text-sm md:text-base uppercase tracking-[0.2em] text-muted-foreground font-bold">In Orbit</span>
               <span className="block text-5xl md:text-6xl lg:text-7xl font-black text-gold drop-shadow-sm leading-none mt-1">50+</span>
-              <span className="block text-sm md:text-base uppercase tracking-[0.2em] text-muted-foreground font-bold mt-1">Organisations</span>
+              <span className="block text-sm md:text-base uppercase tracking-[0.2em] text-muted-foreground font-bold mt-1">Bodies of Work</span>
             </div>
           </div>
           <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
@@ -96,41 +96,61 @@ function Hero() {
   }, []);
   return (
     <section className="relative overflow-hidden">
-      <div className="absolute inset-0 grid-noise opacity-40" />
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-gold-gradient opacity-[0.08] blur-3xl" />
+      {/* Gravitational lensing field */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[720px] w-[720px] rounded-full bg-[radial-gradient(circle,rgba(217,176,101,0.14)_0%,rgba(217,176,101,0.04)_35%,transparent_70%)] blur-2xl animate-pulse" />
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[520px] w-[520px] rounded-full border border-gold/15" />
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[380px] w-[380px] rounded-full border border-gold/25 shadow-[0_0_120px_rgba(217,176,101,0.08)]" />
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[240px] w-[240px] rounded-full border border-dashed border-gold/20 animate-spin-slow" />
+        {/* The singularity — a dark core */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[140px] w-[140px] rounded-full bg-background shadow-[inset_0_0_80px_rgba(0,0,0,0.9),0_0_60px_rgba(217,176,101,0.25)]" />
+      </div>
+      <div className="absolute inset-0 grid-noise opacity-20" />
+
       <div className="relative mx-auto max-w-7xl px-6 pt-32 pb-32 md:pt-40 md:pb-40">
         <div className="flex justify-center mb-10 animate-float-up">
-          <img src={assetUrl(logoMark)} alt="Oryntal" className="h-32 w-32 rounded-full ring-[3px] ring-gold glow-gold shadow-[0_0_40px_rgba(217,185,120,0.35)]" />
+          <img src={assetUrl(logoMark)} alt="Oryntal" className="h-24 w-24 rounded-full ring-[3px] ring-gold glow-gold shadow-[0_0_40px_rgba(217,185,120,0.35)]" />
         </div>
         <div className="text-center max-w-5xl mx-auto">
-          <div className="inline-flex items-center gap-2 rounded-full border border-gold px-4 py-1.5 mb-8 animate-float-up">
+          <div className="inline-flex items-center gap-2 rounded-full border border-gold px-4 py-1.5 mb-8 animate-float-up backdrop-blur">
             <span className="h-1.5 w-1.5 rounded-full bg-gold animate-pulse" />
-            <span className="text-xs uppercase tracking-[0.3em] text-gold">Oryntal Portfolio</span>
+            <span className="text-xs uppercase tracking-[0.4em] text-gold">Aurelius Intelligence · Est. 2026</span>
           </div>
-          <h1 className="font-display text-5xl md:text-7xl lg:text-8xl leading-[1.05] animate-float-up">
-            We architect <br />
-            <span className="text-gold inline-block min-h-[1.2em] transition-all duration-500" key={i}>
+          <h1 className="font-display text-5xl md:text-7xl lg:text-8xl leading-[0.95] animate-float-up">
+            Collapse <span className="italic text-gold">complexity</span> <br />
+            into a <span className="not-italic font-semibold bg-gradient-to-b from-foreground via-gold to-muted-foreground bg-clip-text text-transparent">singularity</span>.
+          </h1>
+          <div className="mt-6 flex items-center justify-center gap-3 animate-float-up">
+            <div className="h-px w-8 bg-gold/40" />
+            <span className="text-[11px] uppercase tracking-[0.35em] text-muted-foreground italic">The gravity behind</span>
+            <span className="font-display italic text-gold text-lg min-w-[220px] text-left transition-all duration-500" key={i}>
               {phrases[i]}
             </span>
-          </h1>
+            <div className="h-px w-8 bg-gold/40" />
+          </div>
           <p className="mt-8 max-w-2xl mx-auto text-lg text-muted-foreground leading-relaxed animate-float-up">
-            A boutique studio engineering AI products, automations, and digital infrastructure for founders who refuse to ship average.
+            Your operations are scattered matter — dashboards, docs, decisions drifting apart. We compress that chaos into a single, inevitable point of truth. AI that pulls. Automation that holds. Systems that no competitor can escape.
           </p>
           <div className="mt-10 flex flex-wrap justify-center gap-4 animate-float-up">
-            <Link to="/contact" className="rounded-full bg-gold-gradient px-8 py-3.5 text-sm uppercase tracking-widest text-primary-foreground font-medium shadow-gold hover:scale-105 transition-transform">
-              Commission Work
+            <Link to="/contact" className="group relative rounded-full bg-gold-gradient px-8 py-3.5 text-sm uppercase tracking-[0.25em] text-primary-foreground font-medium shadow-gold hover:scale-105 transition-transform">
+              Cross the Event Horizon →
             </Link>
-            <Link to="/projects" className="rounded-full border border-gold px-8 py-3.5 text-sm uppercase tracking-widest text-gold hover:bg-secondary transition-colors">
-              View Portfolio
+            <Link to="/projects" className="rounded-full border border-gold/60 px-8 py-3.5 text-sm uppercase tracking-[0.25em] text-gold hover:bg-secondary hover:border-gold transition-colors">
+              Enter the Archive
             </Link>
+          </div>
+          <div className="mt-8 flex items-center justify-center gap-2 opacity-70">
+            <div className="h-px w-6 bg-gold/40" />
+            <span className="text-[10px] uppercase tracking-[0.35em] text-muted-foreground italic">The singularity awaits</span>
+            <div className="h-px w-6 bg-gold/40" />
           </div>
         </div>
         <div className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-px bg-gold/20 border border-gold rounded-2xl overflow-hidden">
           {[
-            ["120+", "Systems Shipped"],
-            ["38", "Global Clients"],
-            ["6", "Practice Areas"],
-            ["100%", "Founder-led"],
+            ["120+", "Systems Compressed"],
+            ["38", "Orbits Established"],
+            ["6", "Fields of Gravity"],
+            ["100%", "Founder-led Core"],
           ].map(([k, v]) => (
             <div key={v} className="bg-background p-6 text-center">
               <div className="font-display text-3xl text-gold">{k}</div>
@@ -143,13 +163,14 @@ function Hero() {
   );
 }
 
+
 const services = [
-  { t: "AI Engineering", d: "LLM agents, RAG systems, fine-tuned models that solve real workflows.", n: "01" },
-  { t: "Automation", d: "n8n, Zapier, custom pipelines — your business running while you sleep.", n: "02" },
-  { t: "Full Stack", d: "Production React, Node, edge-native apps built for scale.", n: "03" },
-  { t: "Shopify", d: "Headless storefronts, custom apps, and conversion-tuned themes.", n: "04" },
-  { t: "WordPress", d: "Performant, secure builds with bespoke admin experiences.", n: "05" },
-  { t: "Mobile Apps", d: "iOS & Android with React Native — ship once, ship everywhere.", n: "06" },
+  { t: "AI Engineering", d: "LLM agents, RAG cores, and fine-tuned models — the gravitational mass that pulls decisions toward the right answer.", n: "01" },
+  { t: "Automation", d: "n8n, custom pipelines, and event-driven flows that run silently in orbit — while you sleep, sell, and scale.", n: "02" },
+  { t: "Full Stack", d: "Production React, Node, and edge-native systems engineered to hold under real gravitational load.", n: "03" },
+  { t: "Shopify", d: "Headless storefronts and bespoke apps — commerce compressed into a single, frictionless conversion path.", n: "04" },
+  { t: "WordPress", d: "Performant, secure builds with editorial control — a stable disc around your content, not a house of cards.", n: "05" },
+  { t: "Mobile Apps", d: "iOS and Android on React Native — one codebase, two gravitational fields, zero drift.", n: "06" },
 ];
 
 function InfrastructureGrid() {
@@ -158,11 +179,11 @@ function InfrastructureGrid() {
       <div className="mx-auto max-w-7xl px-6">
         <div className="flex items-end justify-between flex-wrap gap-6 mb-16">
           <div>
-            <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">§ 02 — The Infrastructure Grid</div>
-            <h2 className="font-display text-4xl md:text-5xl max-w-2xl">Six disciplines. <span className="text-gold italic">One studio.</span></h2>
+            <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">§ 02 — The Accretion Disc</div>
+            <h2 className="font-display text-4xl md:text-5xl max-w-2xl">Six disciplines. <span className="text-gold italic">One gravitational core.</span></h2>
           </div>
           <p className="max-w-md text-muted-foreground">
-            Every Oryntal engagement composes from this stack. We build the entire surface so nothing is lost in handoff.
+            Every Oryntal engagement pulls from this disc. We hold the entire orbit so nothing drifts loose between strategy, engineering, and launch.
           </p>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-gold/15 border border-gold rounded-2xl overflow-hidden">
@@ -188,18 +209,18 @@ function Blueprint() {
       <div className="absolute inset-0 grid-noise opacity-20" />
       <div className="relative mx-auto max-w-7xl px-6 grid lg:grid-cols-2 gap-16 items-center">
         <div>
-          <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">§ 03 — The Architectural Blueprint</div>
+          <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">§ 03 — The Gravitational Blueprint</div>
           <h2 className="font-display text-4xl md:text-5xl leading-tight">
-            Software is <span className="text-gold italic">architecture.</span> We draw the plans before we pour the foundation.
+            Software is <span className="text-gold italic">gravity.</span> We map the field before a single body enters orbit.
           </h2>
           <p className="mt-6 text-muted-foreground leading-relaxed">
-            Most agencies start with code. We start with constraints, dependencies, and second-order effects. By the time we ship, you understand every line — because you helped specify it.
+            Most agencies begin at code. We begin at the field — the constraints, the dependencies, the second-order forces. By the time we ship, you can feel every line of pull, because you helped chart it.
           </p>
           <div className="mt-10 space-y-4">
             {[
-              ["Discovery", "Maps the problem space, stakeholders, and success criteria."],
-              ["Architecture", "Documents systems, data flows, and integration contracts."],
-              ["Build & Ship", "Weekly demos, continuous deploy, zero surprise launches."],
+              ["Observe", "We map the drift — where matter escapes, where the field is weak, where entropy is winning."],
+              ["Compress", "We architect the singularity — one core, one contract, one flow that pulls the rest into alignment."],
+              ["Release light", "We ship in weeks with telemetry baked in. The system runs. The signal shows. The compounding begins."],
             ].map(([t, d]) => (
               <div key={t} className="border-l-2 border-gold pl-5">
                 <div className="font-display text-lg text-gold">{t}</div>
@@ -238,19 +259,19 @@ function Blueprint() {
                   </div>
                   <div className="mt-5 text-center">
                     <div className="font-display text-base md:text-lg text-gold tracking-[0.25em] uppercase">Oryntal AI Labs</div>
-                    <div className="mt-1 font-mono text-[10px] text-muted-foreground tracking-widest">R&D · NEURAL SYSTEMS</div>
+                    <div className="mt-1 font-mono text-[10px] text-muted-foreground tracking-widest">R&D · THE SINGULARITY CORE</div>
                   </div>
                 </div>
               </div>
 
               {/* data ticker */}
               <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between font-mono text-[9px] text-gold/80 tracking-widest">
-                <span className="animate-flicker">◉ MODEL.SYNC</span>
-                <span className="animate-flicker" style={{ animationDelay: '0.4s' }}>LLM · ACTIVE</span>
+                <span className="animate-flicker">◉ CORE.STABLE</span>
+                <span className="animate-flicker" style={{ animationDelay: '0.4s' }}>ORBIT · LOCKED</span>
                 <span className="animate-flicker" style={{ animationDelay: '0.8s' }}>v.2026</span>
               </div>
 
-              <div className="absolute top-4 left-4 font-mono text-[10px] text-gold tracking-wider">SYS.01 / CORE</div>
+              <div className="absolute top-4 left-4 font-mono text-[10px] text-gold tracking-wider">SGR.01 / SINGULARITY</div>
               <div className="absolute top-4 right-4 h-2 w-2 rounded-full bg-gold animate-pulse" />
             </div>
           </div>
@@ -260,7 +281,7 @@ function Blueprint() {
             to="/contact"
             className="absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-gold bg-background/90 backdrop-blur px-6 py-2.5 text-[11px] uppercase tracking-[0.25em] text-gold hover:bg-gold-gradient hover:text-primary-foreground transition-all shadow-gold"
           >
-            For More AI Business LLM Models →
+            Enter the Core — Explore the AI Models →
           </Link>
         </div>
       </div>
@@ -331,10 +352,10 @@ function SelectedWorks() {
       <div className="mx-auto max-w-7xl px-6">
         <div className="flex items-end justify-between flex-wrap gap-6 mb-16">
           <div>
-            <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">§ 04 — Selected Works</div>
-            <h2 className="font-display text-4xl md:text-5xl">A few we're <span className="text-gold italic">proud of.</span></h2>
+            <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">§ 04 — Matter in Orbit</div>
+            <h2 className="font-display text-4xl md:text-5xl">Systems the field <span className="text-gold italic">refuses to release.</span></h2>
           </div>
-          <Link to="/projects" className="text-sm uppercase tracking-widest text-gold border-b border-gold pb-1">All Projects →</Link>
+          <Link to="/projects" className="text-sm uppercase tracking-widest text-gold border-b border-gold pb-1">Enter the Archive →</Link>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {works.map((w, i) => {
@@ -354,17 +375,17 @@ function SelectedWorks() {
                 </div>
                 <div className="p-7">
                   <div className="flex items-center justify-between mb-3">
-                    <span className="font-mono text-xs text-muted-foreground">CASE {String(i + 1).padStart(2, "0")}</span>
+                    <span className="font-mono text-xs text-muted-foreground">BODY {String(i + 1).padStart(2, "0")}</span>
                     <span className="font-mono text-[10px] uppercase tracking-widest text-gold/80">{w.c}</span>
                   </div>
                   <h3 className="font-display text-2xl mb-4">{w.t}</h3>
                   <div className="space-y-3">
                     <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-3">
-                      <div className="font-mono text-[10px] uppercase tracking-widest text-destructive/80 mb-1">Pain Point</div>
+                      <div className="font-mono text-[10px] uppercase tracking-widest text-destructive/80 mb-1">The Entropy</div>
                       <p className="text-sm font-semibold text-foreground leading-relaxed">{w.pain}</p>
                     </div>
                     <div>
-                      <div className="font-mono text-[10px] uppercase tracking-widest text-gold mb-1">What We Built</div>
+                      <div className="font-mono text-[10px] uppercase tracking-widest text-gold mb-1">The Collapse</div>
                       <p className="text-sm text-foreground/90 leading-relaxed">{w.fix}</p>
                     </div>
                   </div>
@@ -394,23 +415,23 @@ function SelectedWorks() {
 const methodSteps = [
   {
     n: "01",
-    t: "Listen for the friction",
-    d: "Every business hides its pain points inside tiny phrases — 'we usually copy-paste this', 'the team waits until Friday', 'the spreadsheet always breaks'. We sit with founders and operators, watch real workflows, and write down every place time, money, or attention leaks.",
+    t: "Detect the drift",
+    d: "Every business leaks matter through small phrases — 'we usually copy-paste this', 'the team waits until Friday', 'the spreadsheet always breaks'. We sit with founders and operators, watch real workflows, and chart every place time, money, or attention is escaping the field.",
   },
   {
     n: "02",
-    t: "Measure the cost",
-    d: "A pain point only matters if it costs something — hours, revenue, retention, or sanity. We attach a number to every issue we find, then rank them by ROI. We don't build what's interesting; we build what moves the metric.",
+    t: "Weigh the mass",
+    d: "A leak only matters if it has mass — hours, revenue, retention, or sanity. We attach a number to every escape point, then rank by gravitational return. We don't build what's interesting; we build what bends the metric.",
   },
   {
     n: "03",
-    t: "Architect the system",
-    d: "This is where Oryntal AI Labs comes in. Our R&D arm prototypes the AI agents, automations, and integrations that will absorb the work. We sketch the system on paper before a single line of code — so you see the solution before you fund it.",
+    t: "Design the core",
+    d: "This is where Oryntal AI Labs enters. Our R&D arm prototypes the agents, automations, and integrations that will absorb the work. We diagram the field on paper before a single line of code — so you see the singularity form before you fund it.",
   },
   {
     n: "04",
-    t: "Ship, measure, compound",
-    d: "We deploy in weeks, not quarters. Every system ships with telemetry baked in, so the impact is visible from day one. Then we compound — each automation becomes the foundation for the next.",
+    t: "Release light",
+    d: "We deploy in weeks, not quarters. Every system ships with telemetry baked in, so the pull is visible from day one. Then the compounding begins — each system becomes gravitational mass for the next.",
   },
 ];
 
@@ -421,18 +442,18 @@ function Method() {
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="grid lg:grid-cols-3 gap-12 mb-16">
           <div className="lg:col-span-2">
-            <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">§ 05 — How We Work</div>
+            <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">§ 05 — The Method of Gravity</div>
             <h2 className="font-display text-4xl md:text-5xl leading-tight">
               We don't sell software. <br />
-              We find the <span className="text-gold italic">pain</span>, then build the <span className="text-gold italic">cure.</span>
+              We find the <span className="text-gold italic">leak</span>, then build the <span className="text-gold italic">core.</span>
             </h2>
           </div>
           <div className="space-y-4 text-muted-foreground leading-relaxed">
             <p>
-              <span className="text-gold font-medium">Oryntal</span> is the studio — strategy, engineering, and delivery for clients who need a system shipped.
+              <span className="text-gold font-medium">Oryntal</span> is the studio — the gravitational discipline of strategy, engineering, and delivery for teams who need a system that actually holds.
             </p>
             <p>
-              <span className="text-gold font-medium">Oryntal AI Labs</span> is our research arm — where we prototype the AI agents and automation patterns that later power those systems in production.
+              <span className="text-gold font-medium">Oryntal AI Labs</span> is our research core — where we prototype the agents and automation patterns that later become the mass inside every production system we ship.
             </p>
           </div>
         </div>
@@ -453,12 +474,12 @@ function Method() {
 }
 
 const faqs = [
-  { q: "We already have a team. Why bring you in?", a: "We integrate. Most engagements augment in-house teams with senior AI/automation specialists for a fixed window." },
-  { q: "Are you fast or are you careful?", a: "Both. Our process is built so speed and rigour aren't trade-offs — they're side effects of clear architecture." },
-  { q: "What does an engagement cost?", a: "Fixed-scope projects start around $12k. Retainers from $5k/mo. Every quote is itemized — no agency math." },
-  { q: "Do you sign NDAs?", a: "Yes, before any commercial discussion. We also offer reverse-NDAs to protect your IP from our shared learnings." },
-  { q: "Where are you based?", a: "Distributed across three continents. Founder-led from a single time zone you'll always reach." },
-  { q: "What happens after launch?", a: "Two weeks of included hypercare, then optional retainer for evolution, monitoring, and on-call response." },
+  { q: "We already have a team. Why bring you in?", a: "We enter orbit around it. Most engagements augment in-house teams with senior AI and automation specialists for a fixed window — added mass, not replaced mass." },
+  { q: "Are you fast, or are you careful?", a: "Both. Our method is built so speed and rigour aren't trade-offs — they're the natural side-effects of a well-mapped field." },
+  { q: "What does an engagement cost?", a: "Fixed-scope projects start around $12k. Retainers from $5k/mo. Every quote is itemised down to the hour — no agency gravity wells." },
+  { q: "Do you sign NDAs?", a: "Yes, before any commercial discussion. We also offer reverse-NDAs so your IP never drifts back through our shared learnings." },
+  { q: "Where are you based?", a: "Distributed across three continents. Founder-led from a single time zone you will always reach." },
+  { q: "What happens after launch?", a: "Two weeks of included hypercare while the system stabilises, then an optional retainer for evolution, monitoring, and on-call response." },
 ];
 
 function FAQGrid() {
@@ -466,7 +487,7 @@ function FAQGrid() {
     <section className="py-32 border-t border-gold">
       <div className="mx-auto max-w-7xl px-6">
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">§ 06 — Strategic Objections</div>
+          <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">§ 06 — Before You Enter Orbit</div>
           <h2 className="font-display text-4xl md:text-5xl">Answered <span className="text-gold italic">before</span> you ask.</h2>
         </div>
         <div className="grid md:grid-cols-2 gap-px bg-gold/15 border border-gold rounded-2xl overflow-hidden">
@@ -485,17 +506,26 @@ function FAQGrid() {
 
 function CTA() {
   return (
-    <section className="py-32 border-t border-gold">
-      <div className="mx-auto max-w-4xl px-6 text-center">
+    <section className="relative py-32 border-t border-gold overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[420px] w-[420px] rounded-full bg-[radial-gradient(circle,rgba(217,176,101,0.14),transparent_70%)] blur-2xl" />
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[260px] w-[260px] rounded-full border border-gold/20" />
+      </div>
+      <div className="relative mx-auto max-w-4xl px-6 text-center">
         <h2 className="font-display text-4xl md:text-6xl leading-tight">
-          Have a system worth <span className="text-gold italic">architecting?</span>
+          Have a system worth <span className="text-gold italic">collapsing?</span>
         </h2>
         <p className="mt-6 text-lg text-muted-foreground">
-          Tell us where you're stuck. We'll respond within one working day with a real opinion — not a sales deck.
+          Tell us where the matter is drifting. Within one working day, you get a real opinion from a founder — never a sales deck, never a bot.
         </p>
-        <Link to="/contact" className="mt-10 inline-block rounded-full bg-gold-gradient px-10 py-4 text-sm uppercase tracking-widest text-primary-foreground font-medium shadow-gold hover:scale-105 transition-transform">
-          Start the Conversation
+        <Link to="/contact" className="mt-10 inline-block rounded-full bg-gold-gradient px-10 py-4 text-sm uppercase tracking-[0.25em] text-primary-foreground font-medium shadow-gold hover:scale-105 transition-transform">
+          Cross the Event Horizon
         </Link>
+        <div className="mt-4 flex items-center justify-center gap-2 opacity-70">
+          <div className="h-px w-6 bg-gold/40" />
+          <span className="text-[10px] uppercase tracking-[0.35em] text-muted-foreground italic">The singularity awaits</span>
+          <div className="h-px w-6 bg-gold/40" />
+        </div>
       </div>
     </section>
   );
