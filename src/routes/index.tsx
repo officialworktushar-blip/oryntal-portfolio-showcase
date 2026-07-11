@@ -259,7 +259,7 @@ function Blueprint() {
                   </div>
                   <div className="mt-5 text-center">
                     <div className="font-display text-base md:text-lg text-gold tracking-[0.25em] uppercase">Oryntal AI Labs</div>
-                    <div className="mt-1 font-mono text-[10px] text-muted-foreground tracking-widest">R&D · NEURAL SYSTEMS</div>
+                    <div className="mt-1 font-mono text-[10px] text-muted-foreground tracking-widest">R&D · THE SINGULARITY CORE</div>
                   </div>
                 </div>
               </div>
