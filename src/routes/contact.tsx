@@ -28,13 +28,14 @@ function ContactPage() {
       <section className="relative border-b border-gold overflow-hidden">
         <div className="absolute inset-0 grid-noise opacity-30" />
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[500px] rounded-full bg-gold-gradient opacity-[0.06] blur-3xl" />
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[320px] w-[320px] rounded-full border border-gold/20" />
         <div className="relative mx-auto max-w-4xl px-6 py-24 md:py-32 text-center">
-          <div className="text-xs uppercase tracking-[0.3em] text-gold mb-4">Start a Conversation</div>
+          <div className="text-xs uppercase tracking-[0.4em] text-gold mb-4">Cross the Event Horizon</div>
           <h1 className="font-display text-5xl md:text-7xl leading-tight">
-            Tell us what you're <span className="text-gold italic">building.</span>
+            Tell us where the <span className="text-gold italic">matter is drifting.</span>
           </h1>
           <p className="mt-6 max-w-xl mx-auto text-lg text-muted-foreground">
-            One thoughtful reply within a working day. No drip campaigns. No discovery decks. Just a real human with a real opinion.
+            One thoughtful reply within a working day. No drip campaigns, no discovery decks — just a real founder with a real opinion and the gravity to hold it.
           </p>
         </div>
       </section>
