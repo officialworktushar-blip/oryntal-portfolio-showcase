@@ -63,9 +63,9 @@ function TrustedBy() {
         <div className="flex items-center gap-6 md:gap-8 rounded-full border-2 border-gold bg-card/60 px-8 md:px-10 py-6 md:py-8 overflow-hidden shadow-gold">
           <div className="shrink-0 pr-6 md:pr-8 border-r-2 border-gold/40">
             <div className="leading-tight">
-              <span className="block text-sm md:text-base uppercase tracking-[0.2em] text-muted-foreground font-bold">Trusted by</span>
+              <span className="block text-sm md:text-base uppercase tracking-[0.2em] text-muted-foreground font-bold">In Orbit</span>
               <span className="block text-5xl md:text-6xl lg:text-7xl font-black text-gold drop-shadow-sm leading-none mt-1">50+</span>
-              <span className="block text-sm md:text-base uppercase tracking-[0.2em] text-muted-foreground font-bold mt-1">Organisations</span>
+              <span className="block text-sm md:text-base uppercase tracking-[0.2em] text-muted-foreground font-bold mt-1">Bodies of Work</span>
             </div>
           </div>
           <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
@@ -82,6 +82,81 @@ function TrustedBy() {
             </div>
           </div>
 
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Hero() {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setI((p) => (p + 1) % phrases.length), 2600);
+    return () => clearInterval(t);
+  }, []);
+  return (
+    <section className="relative overflow-hidden">
+      {/* Gravitational lensing field */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[720px] w-[720px] rounded-full bg-[radial-gradient(circle,rgba(217,176,101,0.14)_0%,rgba(217,176,101,0.04)_35%,transparent_70%)] blur-2xl animate-pulse" />
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[520px] w-[520px] rounded-full border border-gold/15" />
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[380px] w-[380px] rounded-full border border-gold/25 shadow-[0_0_120px_rgba(217,176,101,0.08)]" />
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[240px] w-[240px] rounded-full border border-dashed border-gold/20 animate-spin-slow" />
+        {/* The singularity — a dark core */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[140px] w-[140px] rounded-full bg-background shadow-[inset_0_0_80px_rgba(0,0,0,0.9),0_0_60px_rgba(217,176,101,0.25)]" />
+      </div>
+      <div className="absolute inset-0 grid-noise opacity-20" />
+
+      <div className="relative mx-auto max-w-7xl px-6 pt-32 pb-32 md:pt-40 md:pb-40">
+        <div className="flex justify-center mb-10 animate-float-up">
+          <img src={assetUrl(logoMark)} alt="Oryntal" className="h-24 w-24 rounded-full ring-[3px] ring-gold glow-gold shadow-[0_0_40px_rgba(217,185,120,0.35)]" />
+        </div>
+        <div className="text-center max-w-5xl mx-auto">
+          <div className="inline-flex items-center gap-2 rounded-full border border-gold px-4 py-1.5 mb-8 animate-float-up backdrop-blur">
+            <span className="h-1.5 w-1.5 rounded-full bg-gold animate-pulse" />
+            <span className="text-xs uppercase tracking-[0.4em] text-gold">Aurelius Intelligence · Est. 2026</span>
+          </div>
+          <h1 className="font-display text-5xl md:text-7xl lg:text-8xl leading-[0.95] animate-float-up">
+            Collapse <span className="italic text-gold">complexity</span> <br />
+            into a <span className="not-italic font-semibold bg-gradient-to-b from-foreground via-gold to-muted-foreground bg-clip-text text-transparent">singularity</span>.
+          </h1>
+          <div className="mt-6 flex items-center justify-center gap-3 animate-float-up">
+            <div className="h-px w-8 bg-gold/40" />
+            <span className="text-[11px] uppercase tracking-[0.35em] text-muted-foreground italic">The gravity behind</span>
+            <span className="font-display italic text-gold text-lg min-w-[220px] text-left transition-all duration-500" key={i}>
+              {phrases[i]}
+            </span>
+            <div className="h-px w-8 bg-gold/40" />
+          </div>
+          <p className="mt-8 max-w-2xl mx-auto text-lg text-muted-foreground leading-relaxed animate-float-up">
+            Your operations are scattered matter — dashboards, docs, decisions drifting apart. We compress that chaos into a single, inevitable point of truth. AI that pulls. Automation that holds. Systems that no competitor can escape.
+          </p>
+          <div className="mt-10 flex flex-wrap justify-center gap-4 animate-float-up">
+            <Link to="/contact" className="group relative rounded-full bg-gold-gradient px-8 py-3.5 text-sm uppercase tracking-[0.25em] text-primary-foreground font-medium shadow-gold hover:scale-105 transition-transform">
+              Cross the Event Horizon →
+            </Link>
+            <Link to="/projects" className="rounded-full border border-gold/60 px-8 py-3.5 text-sm uppercase tracking-[0.25em] text-gold hover:bg-secondary hover:border-gold transition-colors">
+              Enter the Archive
+            </Link>
+          </div>
+          <div className="mt-8 flex items-center justify-center gap-2 opacity-70">
+            <div className="h-px w-6 bg-gold/40" />
+            <span className="text-[10px] uppercase tracking-[0.35em] text-muted-foreground italic">The singularity awaits</span>
+            <div className="h-px w-6 bg-gold/40" />
+          </div>
+        </div>
+        <div className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-px bg-gold/20 border border-gold rounded-2xl overflow-hidden">
+          {[
+            ["120+", "Systems Compressed"],
+            ["38", "Orbits Established"],
+            ["6", "Fields of Gravity"],
+            ["100%", "Founder-led Core"],
+          ].map(([k, v]) => (
+            <div key={v} className="bg-background p-6 text-center">
+              <div className="font-display text-3xl text-gold">{k}</div>
+              <div className="mt-1 text-xs uppercase tracking-widest text-muted-foreground">{v}</div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
