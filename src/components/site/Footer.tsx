@@ -28,8 +28,8 @@ export function Footer() {
           </ul>
         </div>
       </div>
-      <div className="border-t border-gold py-6 text-center text-xs text-muted-foreground tracking-widest">
-        © {new Date().getFullYear()} ORYNTAL AI LABS — ENGINEERED WITH PRECISION
+      <div className="border-t border-gold py-6 text-center text-xs text-muted-foreground tracking-[0.3em]">
+        © {new Date().getFullYear()} ORYNTAL AI LABS — GRAVITY, ENGINEERED
       </div>
     </footer>
   );
