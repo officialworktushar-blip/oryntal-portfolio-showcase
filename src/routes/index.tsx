@@ -375,17 +375,17 @@ function SelectedWorks() {
                 </div>
                 <div className="p-7">
                   <div className="flex items-center justify-between mb-3">
-                    <span className="font-mono text-xs text-muted-foreground">CASE {String(i + 1).padStart(2, "0")}</span>
+                    <span className="font-mono text-xs text-muted-foreground">BODY {String(i + 1).padStart(2, "0")}</span>
                     <span className="font-mono text-[10px] uppercase tracking-widest text-gold/80">{w.c}</span>
                   </div>
                   <h3 className="font-display text-2xl mb-4">{w.t}</h3>
                   <div className="space-y-3">
                     <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-3">
-                      <div className="font-mono text-[10px] uppercase tracking-widest text-destructive/80 mb-1">Pain Point</div>
+                      <div className="font-mono text-[10px] uppercase tracking-widest text-destructive/80 mb-1">The Entropy</div>
                       <p className="text-sm font-semibold text-foreground leading-relaxed">{w.pain}</p>
                     </div>
                     <div>
-                      <div className="font-mono text-[10px] uppercase tracking-widest text-gold mb-1">What We Built</div>
+                      <div className="font-mono text-[10px] uppercase tracking-widest text-gold mb-1">The Collapse</div>
                       <p className="text-sm text-foreground/90 leading-relaxed">{w.fix}</p>
                     </div>
                   </div>
