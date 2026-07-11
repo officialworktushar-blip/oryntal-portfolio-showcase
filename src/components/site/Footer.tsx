@@ -9,7 +9,7 @@ export function Footer() {
         <div className="md:col-span-2">
           <img src={assetUrl(logoFull)} alt="Oryntal AI Labs" className="h-24 w-auto -ml-2" />
           <p className="mt-4 max-w-sm text-sm text-muted-foreground leading-relaxed">
-            We architect intelligent systems that ship — AI, automation, and full-stack craft for ambitious teams worldwide.
+            The gravitational studio. We collapse scattered operations — AI, automation, full-stack — into a single, inevitable point of truth.
           </p>
         </div>
         <div>
