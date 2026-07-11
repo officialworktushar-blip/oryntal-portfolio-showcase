@@ -165,12 +165,13 @@ function Hero() {
 
 
 const services = [
-  { t: "AI Engineering", d: "LLM agents, RAG systems, fine-tuned models that solve real workflows.", n: "01" },
-  { t: "Automation", d: "n8n, Zapier, custom pipelines — your business running while you sleep.", n: "02" },
-  { t: "Full Stack", d: "Production React, Node, edge-native apps built for scale.", n: "03" },
-  { t: "Shopify", d: "Headless storefronts, custom apps, and conversion-tuned themes.", n: "04" },
-  { t: "WordPress", d: "Performant, secure builds with bespoke admin experiences.", n: "05" },
-  { t: "Mobile Apps", d: "iOS & Android with React Native — ship once, ship everywhere.", n: "06" },
+const services = [
+  { t: "AI Engineering", d: "LLM agents, RAG cores, and fine-tuned models — the gravitational mass that pulls decisions toward the right answer.", n: "01" },
+  { t: "Automation", d: "n8n, custom pipelines, and event-driven flows that run silently in orbit — while you sleep, sell, and scale.", n: "02" },
+  { t: "Full Stack", d: "Production React, Node, and edge-native systems engineered to hold under real gravitational load.", n: "03" },
+  { t: "Shopify", d: "Headless storefronts and bespoke apps — commerce compressed into a single, frictionless conversion path.", n: "04" },
+  { t: "WordPress", d: "Performant, secure builds with editorial control — a stable disc around your content, not a house of cards.", n: "05" },
+  { t: "Mobile Apps", d: "iOS and Android on React Native — one codebase, two gravitational fields, zero drift.", n: "06" },
 ];
 
 function InfrastructureGrid() {
@@ -179,11 +180,11 @@ function InfrastructureGrid() {
       <div className="mx-auto max-w-7xl px-6">
         <div className="flex items-end justify-between flex-wrap gap-6 mb-16">
           <div>
-            <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">§ 02 — The Infrastructure Grid</div>
-            <h2 className="font-display text-4xl md:text-5xl max-w-2xl">Six disciplines. <span className="text-gold italic">One studio.</span></h2>
+            <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">§ 02 — The Accretion Disc</div>
+            <h2 className="font-display text-4xl md:text-5xl max-w-2xl">Six disciplines. <span className="text-gold italic">One gravitational core.</span></h2>
           </div>
           <p className="max-w-md text-muted-foreground">
-            Every Oryntal engagement composes from this stack. We build the entire surface so nothing is lost in handoff.
+            Every Oryntal engagement pulls from this disc. We hold the entire orbit so nothing drifts loose between strategy, engineering, and launch.
           </p>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-gold/15 border border-gold rounded-2xl overflow-hidden">
@@ -209,18 +210,18 @@ function Blueprint() {
       <div className="absolute inset-0 grid-noise opacity-20" />
       <div className="relative mx-auto max-w-7xl px-6 grid lg:grid-cols-2 gap-16 items-center">
         <div>
-          <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">§ 03 — The Architectural Blueprint</div>
+          <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">§ 03 — The Gravitational Blueprint</div>
           <h2 className="font-display text-4xl md:text-5xl leading-tight">
-            Software is <span className="text-gold italic">architecture.</span> We draw the plans before we pour the foundation.
+            Software is <span className="text-gold italic">gravity.</span> We map the field before a single body enters orbit.
           </h2>
           <p className="mt-6 text-muted-foreground leading-relaxed">
-            Most agencies start with code. We start with constraints, dependencies, and second-order effects. By the time we ship, you understand every line — because you helped specify it.
+            Most agencies begin at code. We begin at the field — the constraints, the dependencies, the second-order forces. By the time we ship, you can feel every line of pull, because you helped chart it.
           </p>
           <div className="mt-10 space-y-4">
             {[
-              ["Discovery", "Maps the problem space, stakeholders, and success criteria."],
-              ["Architecture", "Documents systems, data flows, and integration contracts."],
-              ["Build & Ship", "Weekly demos, continuous deploy, zero surprise launches."],
+              ["Observe", "We map the drift — where matter escapes, where the field is weak, where entropy is winning."],
+              ["Compress", "We architect the singularity — one core, one contract, one flow that pulls the rest into alignment."],
+              ["Release light", "We ship in weeks with telemetry baked in. The system runs. The signal shows. The compounding begins."],
             ].map(([t, d]) => (
               <div key={t} className="border-l-2 border-gold pl-5">
                 <div className="font-display text-lg text-gold">{t}</div>
