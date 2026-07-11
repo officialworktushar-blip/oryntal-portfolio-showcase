@@ -266,12 +266,12 @@ function Blueprint() {
 
               {/* data ticker */}
               <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between font-mono text-[9px] text-gold/80 tracking-widest">
-                <span className="animate-flicker">◉ MODEL.SYNC</span>
-                <span className="animate-flicker" style={{ animationDelay: '0.4s' }}>LLM · ACTIVE</span>
+                <span className="animate-flicker">◉ CORE.STABLE</span>
+                <span className="animate-flicker" style={{ animationDelay: '0.4s' }}>ORBIT · LOCKED</span>
                 <span className="animate-flicker" style={{ animationDelay: '0.8s' }}>v.2026</span>
               </div>
 
-              <div className="absolute top-4 left-4 font-mono text-[10px] text-gold tracking-wider">SYS.01 / CORE</div>
+              <div className="absolute top-4 left-4 font-mono text-[10px] text-gold tracking-wider">SGR.01 / SINGULARITY</div>
               <div className="absolute top-4 right-4 h-2 w-2 rounded-full bg-gold animate-pulse" />
             </div>
           </div>
