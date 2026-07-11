@@ -415,23 +415,23 @@ function SelectedWorks() {
 const methodSteps = [
   {
     n: "01",
-    t: "Listen for the friction",
-    d: "Every business hides its pain points inside tiny phrases — 'we usually copy-paste this', 'the team waits until Friday', 'the spreadsheet always breaks'. We sit with founders and operators, watch real workflows, and write down every place time, money, or attention leaks.",
+    t: "Detect the drift",
+    d: "Every business leaks matter through small phrases — 'we usually copy-paste this', 'the team waits until Friday', 'the spreadsheet always breaks'. We sit with founders and operators, watch real workflows, and chart every place time, money, or attention is escaping the field.",
   },
   {
     n: "02",
-    t: "Measure the cost",
-    d: "A pain point only matters if it costs something — hours, revenue, retention, or sanity. We attach a number to every issue we find, then rank them by ROI. We don't build what's interesting; we build what moves the metric.",
+    t: "Weigh the mass",
+    d: "A leak only matters if it has mass — hours, revenue, retention, or sanity. We attach a number to every escape point, then rank by gravitational return. We don't build what's interesting; we build what bends the metric.",
   },
   {
     n: "03",
-    t: "Architect the system",
-    d: "This is where Oryntal AI Labs comes in. Our R&D arm prototypes the AI agents, automations, and integrations that will absorb the work. We sketch the system on paper before a single line of code — so you see the solution before you fund it.",
+    t: "Design the core",
+    d: "This is where Oryntal AI Labs enters. Our R&D arm prototypes the agents, automations, and integrations that will absorb the work. We diagram the field on paper before a single line of code — so you see the singularity form before you fund it.",
   },
   {
     n: "04",
-    t: "Ship, measure, compound",
-    d: "We deploy in weeks, not quarters. Every system ships with telemetry baked in, so the impact is visible from day one. Then we compound — each automation becomes the foundation for the next.",
+    t: "Release light",
+    d: "We deploy in weeks, not quarters. Every system ships with telemetry baked in, so the pull is visible from day one. Then the compounding begins — each system becomes gravitational mass for the next.",
   },
 ];
 
@@ -442,18 +442,18 @@ function Method() {
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="grid lg:grid-cols-3 gap-12 mb-16">
           <div className="lg:col-span-2">
-            <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">§ 05 — How We Work</div>
+            <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">§ 05 — The Method of Gravity</div>
             <h2 className="font-display text-4xl md:text-5xl leading-tight">
               We don't sell software. <br />
-              We find the <span className="text-gold italic">pain</span>, then build the <span className="text-gold italic">cure.</span>
+              We find the <span className="text-gold italic">leak</span>, then build the <span className="text-gold italic">core.</span>
             </h2>
           </div>
           <div className="space-y-4 text-muted-foreground leading-relaxed">
             <p>
-              <span className="text-gold font-medium">Oryntal</span> is the studio — strategy, engineering, and delivery for clients who need a system shipped.
+              <span className="text-gold font-medium">Oryntal</span> is the studio — the gravitational discipline of strategy, engineering, and delivery for teams who need a system that actually holds.
             </p>
             <p>
-              <span className="text-gold font-medium">Oryntal AI Labs</span> is our research arm — where we prototype the AI agents and automation patterns that later power those systems in production.
+              <span className="text-gold font-medium">Oryntal AI Labs</span> is our research core — where we prototype the agents and automation patterns that later become the mass inside every production system we ship.
             </p>
           </div>
         </div>
@@ -474,12 +474,12 @@ function Method() {
 }
 
 const faqs = [
-  { q: "We already have a team. Why bring you in?", a: "We integrate. Most engagements augment in-house teams with senior AI/automation specialists for a fixed window." },
-  { q: "Are you fast or are you careful?", a: "Both. Our process is built so speed and rigour aren't trade-offs — they're side effects of clear architecture." },
-  { q: "What does an engagement cost?", a: "Fixed-scope projects start around $12k. Retainers from $5k/mo. Every quote is itemized — no agency math." },
-  { q: "Do you sign NDAs?", a: "Yes, before any commercial discussion. We also offer reverse-NDAs to protect your IP from our shared learnings." },
-  { q: "Where are you based?", a: "Distributed across three continents. Founder-led from a single time zone you'll always reach." },
-  { q: "What happens after launch?", a: "Two weeks of included hypercare, then optional retainer for evolution, monitoring, and on-call response." },
+  { q: "We already have a team. Why bring you in?", a: "We enter orbit around it. Most engagements augment in-house teams with senior AI and automation specialists for a fixed window — added mass, not replaced mass." },
+  { q: "Are you fast, or are you careful?", a: "Both. Our method is built so speed and rigour aren't trade-offs — they're the natural side-effects of a well-mapped field." },
+  { q: "What does an engagement cost?", a: "Fixed-scope projects start around $12k. Retainers from $5k/mo. Every quote is itemised down to the hour — no agency gravity wells." },
+  { q: "Do you sign NDAs?", a: "Yes, before any commercial discussion. We also offer reverse-NDAs so your IP never drifts back through our shared learnings." },
+  { q: "Where are you based?", a: "Distributed across three continents. Founder-led from a single time zone you will always reach." },
+  { q: "What happens after launch?", a: "Two weeks of included hypercare while the system stabilises, then an optional retainer for evolution, monitoring, and on-call response." },
 ];
 
 function FAQGrid() {
@@ -487,7 +487,7 @@ function FAQGrid() {
     <section className="py-32 border-t border-gold">
       <div className="mx-auto max-w-7xl px-6">
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">§ 06 — Strategic Objections</div>
+          <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">§ 06 — Before You Enter Orbit</div>
           <h2 className="font-display text-4xl md:text-5xl">Answered <span className="text-gold italic">before</span> you ask.</h2>
         </div>
         <div className="grid md:grid-cols-2 gap-px bg-gold/15 border border-gold rounded-2xl overflow-hidden">
@@ -506,17 +506,26 @@ function FAQGrid() {
 
 function CTA() {
   return (
-    <section className="py-32 border-t border-gold">
-      <div className="mx-auto max-w-4xl px-6 text-center">
+    <section className="relative py-32 border-t border-gold overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[420px] w-[420px] rounded-full bg-[radial-gradient(circle,rgba(217,176,101,0.14),transparent_70%)] blur-2xl" />
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[260px] w-[260px] rounded-full border border-gold/20" />
+      </div>
+      <div className="relative mx-auto max-w-4xl px-6 text-center">
         <h2 className="font-display text-4xl md:text-6xl leading-tight">
-          Have a system worth <span className="text-gold italic">architecting?</span>
+          Have a system worth <span className="text-gold italic">collapsing?</span>
         </h2>
         <p className="mt-6 text-lg text-muted-foreground">
-          Tell us where you're stuck. We'll respond within one working day with a real opinion — not a sales deck.
+          Tell us where the matter is drifting. Within one working day, you get a real opinion from a founder — never a sales deck, never a bot.
         </p>
-        <Link to="/contact" className="mt-10 inline-block rounded-full bg-gold-gradient px-10 py-4 text-sm uppercase tracking-widest text-primary-foreground font-medium shadow-gold hover:scale-105 transition-transform">
-          Start the Conversation
+        <Link to="/contact" className="mt-10 inline-block rounded-full bg-gold-gradient px-10 py-4 text-sm uppercase tracking-[0.25em] text-primary-foreground font-medium shadow-gold hover:scale-105 transition-transform">
+          Cross the Event Horizon
         </Link>
+        <div className="mt-4 flex items-center justify-center gap-2 opacity-70">
+          <div className="h-px w-6 bg-gold/40" />
+          <span className="text-[10px] uppercase tracking-[0.35em] text-muted-foreground italic">The singularity awaits</span>
+          <div className="h-px w-6 bg-gold/40" />
+        </div>
       </div>
     </section>
   );
