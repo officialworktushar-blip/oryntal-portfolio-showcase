@@ -395,15 +395,17 @@ function ProjectsPage() {
     <>
       <section className="relative border-b border-gold overflow-hidden">
         <div className="absolute inset-0 grid-noise opacity-30" />
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-[radial-gradient(circle,rgba(217,176,101,0.10),transparent_70%)] blur-3xl" />
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[380px] w-[380px] rounded-full border border-gold/15" />
         <div className="relative mx-auto max-w-7xl px-6 py-24 md:py-32">
-          <div className="text-xs uppercase tracking-[0.3em] text-gold mb-4">Portfolio · 2024 – 2026</div>
+          <div className="text-xs uppercase tracking-[0.4em] text-gold mb-4">§ The Archive · 2024 – 2026</div>
           <h1 className="font-display text-5xl md:text-7xl max-w-4xl leading-tight">
-            Real websites, <span className="text-gold italic">live projects.</span>
+            Matter in <span className="text-gold italic">orbit.</span>
             <br />
-            Built across AI, automation, Shopify, WordPress, and full stack.
+            Live systems the field refuses to release.
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
-            Browse live client work by category. Each card links directly to the website and shows a real screenshot.
+            Browse live client work by discipline. Each body of work links directly to the production site with a real screenshot — no mockups, no stock imagery, no drift.
           </p>
         </div>
       </section>
