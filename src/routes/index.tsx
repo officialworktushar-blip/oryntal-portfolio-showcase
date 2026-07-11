@@ -281,7 +281,7 @@ function Blueprint() {
             to="/contact"
             className="absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-gold bg-background/90 backdrop-blur px-6 py-2.5 text-[11px] uppercase tracking-[0.25em] text-gold hover:bg-gold-gradient hover:text-primary-foreground transition-all shadow-gold"
           >
-            For More AI Business LLM Models →
+            Enter the Core — Explore the AI Models →
           </Link>
         </div>
       </div>
