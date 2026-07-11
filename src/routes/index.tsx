@@ -163,60 +163,6 @@ function Hero() {
   );
 }
 
-function Hero() {
-  const [i, setI] = useState(0);
-  useEffect(() => {
-    const t = setInterval(() => setI((p) => (p + 1) % phrases.length), 2600);
-    return () => clearInterval(t);
-  }, []);
-  return (
-    <section className="relative overflow-hidden">
-      <div className="absolute inset-0 grid-noise opacity-40" />
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-gold-gradient opacity-[0.08] blur-3xl" />
-      <div className="relative mx-auto max-w-7xl px-6 pt-32 pb-32 md:pt-40 md:pb-40">
-        <div className="flex justify-center mb-10 animate-float-up">
-          <img src={assetUrl(logoMark)} alt="Oryntal" className="h-32 w-32 rounded-full ring-[3px] ring-gold glow-gold shadow-[0_0_40px_rgba(217,185,120,0.35)]" />
-        </div>
-        <div className="text-center max-w-5xl mx-auto">
-          <div className="inline-flex items-center gap-2 rounded-full border border-gold px-4 py-1.5 mb-8 animate-float-up">
-            <span className="h-1.5 w-1.5 rounded-full bg-gold animate-pulse" />
-            <span className="text-xs uppercase tracking-[0.3em] text-gold">Oryntal Portfolio</span>
-          </div>
-          <h1 className="font-display text-5xl md:text-7xl lg:text-8xl leading-[1.05] animate-float-up">
-            We architect <br />
-            <span className="text-gold inline-block min-h-[1.2em] transition-all duration-500" key={i}>
-              {phrases[i]}
-            </span>
-          </h1>
-          <p className="mt-8 max-w-2xl mx-auto text-lg text-muted-foreground leading-relaxed animate-float-up">
-            A boutique studio engineering AI products, automations, and digital infrastructure for founders who refuse to ship average.
-          </p>
-          <div className="mt-10 flex flex-wrap justify-center gap-4 animate-float-up">
-            <Link to="/contact" className="rounded-full bg-gold-gradient px-8 py-3.5 text-sm uppercase tracking-widest text-primary-foreground font-medium shadow-gold hover:scale-105 transition-transform">
-              Commission Work
-            </Link>
-            <Link to="/projects" className="rounded-full border border-gold px-8 py-3.5 text-sm uppercase tracking-widest text-gold hover:bg-secondary transition-colors">
-              View Portfolio
-            </Link>
-          </div>
-        </div>
-        <div className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-px bg-gold/20 border border-gold rounded-2xl overflow-hidden">
-          {[
-            ["120+", "Systems Shipped"],
-            ["38", "Global Clients"],
-            ["6", "Practice Areas"],
-            ["100%", "Founder-led"],
-          ].map(([k, v]) => (
-            <div key={v} className="bg-background p-6 text-center">
-              <div className="font-display text-3xl text-gold">{k}</div>
-              <div className="mt-1 text-xs uppercase tracking-widest text-muted-foreground">{v}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
 
 const services = [
   { t: "AI Engineering", d: "LLM agents, RAG systems, fine-tuned models that solve real workflows.", n: "01" },
