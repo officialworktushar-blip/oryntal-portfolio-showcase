@@ -148,7 +148,7 @@ function Hero() {
         <div className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-px bg-gold/20 border border-gold rounded-2xl overflow-hidden">
           {[
             ["120+", "Systems Compressed"],
-            ["38", "Orbits Established"],
+            ["2025", "Agency Established"],
             ["6", "Fields of Gravity"],
             ["100%", "Founder-led Core"],
           ].map(([k, v]) => (
