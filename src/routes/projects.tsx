@@ -392,19 +392,14 @@ function ProjectsPage() {
 
   return (
     <>
-      <section className="relative border-b border-gold overflow-hidden">
-        <div className="absolute inset-0 grid-noise opacity-30" />
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-[radial-gradient(circle,rgba(217,176,101,0.10),transparent_70%)] blur-3xl" />
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[380px] w-[380px] rounded-full border border-gold/15" />
+      <section className="border-b border-gold">
         <div className="relative mx-auto max-w-7xl px-6 py-24 md:py-32">
-          <div className="text-xs uppercase tracking-[0.4em] text-gold mb-4">§ The Archive · 2024 – 2026</div>
-          <h1 className="font-display text-5xl md:text-7xl max-w-4xl leading-tight">
-            Matter in <span className="text-gold italic">orbit.</span>
-            <br />
-            Live systems the field refuses to release.
+          <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">Our work · 2024 – 2026</div>
+          <h1 className="font-display text-5xl md:text-7xl max-w-4xl leading-[1.05]">
+            Real projects. <span className="text-gold italic">Real live sites.</span>
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
-            Browse live client work by discipline. Each body of work links directly to the production site with a real screenshot — no mockups, no stock imagery, no drift.
+            Browse client work by discipline. Every card links directly to the production site with a real screenshot — no mockups, no stock imagery.
           </p>
         </div>
       </section>
