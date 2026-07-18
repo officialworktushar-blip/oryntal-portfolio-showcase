@@ -4,10 +4,10 @@ import { useState } from "react";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact — Cross the Event Horizon | Oryntal AI Labs" },
-      { name: "description", content: "Tell us where the matter is drifting. One thoughtful reply within a working day — no sales deck, no drip campaign, just a real opinion from a founder." },
-      { property: "og:title", content: "Contact — Cross the Event Horizon" },
-      { property: "og:description", content: "One thoughtful reply within a working day. The singularity awaits." },
+      { title: "Contact — Get a Free Project Estimate | Oryntal" },
+      { name: "description", content: "Tell us what you want to build. We reply within one working day with a real opinion — never a sales deck." },
+      { property: "og:title", content: "Contact — Get a Free Project Estimate | Oryntal" },
+      { property: "og:description", content: "One thoughtful reply within a working day." },
     ],
   }),
   component: ContactPage,
