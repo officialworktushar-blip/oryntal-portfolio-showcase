@@ -33,9 +33,9 @@ export function Header() {
           ))}
           <Link
             to="/contact"
-            className="rounded-full border border-gold px-5 py-2 text-xs uppercase tracking-widest text-gold hover:bg-gold-gradient hover:text-primary-foreground transition-all"
+            className="border border-[color:var(--gold)] px-5 py-2 text-xs uppercase tracking-[0.2em] text-gold hover:bg-[color:var(--gold)] hover:text-primary-foreground transition-colors"
           >
-            Start a Project
+            Get Estimate
           </Link>
         </nav>
         <button
