@@ -566,7 +566,7 @@ function ProjectsPage() {
           <div className="relative mx-auto max-w-7xl px-6">
             <div className="flex items-end justify-between flex-wrap gap-4 mb-12">
               <div>
-                <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">Live Website Portfolio</div>
+                <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">Web · Shopify · WordPress</div>
                 <h2 className="font-display text-4xl md:text-5xl leading-tight">
                   Pixels become <span className="text-gold italic">businesses.</span>
                   <br />
