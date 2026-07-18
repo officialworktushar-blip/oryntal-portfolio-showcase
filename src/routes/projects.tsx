@@ -139,17 +139,16 @@ const automations: AutomationItem[] = [
 export const Route = createFileRoute("/projects")({
   head: () => ({
     meta: [
-      { title: "The Archive — Matter in Orbit | Oryntal AI Labs" },
+      { title: "Our Work — AI, Automation, Web, Shopify & WordPress | Oryntal" },
       {
         name: "description",
         content:
-          "Selected bodies of work across AI, automation, full-stack, Shopify, WordPress, and mobile — systems the gravitational field refuses to release.",
+          "Selected client work across AI, automation, full-stack, Shopify, WordPress, and mobile — real production systems, real live sites.",
       },
-      { property: "og:title", content: "The Archive — Matter in Orbit" },
+      { property: "og:title", content: "Our Work | Oryntal" },
       {
         property: "og:description",
-        content:
-          "Selected bodies of work across AI, automation, full-stack, Shopify, WordPress, and mobile.",
+        content: "Selected client work across AI, automation, full-stack, Shopify, WordPress, and mobile.",
       },
     ],
   }),
@@ -393,19 +392,14 @@ function ProjectsPage() {
 
   return (
     <>
-      <section className="relative border-b border-gold overflow-hidden">
-        <div className="absolute inset-0 grid-noise opacity-30" />
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-[radial-gradient(circle,rgba(217,176,101,0.10),transparent_70%)] blur-3xl" />
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[380px] w-[380px] rounded-full border border-gold/15" />
+      <section className="border-b border-gold">
         <div className="relative mx-auto max-w-7xl px-6 py-24 md:py-32">
-          <div className="text-xs uppercase tracking-[0.4em] text-gold mb-4">§ The Archive · 2024 – 2026</div>
-          <h1 className="font-display text-5xl md:text-7xl max-w-4xl leading-tight">
-            Matter in <span className="text-gold italic">orbit.</span>
-            <br />
-            Live systems the field refuses to release.
+          <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">Our work · 2024 – 2026</div>
+          <h1 className="font-display text-5xl md:text-7xl max-w-4xl leading-[1.05]">
+            Real projects. <span className="text-gold italic">Real live sites.</span>
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
-            Browse live client work by discipline. Each body of work links directly to the production site with a real screenshot — no mockups, no stock imagery, no drift.
+            Browse client work by discipline. Every card links directly to the production site with a real screenshot — no mockups, no stock imagery.
           </p>
         </div>
       </section>
@@ -434,13 +428,13 @@ function ProjectsPage() {
           <div className="relative mx-auto max-w-7xl px-6">
             <div className="flex items-end justify-between flex-wrap gap-4 mb-12">
               <div>
-                <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">Oryntal AI Labs · LLM Models</div>
+                <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">AI · LLM Products</div>
                 <h2 className="font-display text-4xl md:text-5xl leading-tight">
-                  Production-grade <span className="text-gold italic">AI products.</span>
+                  Production-ready <span className="text-gold italic">AI products.</span>
                 </h2>
               </div>
               <p className="text-sm text-muted-foreground max-w-xs">
-                A growing family of business-ready LLM models built in-house. <span className="text-gold">More models coming soon.</span>
+                A growing family of business-ready LLM tools we build in-house. <span className="text-gold">More coming every quarter.</span>
               </p>
             </div>
 
@@ -502,7 +496,7 @@ function ProjectsPage() {
           <div className="relative mx-auto max-w-7xl px-6">
             <div className="flex items-end justify-between flex-wrap gap-4 mb-12">
               <div>
-                <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">Oryntal · Automation Suite</div>
+                <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">Automation</div>
                 <h2 className="font-display text-4xl md:text-5xl leading-tight">
                   Workflows that <span className="text-gold italic">run themselves.</span>
                 </h2>
@@ -572,7 +566,7 @@ function ProjectsPage() {
           <div className="relative mx-auto max-w-7xl px-6">
             <div className="flex items-end justify-between flex-wrap gap-4 mb-12">
               <div>
-                <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">Live Website Portfolio</div>
+                <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">Web · Shopify · WordPress</div>
                 <h2 className="font-display text-4xl md:text-5xl leading-tight">
                   Pixels become <span className="text-gold italic">businesses.</span>
                   <br />
