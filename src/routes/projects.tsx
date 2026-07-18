@@ -428,13 +428,13 @@ function ProjectsPage() {
           <div className="relative mx-auto max-w-7xl px-6">
             <div className="flex items-end justify-between flex-wrap gap-4 mb-12">
               <div>
-                <div className="text-xs uppercase tracking-[0.3em] text-gold mb-3">Oryntal AI Labs · LLM Models</div>
+                <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">AI · LLM Products</div>
                 <h2 className="font-display text-4xl md:text-5xl leading-tight">
-                  Production-grade <span className="text-gold italic">AI products.</span>
+                  Production-ready <span className="text-gold italic">AI products.</span>
                 </h2>
               </div>
               <p className="text-sm text-muted-foreground max-w-xs">
-                A growing family of business-ready LLM models built in-house. <span className="text-gold">More models coming soon.</span>
+                A growing family of business-ready LLM tools we build in-house. <span className="text-gold">More coming every quarter.</span>
               </p>
             </div>
 
