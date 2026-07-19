@@ -633,18 +633,19 @@ const serviceCards = [
   },
 ];
 
-// Phone-frame card dimensions - increased by 73% height, 30% width
-const CARD_WIDTH = 130;   // 100 * 1.3 = 130
+// Phone-frame card dimensions - increased by 73% height, 30% width + 30% more
+const CARD_WIDTH = 169;   // 130 * 1.3 = 169
 const CARD_HEIGHT = 311;  // 180 * 1.73 = 311
 const CARD_RADIUS = 28;
 
 // Orbit radius - large enough to clear center text block
-const ORBIT_RADIUS_DESKTOP = 420;
-const ORBIT_RADIUS_TABLET = 360;
+const ORBIT_RADIUS_DESKTOP = 440;
+const ORBIT_RADIUS_TABLET = 380;
 
-// 3D Carousel - cards orbit around Y-axis (cylinder)
+// 3D Carousel - cards orbit around tilted Y-axis (cylinder at 45 degrees)
 const CARDS_COUNT = 6;
 const ANGLE_STEP = 360 / CARDS_COUNT; // 60 degrees
+const ORBIT_TILT = 45; // degrees - tilt the orbit axis
 
 function GlassCard({ index, service, prefersReduced, isMobile, radius, initialAngle, rotationRef, floatOffset, orbitRotation }) {
   const currentOrbitAngle = rotationRef.current || 0;
@@ -656,7 +657,7 @@ function GlassCard({ index, service, prefersReduced, isMobile, radius, initialAn
   if (isMobile) {
     return (
       <motion.div
-        className="relative flex flex-col items-center p-5 min-w-[140px] max-w-[160px] bg-white/5 backdrop-blur-xl border border-white/10 rounded-[32px] shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all duration-300 hover:scale-105 hover:border-gold/30 hover:shadow-[0_12px_40px_rgba(201,162,75,0.15)]"
+        className="relative flex flex-col items-center p-5 min-w-[160px] max-w-[180px] bg-white/5 backdrop-blur-xl border border-white/10 rounded-[32px] shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all duration-300 hover:scale-105 hover:border-gold/30 hover:shadow-[0_12px_40px_rgba(201,162,75,0.15)]"
         initial={{ opacity: 0, y: 30, scale: 0.9 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.6, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
@@ -673,31 +674,24 @@ function GlassCard({ index, service, prefersReduced, isMobile, radius, initialAn
     );
   }
 
-  // 3D Y-axis orbit: calculate 3D position
-  const angleRad = ((initialAngle + currentOrbitAngle) * Math.PI) / 180;
-  const x = Math.sin(angleRad) * radius;  // X position on cylinder
-  const z = Math.cos(angleRad) * radius;  // Z depth on cylinder
+  // Each card's position on the tilted cylinder
+  // Cards are placed at 60-degree intervals around the cylinder
+  const cardRotationY = -initialAngle; // Face inward toward center
   
-  // Card should face the center (rotateY to point inward)
-  const cardRotationY = -(initialAngle + currentOrbitAngle); // Negative so cards face center
-  
-  // Perspective scale based on Z position (closer = larger)
-  const perspectiveScale = 1 + (z / 1000) * 0.15; // Subtle perspective
-
   return (
     <motion.div
       style={{
         position: 'absolute',
-        left: `${x}px`,
-        top: `${floatY}px`,
-        transform: `translate(-50%, -50%) translateZ(${z}px) rotateY(${-(initialAngle + currentOrbitAngle)}deg)`,
+        left: '50%',
+        top: '50%',
+        transform: `translate(-50%, -50%) translateX(${Math.sin(initialAngle * Math.PI / 180) * radius}px) translateZ(${Math.cos(initialAngle * Math.PI / 180) * radius}px) rotateY(${cardRotationY}deg)`,
         transformOrigin: 'center center',
         willChange: 'transform',
         width: CARD_WIDTH,
         height: CARD_HEIGHT,
       }}
-      initial={{ opacity: 0, scale: 0.8, rotateY: -(initialAngle + 180) }}
-      animate={{ opacity: 1, scale: perspectiveScale, rotateY: -(initialAngle + currentOrbitAngle) }}
+      initial={{ opacity: 0, scale: 0.8, rotateY: cardRotationY - 180 }}
+      animate={{ opacity: 1, scale: 1, rotateY: cardRotationY }}
       transition={{ duration: 0.8, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
       className="relative flex flex-col items-center p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-[32px] shadow-[0_8px_32px_rgba(0,0,0,0.4)] pointer-events-auto"
       whileHover={{ scale: 1.06, zIndex: 10 }}
@@ -771,7 +765,7 @@ function Hero({ capabilityIndex, prefersReduced }: { capabilityIndex: number; pr
     return () => ctx.revert();
   }, [prefersReduced]);
 
-  // Continuous 3D Y-axis orbit rotation
+  // Continuous 3D tilted-axis orbit rotation
   useEffect(() => {
     if (prefersReduced || isMobile) return;
 
@@ -782,7 +776,8 @@ function Hero({ capabilityIndex, prefersReduced }: { capabilityIndex: number; pr
       const elapsed = (Date.now() - startTime) / 1000;
       rotationRef.current = (elapsed / 80) * 360; // 80s per full rotation
       if (orbitRef.current) {
-        orbitRef.current.style.transform = `rotateY(${rotationRef.current}deg)`;
+        // Rotate around tilted axis: tilt 45deg on X, then rotate on Z
+        orbitRef.current.style.transform = `rotateX(${ORBIT_TILT}deg) rotateZ(${rotationRef.current}deg)`;
       }
       animationId = requestAnimationFrame(animate);
     };
