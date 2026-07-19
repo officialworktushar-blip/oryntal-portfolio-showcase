@@ -126,7 +126,7 @@ const faqs = [
 
 const stats = [
   { value: 120, suffix: "+", label: "Systems shipped" },
-  { value: 2025, suffix: "", label: "Agency established" },
+  { value: 7, suffix: "+", label: "Countries delivered" },
   { value: 6, suffix: "", label: "Disciplines" },
   { value: 100, suffix: "%", label: "Founder-led" },
 ];
