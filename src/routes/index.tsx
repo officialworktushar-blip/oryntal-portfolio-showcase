@@ -837,6 +837,20 @@ function InfinityLoopCarousel({ prefersReduced }) {
     const delta = e.deltaY * 1.5; // Adjust scroll speed
     carousel.scrollLeft += delta;
     
+    // Infinite loop: jump to start when reaching end of second half, or to end when at start
+    const scrollWidth = carousel.scrollWidth;
+    const clientWidth = carousel.clientWidth;
+    const maxScroll = scrollWidth - clientWidth;
+    const halfScroll = scrollWidth / 2; // halfway point (where duplicate starts)
+    
+    if (carousel.scrollLeft >= halfScroll) {
+      // Jump to equivalent position in first half
+      carousel.scrollLeft = carousel.scrollLeft - halfScroll;
+    } else if (carousel.scrollLeft <= 0) {
+      // Jump to equivalent position in second half
+      carousel.scrollLeft = carousel.scrollLeft + halfScroll;
+    }
+    
     // Update velocity for momentum
     const now = Date.now();
     const deltaTime = now - lastTimeRef.current;
@@ -862,6 +876,17 @@ function InfinityLoopCarousel({ prefersReduced }) {
       if (Math.abs(velocity) > 0.5) {
         carousel.scrollLeft += velocity;
         setVelocity(v => v * 0.96); // friction
+        
+        // Infinite loop wrap for momentum
+        const scrollWidth = carousel.scrollWidth;
+        const clientWidth = carousel.clientWidth;
+        const halfScroll = scrollWidth / 2;
+        
+        if (carousel.scrollLeft >= halfScroll) {
+          carousel.scrollLeft -= halfScroll;
+        } else if (carousel.scrollLeft <= 0) {
+          carousel.scrollLeft += halfScroll;
+        }
       } else {
         setVelocity(0);
       }
@@ -887,6 +912,18 @@ function InfinityLoopCarousel({ prefersReduced }) {
     if (!carousel) return;
     const delta = e.clientX - startXRef.current;
     carousel.scrollLeft = startScrollRef.current - delta;
+    
+    // Infinite loop wrap during drag
+    const scrollWidth = carousel.scrollWidth;
+    const halfScroll = scrollWidth / 2;
+    
+    if (carousel.scrollLeft >= halfScroll) {
+      carousel.scrollLeft -= halfScroll;
+      startScrollRef.current -= halfScroll;
+    } else if (carousel.scrollLeft <= 0) {
+      carousel.scrollLeft += halfScroll;
+      startScrollRef.current += halfScroll;
+    }
   };
 
   const handleMouseUp = () => {
@@ -1121,11 +1158,14 @@ function InfinityLoopCarousel({ prefersReduced }) {
             <span className="text-[11px] uppercase tracking-[0.35em] text-muted-foreground">ORYNTAL — Est. 2025</span>
           </div>
 
-          <h1 ref={heroTitleRef} className="font-display text-4xl md:text-6xl lg:text-[5.5rem] leading-[1.02] tracking-tight hero-title">
+          <h1 ref={heroTitleRef} className="font-display text-3xl md:text-5xl lg:text-[4.75rem] leading-[1.02] tracking-tight hero-title">
             Your team, minus the busywork. Powered by AI.
           </h1>
 
-          <p ref={heroSubtitleRef} className="mt-6 text-lg md:text-xl text-muted-foreground leading-relaxed hero-subtitle max-w-xl mx-auto">
+          {/* Infinity Loop Carousel — horizontal scroll with cursor effect */}
+          <InfinityLoopCarousel prefersReduced={prefersReduced} />
+
+          <p ref={heroSubtitleRef} className="mt-6 text-base md:text-lg text-muted-foreground leading-relaxed hero-subtitle max-w-xl mx-auto">
             AI agents, automation, and full-stack systems — from Oryntal, in weeks not quarters.
           </p>
 
