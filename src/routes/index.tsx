@@ -462,8 +462,8 @@ function HomePage() {
       <Hero capabilityIndex={capabilityIndex} prefersReduced={prefersReduced} />
       <TrustedBy />
       <Services />
-      <Differentiators />
       <SelectedWorks />
+      <Differentiators />
       <Process />
       <FAQGrid />
       <CTA />
