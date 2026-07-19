@@ -633,28 +633,30 @@ const serviceCards = [
   },
 ];
 
-// Phone-frame card dimensions
-const CARD_WIDTH = 100;
-const CARD_HEIGHT = 180;
-const CARD_RADIUS = 24;
+// Phone-frame card dimensions - increased by 73% height, 30% width
+const CARD_WIDTH = 130;   // 100 * 1.3 = 130
+const CARD_HEIGHT = 311;  // 180 * 1.73 = 311
+const CARD_RADIUS = 28;
 
 // Orbit radius - large enough to clear center text block
-const ORBIT_RADIUS_DESKTOP = 380;
-const ORBIT_RADIUS_TABLET = 320;
+const ORBIT_RADIUS_DESKTOP = 420;
+const ORBIT_RADIUS_TABLET = 360;
 
-function GlassCard({ index, service, prefersReduced, isMobile, centerX, centerY, radius, initialAngle, rotationRef, floatOffset, orbitRotation }) {
+// 3D Carousel - cards orbit around Y-axis (cylinder)
+const CARDS_COUNT = 6;
+const ANGLE_STEP = 360 / CARDS_COUNT; // 60 degrees
+
+function GlassCard({ index, service, prefersReduced, isMobile, radius, initialAngle, rotationRef, floatOffset, orbitRotation }) {
   const currentOrbitAngle = rotationRef.current || 0;
   const cardAngle = initialAngle + currentOrbitAngle;
-  const x = centerX + radius * Math.cos(cardAngle * Math.PI / 180);
-  const y = centerY + radius * Math.sin(cardAngle * Math.PI / 180);
   
   // Float animation - independent per card
-  const floatY = prefersReduced ? 0 : Math.sin((Date.now() * 0.001 + floatOffset) * 1.8) * 8;
+  const floatY = prefersReduced ? 0 : Math.sin((Date.now() * 0.001 + floatOffset) * 1.8) * 6;
 
   if (isMobile) {
     return (
       <motion.div
-        className="relative flex flex-col items-center p-4 min-w-[120px] max-w-[140px] bg-white/5 backdrop-blur-xl border border-white/10 rounded-[28px] shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all duration-300 hover:scale-105 hover:border-gold/30 hover:shadow-[0_12px_40px_rgba(201,162,75,0.15)]"
+        className="relative flex flex-col items-center p-5 min-w-[140px] max-w-[160px] bg-white/5 backdrop-blur-xl border border-white/10 rounded-[32px] shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all duration-300 hover:scale-105 hover:border-gold/30 hover:shadow-[0_12px_40px_rgba(201,162,75,0.15)]"
         initial={{ opacity: 0, y: 30, scale: 0.9 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.6, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
@@ -662,40 +664,49 @@ function GlassCard({ index, service, prefersReduced, isMobile, centerX, centerY,
         style={{ width: CARD_WIDTH, height: CARD_HEIGHT }}
       >
         <div className="flex flex-col items-center h-full justify-start pt-6">
-          <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center mb-3 text-gold">
+          <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center mb-3 text-gold">
             {service.icon}
           </div>
-          <span className="font-display text-xs text-center text-foreground leading-snug px-2">{service.title}</span>
+          <span className="font-display text-sm text-center text-foreground leading-snug px-2">{service.title}</span>
         </div>
       </motion.div>
     );
   }
 
-  // Counter-rotate: card rotation = -orbitRotation so card stays upright
-  const counterRotation = -currentOrbitAngle;
+  // 3D Y-axis orbit: calculate 3D position
+  const angleRad = ((initialAngle + currentOrbitAngle) * Math.PI) / 180;
+  const x = Math.sin(angleRad) * radius;  // X position on cylinder
+  const z = Math.cos(angleRad) * radius;  // Z depth on cylinder
+  
+  // Card should face the center (rotateY to point inward)
+  const cardRotationY = -(initialAngle + currentOrbitAngle); // Negative so cards face center
+  
+  // Perspective scale based on Z position (closer = larger)
+  const perspectiveScale = 1 + (z / 1000) * 0.15; // Subtle perspective
 
   return (
     <motion.div
       style={{
         position: 'absolute',
         left: `${x}px`,
-        top: `${y + floatY}px`,
-        transform: `translate(-50%, -50%) rotate(${counterRotation}deg)`,
+        top: `${floatY}px`,
+        transform: `translate(-50%, -50%) translateZ(${z}px) rotateY(${-(initialAngle + currentOrbitAngle)}deg)`,
+        transformOrigin: 'center center',
         willChange: 'transform',
         width: CARD_WIDTH,
         height: CARD_HEIGHT,
       }}
-      initial={{ opacity: 0, scale: 0.8, x: (Math.cos(initialAngle * Math.PI / 180) * 100), y: (Math.sin(initialAngle * Math.PI / 180) * 100) }}
-      animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
+      initial={{ opacity: 0, scale: 0.8, rotateY: -(initialAngle + 180) }}
+      animate={{ opacity: 1, scale: perspectiveScale, rotateY: -(initialAngle + currentOrbitAngle) }}
       transition={{ duration: 0.8, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
-      className="relative flex flex-col items-center p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-[28px] shadow-[0_8px_32px_rgba(0,0,0,0.4)] pointer-events-auto"
-      whileHover={{ scale: 1.08 }}
+      className="relative flex flex-col items-center p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-[32px] shadow-[0_8px_32px_rgba(0,0,0,0.4)] pointer-events-auto"
+      whileHover={{ scale: 1.06, zIndex: 10 }}
     >
-      <div className="flex flex-col items-center h-full justify-start pt-6">
-        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center mb-3 text-gold">
+      <div className="flex flex-col items-center h-full justify-start pt-8">
+        <div className="w-18 h-18 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center mb-4 text-gold">
           {service.icon}
         </div>
-        <span className="font-display text-xs text-center text-foreground leading-snug px-2">{service.title}</span>
+        <span className="font-display text-sm text-center text-foreground leading-snug px-3">{service.title}</span>
       </div>
     </motion.div>
   );
@@ -731,13 +742,21 @@ function Hero({ capabilityIndex, prefersReduced }: { capabilityIndex: number; pr
 
       if (!title || !subtitle || !cta) return;
 
-      const words = ["Production,", "not", "proposals."];
+      // Split headline into words - "Powered by AI." should be gold
+      const words = ["Your team,", "minus the", "busywork.", "Powered by AI."];
       title.innerHTML = words.map((word, i) => 
         `<span class="hero-word" style="display:inline-block; overflow:hidden;"><span style="display:inline-block;">${word}</span><span style="display:inline-block;">${i < words.length - 1 ? "\u00A0" : ""}</span></span>`
       ).join("");
 
       const wordSpans = title.querySelectorAll(".hero-word > span:first-child");
       const ctaButtons = cta.querySelectorAll("a");
+
+      // Mark "Powered by AI." for gold color
+      const poweredByAISpan = title.querySelector(".hero-word:last-child > span:first-child");
+      if (poweredByAISpan) {
+        poweredByAISpan.classList.add("text-gold");
+        poweredByAISpan.style.fontStyle = "italic";
+      }
 
       gsap.set([...wordSpans], { y: 40, opacity: 0 });
       gsap.set(subtitle, { y: 20, opacity: 0 });
@@ -752,7 +771,7 @@ function Hero({ capabilityIndex, prefersReduced }: { capabilityIndex: number; pr
     return () => ctx.revert();
   }, [prefersReduced]);
 
-  // Continuous orbit rotation
+  // Continuous 3D Y-axis orbit rotation
   useEffect(() => {
     if (prefersReduced || isMobile) return;
 
@@ -761,9 +780,9 @@ function Hero({ capabilityIndex, prefersReduced }: { capabilityIndex: number; pr
 
     const animate = () => {
       const elapsed = (Date.now() - startTime) / 1000;
-      rotationRef.current = (elapsed / 75) * 360; // 75s per full rotation
+      rotationRef.current = (elapsed / 80) * 360; // 80s per full rotation
       if (orbitRef.current) {
-        orbitRef.current.style.transform = `rotate(${rotationRef.current}deg)`;
+        orbitRef.current.style.transform = `rotateY(${rotationRef.current}deg)`;
       }
       animationId = requestAnimationFrame(animate);
     };
@@ -799,7 +818,7 @@ function Hero({ capabilityIndex, prefersReduced }: { capabilityIndex: number; pr
           </div>
 
           <h1 ref={heroTitleRef} className="font-display text-4xl md:text-6xl lg:text-[5.5rem] leading-[1.02] tracking-tight hero-title">
-            Production, not proposals.
+            Your team, minus the busywork. Powered by AI.
           </h1>
 
           <p ref={heroSubtitleRef} className="mt-6 text-lg md:text-xl text-muted-foreground leading-relaxed hero-subtitle max-w-xl mx-auto">
@@ -821,10 +840,10 @@ function Hero({ capabilityIndex, prefersReduced }: { capabilityIndex: number; pr
           </div>
         </div>
 
-        {/* Orbital cards */}
-        <div ref={orbitRef} className="relative w-full h-[640px] md:h-[700px] lg:h-[750px] -mt-20 md:-mt-24 lg:-mt-28 flex items-center justify-center pointer-events-none" style={{ position: 'relative' }}>
+        {/* 3D Y-axis orbital carousel */}
+        <div ref={orbitRef} className="relative w-full h-[700px] md:h-[780px] lg:h-[850px] -mt-24 md:-mt-28 lg:-mt-32 flex items-center justify-center pointer-events-none" style={{ position: 'relative', perspective: '1200px' }}>
           {!isMobile && serviceCards.map((service, i) => {
-            const initialAngle = (i * 60) - 90; // Start at 12 o'clock
+            const initialAngle = i * ANGLE_STEP; // 0, 60, 120, 180, 240, 300
             const floatOffset = i * 0.5;
             return (
               <GlassCard
@@ -844,7 +863,7 @@ function Hero({ capabilityIndex, prefersReduced }: { capabilityIndex: number; pr
             );
           })}
           {isMobile && (
-            <div className="flex flex-wrap justify-center gap-4 p-4 md:gap-6 pointer-events-auto max-w-5xl overflow-x-auto pb-4" style={{ scrollbarWidth: 'none' }}>
+            <div className="flex gap-4 p-4 md:gap-6 pointer-events-auto max-w-5xl overflow-x-auto pb-4 flex-nowrap" style={{ scrollbarWidth: 'none' }}>
               {serviceCards.map((service, i) => (
                 <GlassCard
                   key={i}
