@@ -13,15 +13,16 @@ import whatsappRag from "@/assets/whatsapp-rag.jpg.asset.json";
 import eshopwebStore from "@/assets/site-shots/eshopweb-store.asset.json";
 import theKaftanCompany from "@/assets/site-shots/the-kaftan-company.asset.json";
 import clouShot from "@/assets/site-shots/clou.asset.json";
+import { motion } from "framer-motion";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Oryntal \u2014 AI, automation & full-stack systems for teams done wasting time" },
+      { title: "Oryntal — AI, automation & full-stack systems for teams done wasting time" },
       { name: "description", content: "From LLM agents to Shopify storefronts, Oryntal ships production systems in weeks, not quarters." },
-      { property: "og:title", content: "Oryntal \u2014 Production systems in weeks, not quarters" },
+      { property: "og:title", content: "Oryntal — Production systems in weeks, not quarters" },
       { property: "og:description", content: "AI, automation, and full-stack systems for founders and operators who are done wasting time on manual work." },
     ],
   }),
@@ -470,6 +471,101 @@ function HomePage() {
   );
 }
 
+function AIHeroVisual({ prefersReduced }: { prefersReduced: boolean }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (prefersReduced) return;
+
+    const ctx = gsap.context(() => {
+      const rings = containerRef.current?.querySelectorAll(".ai-ring");
+      const particles = containerRef.current?.querySelectorAll(".ai-particle");
+      const center = containerRef.current?.querySelector(".ai-center");
+
+      if (!rings || !particles || !center) return;
+
+      gsap.set(rings, { scale: 0.8, opacity: 0 });
+      gsap.set(particles, { scale: 0, opacity: 0 });
+      gsap.set(center, { scale: 0.5, opacity: 0 });
+
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      tl.to(center, { scale: 1, opacity: 1, duration: 1.2, ease: "expo.out" })
+        .to(rings, { scale: 1, opacity: 0.4, duration: 1, stagger: 0.15, ease: "power3.out" }, "-=0.6")
+        .to(particles, { scale: 1, opacity: 0.6, duration: 0.8, stagger: 0.05, ease: "expo.out" }, "-=0.4");
+
+      // Continuous animation
+      rings.forEach((ring, i) => {
+        gsap.to(ring, {
+          rotation: 360,
+          duration: 20 + i * 5,
+          ease: "none",
+          repeat: -1,
+        });
+      });
+
+      particles.forEach((particle, i) => {
+        gsap.to(particle, {
+          y: `+=${15 + i * 5}`,
+          x: `+=${(i % 2 === 0 ? 10 : -10)}`,
+          opacity: 0.2,
+          duration: 3 + i * 0.5,
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: -1,
+        });
+      });
+
+      gsap.to(center, {
+        scale: 1.05,
+        duration: 2,
+        ease: "sine.inOut",
+        yoyo: true,
+        repeat: -1,
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, [prefersReduced]);
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative w-full aspect-square max-w-[500px] mx-auto"
+      aria-hidden="true"
+    >
+      <div className="absolute inset-0 flex items-center justify-center">
+        {/* Outer rings */}
+        {[1, 2, 3].map((i) => (
+          <div
+            key={i}
+            className="ai-ring absolute border-gold/20 rounded-full transition-opacity"
+            style={{
+              width: `${200 + i * 60}px`,
+              height: `${200 + i * 60}px`,
+              borderWidth: `${1 + i * 0.5}px`,
+            }}
+          />
+        ))}
+        {/* Center core */}
+        <div className="ai-center relative z-10 w-24 h-24 md:w-32 md:h-32 rounded-full bg-gradient-to-br from-gold/30 via-gold/10 to-gold/30 shadow-[0_0_60px_rgba(201,162,75,0.4)] flex items-center justify-center">
+          <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-gold/40 to-gold/20 blur-xl" />
+        </div>
+        {/* Floating particles */}
+        {Array.from({ length: 12 }).map((_, i) => (
+          <div
+            key={i}
+            className="ai-particle absolute w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-gold/50 blur-sm"
+            style={{
+              top: `${45 + Math.random() * 10}%`,
+              left: `${45 + Math.random() * 10}%`,
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function Hero({ capabilityIndex, prefersReduced }: { capabilityIndex: number; prefersReduced: boolean }) {
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
   const heroSubtitleRef = useRef<HTMLParagraphElement>(null);
@@ -485,13 +581,13 @@ function Hero({ capabilityIndex, prefersReduced }: { capabilityIndex: number; pr
 
       if (!title || !subtitle || !cta) return;
 
-      // Split heading into words wrapped in spans
-      const words = "Production, not proposals.".split(" ");
+      // Split heading into words wrapped in spans - preserve spaces
+      const words = ["Production,", "not", "proposals."];
       title.innerHTML = words.map((word, i) => 
-        `<span class="hero-word" style="display:inline-block; overflow:hidden;"><span style="display:inline-block;">${word}</span>${i < words.length - 1 ? " " : ""}</span>`
+        `<span class="hero-word" style="display:inline-block; overflow:hidden;"><span style="display:inline-block;">${word}</span><span style="display:inline-block;">${i < words.length - 1 ? "\u00A0" : ""}</span></span>`
       ).join("");
 
-      const wordSpans = title.querySelectorAll(".hero-word > span");
+      const wordSpans = title.querySelectorAll(".hero-word > span:first-child");
       const ctaButtons = cta.querySelectorAll("a");
 
       gsap.set([...wordSpans], { y: 40, opacity: 0 });
@@ -513,37 +609,43 @@ function Hero({ capabilityIndex, prefersReduced }: { capabilityIndex: number; pr
       <div className="absolute inset-0 bg-gradient-to-b from-background via-background/80 to-transparent" />
       <div className="absolute inset-0 parallax-bg" style={{ background: "radial-gradient(ellipse 80% 50% at 50% -20%, rgba(201, 162, 75, 0.08), transparent), radial-gradient(circle at 20% 80%, rgba(201, 162, 75, 0.05), transparent 40%), radial-gradient(circle at 80% 20%, rgba(201, 162, 75, 0.05), transparent 40%)" }} />
       
-      <div className="relative mx-auto max-w-7xl px-6 pt-28 pb-24 md:pt-40 md:pb-32">
-        <div className="max-w-4xl">
-          <div className="flex items-center gap-3 mb-10 hero-logo">
-            <img src={assetUrl(logoMark)} alt="Oryntal" className="h-10 w-10 rounded-full ring-1 ring-gold/50" />
-            <span className="text-[11px] uppercase tracking-[0.35em] text-muted-foreground">Oryntal \u2014 Est. 2025</span>
+      <div className="relative mx-auto max-w-7xl px-6 pt-16 pb-20 md:pt-24 md:pb-28">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div className="max-w-3xl mx-auto lg:mx-0">
+            <div className="flex items-center gap-3 mb-8 hero-logo">
+              <img src={assetUrl(logoMark)} alt="Oryntal" className="h-10 w-10 rounded-full ring-1 ring-gold/50" />
+              <span className="text-[11px] uppercase tracking-[0.35em] text-muted-foreground">ORYNTAL — Est. 2025</span>
+            </div>
+            
+            <h1 ref={heroTitleRef} className="font-display text-4xl md:text-6xl lg:text-[5rem] leading-[1.02] tracking-tight hero-title">
+              Production, not proposals.
+            </h1>
+            
+            <p ref={heroSubtitleRef} className="mt-6 max-w-xl text-lg md:text-xl text-muted-foreground leading-relaxed hero-subtitle">
+              AI agents, automation, and full-stack systems — from Oryntal, in weeks not quarters.
+            </p>
+            
+            <div className="mt-6 flex items-center gap-3 text-sm text-muted-foreground hero-capability">
+              <span>We ship</span>
+              <span className="font-display italic text-gold text-lg min-w-[220px] transition-all duration-500">{rotatingCapabilities[capabilityIndex]}</span>
+            </div>
+            
+            <div ref={heroCtaRef} className="mt-10 flex flex-wrap gap-4 hero-cta">
+              <Link to="/contact" className="btn-primary magnetic">
+                Get a Free Project Estimate
+              </Link>
+              <Link to="/projects" className="btn-secondary magnetic">
+                See Our Work
+              </Link>
+            </div>
           </div>
-          
-          <h1 ref={heroTitleRef} className="font-display text-5xl md:text-7xl lg:text-[5.5rem] leading-[1.02] tracking-tight hero-title">
-            Production, not proposals.
-          </h1>
-          
-          <p ref={heroSubtitleRef} className="mt-8 max-w-2xl text-lg md:text-xl text-muted-foreground leading-relaxed hero-subtitle">
-            AI agents, automation, and full-stack systems \u2014 from Oryntal, in weeks not quarters.
-          </p>
-          
-          <div className="mt-6 flex items-center gap-3 text-sm text-muted-foreground hero-capability">
-            <span>We ship</span>
-            <span className="font-display italic text-gold text-lg min-w-[220px] transition-all duration-500">{rotatingCapabilities[capabilityIndex]}</span>
-          </div>
-          
-          <div ref={heroCtaRef} className="mt-12 flex flex-wrap gap-4 hero-cta">
-            <Link to="/contact" className="btn-primary magnetic">
-              Get a Free Project Estimate
-            </Link>
-            <Link to="/projects" className="btn-secondary magnetic">
-              See Our Work
-            </Link>
+
+          <div className="relative hidden lg:block" aria-hidden="true">
+            <AIHeroVisual prefersReduced={prefersReduced} />
           </div>
         </div>
 
-        <div className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-10 border-t border-gold/30 pt-12 hero-stats">
+        <div className="mt-16 lg:mt-24 grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-10 border-t border-gold/30 pt-12 hero-stats">
           {stats.map((stat) => (
             <div key={stat.label} className="relative group">
               <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -574,7 +676,7 @@ function TrustedBy() {
           <div className="shrink-0 md:pr-10 md:border-r md:border-gold/20 reveal-left">
             <div className="text-[11px] uppercase tracking-[0.3em] text-muted-foreground mb-2">Trusted by</div>
             <div className="font-display text-3xl md:text-4xl text-gold gradient-text-clamp">50+ organisations</div>
-            <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground mt-1">GST registered \u2014 India & global</div>
+            <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground mt-1">GST registered — India & global</div>
           </div>
           <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] reveal-right trusted-marquee">
             <div className="marquee-inner flex gap-10 whitespace-nowrap">
