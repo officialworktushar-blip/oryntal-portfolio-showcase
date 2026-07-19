@@ -233,25 +233,21 @@ function HomePage() {
       // Hero logo
       gsap.set(".hero-logo", { scale: 0.8, opacity: 0 });
 
-      // Split hero title into lines
-      const titleEl = document.querySelector(".hero-title");
-      if (titleEl) {
-        const split = new SplitText(titleEl as HTMLElement, { type: "lines", linesClass: "split-line" });
-        gsap.set(split.lines, { y: "100%", opacity: 0 });
-      }
+      // Hero heading words - animate each word
+      gsap.set(".hero-title .word", { y: 40, opacity: 0 });
 
-      gsap.set(".hero-subtitle", { y: 30, opacity: 0 });
+      gsap.set(".hero-subtitle", { y: 20, opacity: 0 });
       gsap.set(".hero-capability", { y: 20, opacity: 0 });
-      gsap.set(".hero-cta", { y: 30, opacity: 0 });
+      gsap.set(".hero-cta", { scale: 0.95, opacity: 0 });
       gsap.set(".hero-stats", { y: 30, opacity: 0 });
 
-      const tl = gsap.timeline({ defaults: { ease: "expo.out", duration: 1.4 } });
-      tl.to(".hero-logo", { scale: 1, opacity: 1, duration: 1.2, ease: "expo.out" })
-        .to(".hero-title .split-line", { y: 0, opacity: 1, stagger: 0.12, duration: 1.2, ease: "expo.out" }, "-=0.7")
-        .to(".hero-subtitle", { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.9")
-        .to(".hero-capability", { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.7")
-        .to(".hero-cta", { y: 0, opacity: 1, stagger: 0.1, duration: 1, ease: "expo.out" }, "-=0.5")
-        .to(".hero-stats", { y: 0, opacity: 1, stagger: 0.1, duration: 1, ease: "power3.out" }, "-=0.3");
+      const tl = gsap.timeline({ defaults: { ease: "power3.out", duration: 0.8 } });
+      tl.to(".hero-logo", { scale: 1, opacity: 1, duration: 1, ease: "expo.out" })
+        .to(".hero-title .word", { y: 0, opacity: 1, stagger: 0.1, duration: 0.8, ease: "power3.out" }, "-=0.5")
+        .to(".hero-subtitle", { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" }, "-=0.3")
+        .to(".hero-capability", { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, "-=0.4")
+        .to(".hero-cta", { scale: 1, opacity: 1, stagger: 0.08, duration: 0.8, ease: "expo.out" }, "-=0.2")
+        .to(".hero-stats", { y: 0, opacity: 1, stagger: 0.1, duration: 0.8, ease: "power3.out" }, "-=0.2");
     }, scrollRef);
 
     return () => ctx.revert();
@@ -475,6 +471,42 @@ function HomePage() {
 }
 
 function Hero({ capabilityIndex, prefersReduced }: { capabilityIndex: number; prefersReduced: boolean }) {
+  const heroTitleRef = useRef<HTMLHeadingElement>(null);
+  const heroSubtitleRef = useRef<HTMLParagraphElement>(null);
+  const heroCtaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (prefersReduced) return;
+
+    const ctx = gsap.context(() => {
+      const title = heroTitleRef.current;
+      const subtitle = heroSubtitleRef.current;
+      const cta = heroCtaRef.current;
+
+      if (!title || !subtitle || !cta) return;
+
+      // Split heading into words wrapped in spans
+      const words = "Production, not proposals.".split(" ");
+      title.innerHTML = words.map((word, i) => 
+        `<span class="hero-word" style="display:inline-block; overflow:hidden;"><span style="display:inline-block;">${word}</span>${i < words.length - 1 ? " " : ""}</span>`
+      ).join("");
+
+      const wordSpans = title.querySelectorAll(".hero-word > span");
+      const ctaButtons = cta.querySelectorAll("a");
+
+      gsap.set([...wordSpans], { y: 40, opacity: 0 });
+      gsap.set(subtitle, { y: 20, opacity: 0 });
+      gsap.set(ctaButtons, { scale: 0.95, opacity: 0 });
+
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      tl.to(wordSpans, { y: 0, opacity: 1, duration: 0.8, stagger: 0.1 }, 0)
+        .to(subtitle, { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" }, "-=0.3")
+        .to(ctaButtons, { scale: 1, opacity: 1, duration: 0.7, stagger: 0.08, ease: "expo.out" }, "-=0.2");
+    }, heroTitleRef);
+
+    return () => ctx.revert();
+  }, [prefersReduced]);
+
   return (
     <section className="relative min-h-screen flex items-center hero-pattern overflow-hidden">
       <div className="absolute inset-0 grid-noise opacity-30" />
@@ -488,15 +520,12 @@ function Hero({ capabilityIndex, prefersReduced }: { capabilityIndex: number; pr
             <span className="text-[11px] uppercase tracking-[0.35em] text-muted-foreground">Oryntal \u2014 Est. 2025</span>
           </div>
           
-          <h1 className="font-display text-5xl md:text-7xl lg:text-[5.5rem] leading-[1.02] tracking-tight hero-title">
-            We build AI, automation, and
-            full-stack systems for teams
-            who are done wasting time
-            on manual work.
+          <h1 ref={heroTitleRef} className="font-display text-5xl md:text-7xl lg:text-[5.5rem] leading-[1.02] tracking-tight hero-title">
+            Production, not proposals.
           </h1>
           
-          <p className="mt-8 max-w-2xl text-lg md:text-xl text-muted-foreground leading-relaxed hero-subtitle">
-            From LLM agents to Shopify storefronts \u2014 Oryntal ships production systems in weeks, not quarters.
+          <p ref={heroSubtitleRef} className="mt-8 max-w-2xl text-lg md:text-xl text-muted-foreground leading-relaxed hero-subtitle">
+            AI agents, automation, and full-stack systems \u2014 from Oryntal, in weeks not quarters.
           </p>
           
           <div className="mt-6 flex items-center gap-3 text-sm text-muted-foreground hero-capability">
@@ -504,7 +533,7 @@ function Hero({ capabilityIndex, prefersReduced }: { capabilityIndex: number; pr
             <span className="font-display italic text-gold text-lg min-w-[220px] transition-all duration-500">{rotatingCapabilities[capabilityIndex]}</span>
           </div>
           
-          <div className="mt-12 flex flex-wrap gap-4 hero-cta">
+          <div ref={heroCtaRef} className="mt-12 flex flex-wrap gap-4 hero-cta">
             <Link to="/contact" className="btn-primary magnetic">
               Get a Free Project Estimate
             </Link>
