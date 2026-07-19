@@ -762,10 +762,59 @@ function PhoneNotch({ className = '' }) {
   );
 }
 
-function FanCarousel({ prefersReduced }) {
-  const panelRefs = useRef([]);
+// Infinity Loop Carousel — horizontal infinite scroll with cursor effect
+function InfinityLoopCarousel({ prefersReduced }) {
+  const carouselRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
+  const [scrollX, setScrollX] = useState(0);
+  const [velocity, setVelocity] = useState(0);
+  const lastTimeRef = useRef(Date.now());
+  const lastScrollRef = useRef(0);
+  const animationRef = useRef(null);
+  const isDraggingRef = useRef(false);
+  const startXRef = useRef(0);
+  const startScrollRef = useRef(0);
+
+  // Services data matching the 6 services
+  const carouselServices = [
+    {
+      id: 'ai',
+      title: 'AI Engineering',
+      image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=1200&fit=crop',
+      color: 'from-purple-600/30 via-purple-900/20 to-transparent',
+    },
+    {
+      id: 'automation',
+      title: 'Automation',
+      image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&h=1200&fit=crop',
+      color: 'from-blue-600/30 via-blue-900/20 to-transparent',
+    },
+    {
+      id: 'fullstack',
+      title: 'Full-Stack Web',
+      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=1200&fit=crop',
+      color: 'from-emerald-600/30 via-emerald-900/20 to-transparent',
+    },
+    {
+      id: 'shopify',
+      title: 'Shopify',
+      image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=1200&fit=crop',
+      color: 'from-pink-600/30 via-pink-900/20 to-transparent',
+    },
+    {
+      id: 'wordpress',
+      title: 'WordPress & WooCommerce',
+      image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=1200&fit=crop',
+      color: 'from-orange-600/30 via-orange-900/20 to-transparent',
+    },
+    {
+      id: 'mobile',
+      title: 'Mobile Apps',
+      image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=1200&fit=crop',
+      color: 'from-cyan-600/30 via-cyan-900/20 to-transparent',
+    },
+  ];
 
   useEffect(() => {
     const checkScreen = () => {
@@ -777,16 +826,97 @@ function FanCarousel({ prefersReduced }) {
     return () => window.removeEventListener('resize', checkScreen);
   }, []);
 
-  // Entrance animation on scroll
+  // Mouse wheel / trackpad scroll handler
+  const handleWheel = (e) => {
+    if (prefersReduced) return;
+    e.preventDefault();
+    
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+    
+    const delta = e.deltaY * 1.5; // Adjust scroll speed
+    carousel.scrollLeft += delta;
+    
+    // Update velocity for momentum
+    const now = Date.now();
+    const deltaTime = now - lastTimeRef.current;
+    const deltaScroll = carousel.scrollLeft - lastScrollRef.current;
+    if (deltaTime > 0) {
+      setVelocity(deltaScroll / deltaTime * 16); // pixels per frame
+    }
+    lastTimeRef.current = now;
+    lastScrollRef.current = carousel.scrollLeft;
+  };
+
+  // Momentum scrolling animation
+  useEffect(() => {
+    if (prefersReduced) return;
+    
+    const animate = () => {
+      const carousel = carouselRef.current;
+      if (!carousel || isDraggingRef.current) {
+        animationRef.current = requestAnimationFrame(animate);
+        return;
+      }
+      
+      if (Math.abs(velocity) > 0.5) {
+        carousel.scrollLeft += velocity;
+        setVelocity(v => v * 0.96); // friction
+      } else {
+        setVelocity(0);
+      }
+      animationRef.current = requestAnimationFrame(animate);
+    };
+    animationRef.current = requestAnimationFrame(animate);
+    
+    return () => cancelAnimationFrame(animationRef.current);
+  }, [velocity]);
+
+  // Touch/drag handlers
+  const handleMouseDown = (e) => {
+    if (prefersReduced) return;
+    isDraggingRef.current = true;
+    startXRef.current = e.clientX;
+    startScrollRef.current = carouselRef.current?.scrollLeft || 0;
+    carouselRef.current?.style.setProperty('cursor', 'grabbing');
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDraggingRef.current || prefersReduced) return;
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+    const delta = e.clientX - startXRef.current;
+    carousel.scrollLeft = startScrollRef.current - delta;
+  };
+
+  const handleMouseUp = () => {
+    isDraggingRef.current = false;
+    carouselRef.current?.style.removeProperty('cursor');
+  };
+
+  // Keyboard navigation
+  const handleKeyDown = (e) => {
+    if (prefersReduced) return;
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+    
+    const scrollAmount = 400;
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
+
+  // Entrance animation
   useEffect(() => {
     if (prefersReduced) return;
 
     const ctx = gsap.context(() => {
-      const container = panelRefs.current[0]?.parentElement;
-      if (!container) return;
-
-      gsap.fromTo(container.querySelectorAll('.fan-panel'),
-        { y: 60, opacity: 0 },
+      gsap.fromTo('.infinity-frame',
+        { y: 40, opacity: 0 },
         {
           y: 0,
           opacity: 1,
@@ -794,7 +924,7 @@ function FanCarousel({ prefersReduced }) {
           stagger: 0.08,
           ease: 'power3.out',
           scrollTrigger: {
-            trigger: container,
+            trigger: carouselRef.current,
             start: 'top 85%',
             toggleActions: 'play none none reverse',
           },
@@ -805,100 +935,51 @@ function FanCarousel({ prefersReduced }) {
     return () => ctx.revert();
   }, [prefersReduced]);
 
-  // Float animation
-  useEffect(() => {
-    if (prefersReduced) return;
+  // Frame dimensions
+  const frameWidth = 220;
+  const frameHeight = 440;
 
-    const panels = document.querySelectorAll('.fan-panel');
-    if (!panels.length) return;
+  // Render 2x the items for infinite loop
+  const items = [...carouselServices, ...carouselServices];
 
-    const animate = () => {
-      panels.forEach((panel, i) => {
-        const offset = i * 0.7;
-        const floatY = Math.sin((Date.now() * 0.001 + offset) * 1.5) * 6;
-        if (!panel.dataset.hovered) {
-          panel.style.transform = panel.style.transform.replace(/translateY\([^)]*\)/, '') + ` translateY(${floatY}px)`;
-        }
-      });
-      requestAnimationFrame(animate);
-    };
-    animate();
-  }, [prefersReduced]);
-
-  const centerWidth = 280;
-  const centerHeight = 560;
-  const panelWidth = 220;
-
-  const renderPanels = () => {
-    // Determine active panels based on screen size
-    const activePanels = isTablet 
-      ? fanPanels.filter(p => ['ai', 'center', 'shopify'].includes(p.id)) // 3 panels: center + immediate left/right
-      : fanPanels; // 5 panels on desktop
-
-    if (isMobile) {
-      return (
-        <div className="flex gap-4 p-4 md:gap-6 pointer-events-auto max-w-5xl overflow-x-auto pb-4 flex-nowrap snap-x" style={{ scrollbarWidth: 'none' }}>
-          {activePanels.map((panel, i) => (
-            <div
-              key={panel.id}
-              ref={(el) => { panelRefs.current[i] = el; }}
-              className="fan-panel flex-shrink-0 flex flex-col items-center p-4 min-w-[200px] max-w-[240px] bg-white/5 backdrop-blur-xl border-2 border-gold/20 rounded-[28px] shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all duration-300 hover:scale-105 hover:border-gold/30 hover:shadow-[0_12px_40px_rgba(201,162,75,0.15)]"
-              style={{ width: centerWidth * panel.heightPercent, height: centerHeight * panel.heightPercent }}
-            >
-              <div className="relative w-full h-full overflow-hidden rounded-[24px]">
-                <img
-                  src={panel.image}
-                  alt={panel.title}
-                  loading="lazy"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <span className="mt-3 font-display text-sm text-center text-foreground">{panel.title}</span>
-            </div>
-          ))}
+  return (
+    <section className="relative py-16 px-6" aria-label="Service showcase carousel">
+      <div className="relative mx-auto max-w-7xl">
+        <div className="text-center mb-10">
+          <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-2">What we do</div>
+          <h2 className="font-display text-3xl md:text-5xl leading-tight">
+            Six disciplines. <span className="text-gold italic gradient-text-clamp">One loop.</span>
+          </h2>
         </div>
-      );
-    }
 
-    return (
-      <div
-        ref={(el) => { panelRefs.current[2] = el; }}
-        className="relative flex items-end justify-center gap-[-60px] md:gap-[-80px] h-[700px] w-full pointer-events-none"
-      >
-        {activePanels.map((panel, i) => {
-          const height = centerHeight * panel.heightPercent;
-          const width = panel.isPhoneFrame ? centerWidth : panelWidth;
-
-          return (
-            <div
-              key={panel.id}
-              ref={(el) => { panelRefs.current[i] = el; }}
-              className="fan-panel flex-shrink-0 flex flex-col items-center pointer-events-auto"
-              style={{
-                zIndex: panel.zIndex,
-                transformOrigin: 'center bottom',
-                transform: `rotate(${panel.rotation}deg)`,
-              }}
-              onMouseEnter={(e) => {
-                if (!panel.isPhoneFrame && !prefersReduced) {
-                  e.currentTarget.dataset.hovered = 'true';
-                  e.currentTarget.style.transition = 'transform 0.3s ease-out, z-index 0s';
-                  e.currentTarget.style.transform = `rotate(0deg) scale(1.05)`;
-                  e.currentTarget.style.zIndex = '50';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!panel.isPhoneFrame && !prefersReduced) {
-                  e.currentTarget.dataset.hovered = 'false';
-                  e.currentTarget.style.transform = `rotate(${panel.rotation}deg) scale(1)`;
-                  e.currentTarget.style.zIndex = panel.zIndex;
-                }
-              }}
-            >
-              {panel.isPhoneFrame ? (
-                <div
-                  className="relative flex flex-col items-center"
-                  style={{ width, height }}
+        <div 
+          ref={carouselRef}
+          className="relative overflow-hidden"
+          onWheel={handleWheel}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+          onKeyDown={handleKeyDown}
+          tabIndex={0}
+          role="region"
+          aria-label="Service showcase carousel"
+          style={{ scrollBehavior: 'auto' }}
+        >
+          <div 
+            className="flex gap-6 md:gap-8 pb-8" 
+            style={{ minWidth: 'max-content' }}
+          >
+            {items.map((service, i) => (
+              <div
+                key={`${service.id}-${i}`}
+                className="infinity-frame flex-shrink-0 flex flex-col items-center"
+                style={{ width: isMobile ? 200 : frameWidth }}
+              >
+                {/* Phone frame */}
+                <div 
+                  className="relative flex flex-col items-center pointer-events-auto"
+                  style={{ width: isMobile ? 200 : 220, height: isMobile ? 400 : frameHeight }}
                 >
                   {/* Phone frame */}
                   <div
@@ -906,67 +987,35 @@ function FanCarousel({ prefersReduced }) {
                     style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.6), 0 0 0 2px rgba(201,162,75,0.3), inset 0 0 0 10px rgba(0,0,0,0.5)' }}
                   >
                     {/* Notch */}
-                    <PhoneNotch />
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-4 md:w-32 md:h-5 bg-black/80 rounded-b-[20px]" />
+                    
                     {/* Screen content */}
                     <div className="absolute inset-[14px] overflow-hidden rounded-[26px]">
                       <img
-                        src={panel.image}
-                        alt={panel.title}
+                        src={carouselServices[i % carouselServices.length].image}
+                        alt={carouselServices[i % carouselServices.length].title}
                         loading="lazy"
                         className="w-full h-full object-cover"
                       />
                     </div>
                   </div>
-                  <span className="mt-3 font-display text-sm text-center text-foreground">{panel.title}</span>
                 </div>
-              ) : (
-                <div
-                  className="relative flex flex-col items-center"
-                  style={{ width, height }}
-                >
-                  <div
-                    className="relative w-full h-full overflow-hidden rounded-[24px] bg-white/5 backdrop-blur-xl border-2 border-gold/20 shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all duration-300"
-                    style={{
-                      boxShadow: panel.zIndex === 30 ? '0 20px 60px rgba(0,0,0,0.6)' : '0 8px 32px rgba(0,0,0,0.4)',
-                    }}
-                  >
-                    <div className="absolute inset-0" style={{ background: panel.color }}>
-                      <img
-                        src={panel.image}
-                        alt={panel.title}
-                        loading="lazy"
-                        className="w-full h-full object-cover opacity-60"
-                      />
-                    </div>
-                  </div>
-                  <span className="mt-3 font-display text-sm text-center text-foreground">{panel.title}</span>
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-    );
-  };
-
-  return (
-    <section className="relative py-20 px-6" aria-label="Service fan carousel">
-      <div className="relative mx-auto max-w-7xl">
-        <div className="text-center mb-12">
-          <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-2">What we do</div>
-          <h2 className="font-display text-3xl md:text-5xl leading-tight">
-            Six disciplines. <span className="text-gold italic gradient-text-clamp">One fan.</span>
-          </h2>
+                
+                <span className="mt-4 font-display text-sm text-center text-foreground">{carouselServices[i % carouselServices.length].title}</span>
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="relative" ref={(el) => { panelRefs.current[0] = el; }}>
-          {renderPanels()}
-        </div>
+        
+        {/* Gradient fade edges */}
+        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background via-background/80 to-transparent pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background via-background/80 to-transparent pointer-events-none" />
       </div>
     </section>
   );
 }
-
-function Hero({ capabilityIndex, prefersReduced }: { capabilityIndex: number; prefersReduced: boolean }) {
+  // Hero function - properly wrapped
+  function Hero({ capabilityIndex, prefersReduced }: { capabilityIndex: number; prefersReduced: boolean }) {
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
   const heroSubtitleRef = useRef<HTMLParagraphElement>(null);
   const heroCtaRef = useRef<HTMLDivElement>(null);
@@ -1095,8 +1144,8 @@ function Hero({ capabilityIndex, prefersReduced }: { capabilityIndex: number; pr
           </div>
         </div>
 
-        {/* Fan Carousel — coverflow style below hero text */}
-        <FanCarousel prefersReduced={prefersReduced} />
+        {/* Infinity Loop Carousel — horizontal scroll with cursor effect */}
+        <InfinityLoopCarousel prefersReduced={prefersReduced} />
 
         {/* 3D Y-axis orbital carousel */}
         <div ref={orbitRef} className="relative w-full h-[700px] md:h-[780px] lg:h-[850px] -mt-24 md:-mt-28 lg:-mt-32 flex items-center justify-center pointer-events-none" style={{ position: 'relative', perspective: '1200px' }}>
