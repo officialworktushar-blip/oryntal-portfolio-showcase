@@ -394,7 +394,17 @@ function ProjectsPage() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const lenisRef = useRef<Lenis | null>(null);
   const [filter, setFilter] = useState<Cat>("All");
-  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+  const [prefersReduced, setPrefersReduced] = useState(false);
+  const [isFiltering, setIsFiltering] = useState(false);
+  const cardsContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReduced(mediaQuery.matches);
+    const handler = (e: MediaQueryListEvent) => setPrefersReduced(e.matches);
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, []);
 
   useEffect(() => {
     lenisRef.current = new Lenis({
@@ -423,104 +433,141 @@ function ProjectsPage() {
       ? websiteShowcases
       : websiteShowcases.filter((site) => site.category === filter);
 
+  const handleFilterChange = (newFilter: Cat) => {
+    if (newFilter === filter || isFiltering) return;
+    
+    if (!prefersReduced) {
+      setIsFiltering(true);
+      const cards = cardsContainerRef.current?.children;
+      if (cards && cards.length > 0) {
+        gsap.to(cards, {
+          opacity: 0,
+          y: 20,
+          duration: 0.3,
+          ease: "power3.inOut",
+          stagger: 0.03,
+          onComplete: () => {
+            setFilter(newFilter);
+            requestAnimationFrame(() => {
+              const newCards = cardsContainerRef.current?.children;
+              if (newCards && newCards.length > 0) {
+                gsap.fromTo(newCards, 
+                  { opacity: 0, y: -20 },
+                  { opacity: 1, y: 0, duration: 0.5, ease: "power3.out", stagger: 0.05, onComplete: () => setIsFiltering(false) }
+                );
+              } else {
+                setIsFiltering(false);
+              }
+            });
+          }
+        });
+      } else {
+        setFilter(newFilter);
+        setIsFiltering(false);
+      }
+    } else {
+      setFilter(newFilter);
+    }
+  };
+
+  // Hero and section animations
   useEffect(() => {
+    if (prefersReduced) return;
+    
     const ctx = gsap.context(() => {
       gsap.set(".projects-hero-title .line", { y: "100%", opacity: 0 });
       gsap.set(".projects-hero-subtitle", { y: 30, opacity: 0 });
       gsap.set(".filter-btn", { y: 20, opacity: 0 });
 
-      const tl = gsap.timeline({ defaults: { ease: "power4.out", duration: 1 } });
-      tl.to(".projects-hero-title .line", { y: 0, opacity: 1, stagger: 0.1, duration: 1 })
-        .to(".projects-hero-subtitle", { y: 0, opacity: 1, duration: 1 }, "-=0.6")
-        .to(".filter-btn", { y: 0, opacity: 1, stagger: 0.05, duration: 0.8 }, "-=0.4");
+      const tl = gsap.timeline({ defaults: { ease: "expo.out", duration: 1.2 } });
+      tl.to(".projects-hero-title .line", { y: 0, opacity: 1, stagger: 0.1, duration: 1.2 }, 0)
+        .to(".projects-hero-subtitle", { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.8")
+        .to(".filter-btn", { y: 0, opacity: 1, stagger: 0.05, duration: 0.8, ease: "expo.out" }, "-=0.5");
 
       gsap.utils.toArray(".section-title").forEach((title: any) => {
         gsap.fromTo(title, { y: 40, opacity: 0 }, {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: title,
-            start: "top 85%",
-            toggleActions: "play none none reverse",
-          },
-        });
-      });
-
-      gsap.utils.toArray(".ai-model-card").forEach((card: any, i) => {
-        gsap.fromTo(card, { y: 50, opacity: 0, rotateX: -5 }, {
-          y: 0,
-          opacity: 1,
-          rotateX: 0,
-          duration: 1,
-          delay: i * 0.1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: card,
-            start: "top 90%",
-            toggleActions: "play none none reverse",
-          },
-        });
-      });
-
-      gsap.utils.toArray(".automation-card").forEach((card: any, i) => {
-        gsap.fromTo(card, { y: 50, opacity: 0, scale: 0.95 }, {
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          duration: 1,
-          delay: i * 0.1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: card,
-            start: "top 90%",
-            toggleActions: "play none none reverse",
-          },
-        });
-      });
-
-      gsap.utils.toArray(".website-card").forEach((card: any, i) => {
-        gsap.fromTo(card, { y: 60, opacity: 0 }, {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          delay: i * 0.08,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: card,
-            start: "top 90%",
-            toggleActions: "play none none reverse",
-          },
-        });
-      });
-
-      gsap.utils.toArray(".coming-soon-card").forEach((card: any) => {
-        gsap.fromTo(card, { y: 40, opacity: 0 }, {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: card,
-            start: "top 90%",
-            toggleActions: "play none none reverse",
-          },
+          y: 0, opacity: 1, duration: 1, ease: "power3.out",
+          scrollTrigger: { trigger: title, start: "top 85%", toggleActions: "play none none reverse" }
         });
       });
     }, scrollRef);
 
     return () => ctx.revert();
-  }, [filter]);
+  }, [prefersReduced]);
+
+  // Card reveal animations - run when filter changes
+  useEffect(() => {
+    if (prefersReduced) return;
+
+    const ctx = gsap.context(() => {
+      // AI Model cards
+      gsap.utils.toArray(".ai-model-card").forEach((card: any, i) => {
+        gsap.fromTo(card, { y: 50, opacity: 0, rotateX: -5 }, {
+          y: 0, opacity: 1, rotateX: 0, duration: 1, delay: i * 0.1, ease: "power3.out",
+          scrollTrigger: { trigger: card, start: "top 90%", toggleActions: "play none none reverse" }
+        });
+      });
+
+      // Automation cards
+      gsap.utils.toArray(".automation-card").forEach((card: any, i) => {
+        gsap.fromTo(card, { y: 50, opacity: 0, scale: 0.95 }, {
+          y: 0, opacity: 1, scale: 1, duration: 1, delay: i * 0.1, ease: "power3.out",
+          scrollTrigger: { trigger: card, start: "top 90%", toggleActions: "play none none reverse" }
+        });
+      });
+
+      // Website cards - staggered reveal
+      gsap.utils.toArray(".website-card").forEach((card: any, i) => {
+        gsap.fromTo(card, { y: 60, opacity: 0 }, {
+          y: 0, opacity: 1, duration: 1, delay: i * 0.08, ease: "power3.out",
+          scrollTrigger: { trigger: card, start: "top 90%", toggleActions: "play none none reverse" }
+        });
+      });
+
+      // Coming soon cards
+      gsap.utils.toArray(".coming-soon-card").forEach((card: any) => {
+        gsap.fromTo(card, { y: 40, opacity: 0 }, {
+          y: 0, opacity: 1, duration: 1, ease: "power3.out",
+          scrollTrigger: { trigger: card, start: "top 90%", toggleActions: "play none none reverse" }
+        });
+      });
+    }, scrollRef);
+
+    return () => ctx.revert();
+  }, [filter, prefersReduced]);
+
+  // Hover animations for cards - subtle scale/zoom
+  useEffect(() => {
+    if (prefersReduced) return;
+    
+    const cards = document.querySelectorAll(".website-card, .ai-model-card, .automation-card");
+    cards.forEach((card) => {
+      const img = card.querySelector("img");
+      const handleEnter = () => {
+        gsap.to(card, { y: -8, scale: 1.01, duration: 0.4, ease: "power3.out" });
+        if (img) gsap.to(img, { scale: 1.05, duration: 0.6, ease: "power3.out" });
+      };
+      const handleLeave = () => {
+        gsap.to(card, { y: 0, scale: 1, duration: 0.4, ease: "power3.out" });
+        if (img) gsap.to(img, { scale: 1, duration: 0.6, ease: "power3.out" });
+      };
+      card.addEventListener("mouseenter", handleEnter);
+      card.addEventListener("mouseleave", handleLeave);
+      return () => {
+        card.removeEventListener("mouseenter", handleEnter);
+        card.removeEventListener("mouseleave", handleLeave);
+      };
+    });
+  }, [prefersReduced, filter]);
 
   return (
     <div ref={scrollRef} className="relative">
       <Hero />
-      <FilterBar filter={filter} setFilter={setFilter} />
+      <FilterBar filter={filter} setFilter={handleFilterChange} isFiltering={isFiltering} />
       {(filter === "All" || filter === "AI") && <AIModelsSection />}
       {(filter === "All" || filter === "Automation") && <AutomationSection />}
       {(filter === "All" || filter === "Full Stack" || filter === "Shopify" || filter === "WordPress") && (
-        <WebsitesSection sites={visibleWebsiteShowcases} />
+        <WebsitesSection sites={visibleWebsiteShowcases} cardsContainerRef={cardsContainerRef} />
       )}
     </div>
   );
@@ -544,21 +591,23 @@ function Hero() {
   );
 }
 
-function FilterBar({ filter, setFilter }: { filter: Cat; setFilter: (f: Cat) => void }) {
+function FilterBar({ filter, setFilter, isFiltering }: { filter: Cat; setFilter: (f: Cat) => void; isFiltering: boolean }) {
   return (
-    <section className="py-12 border-b border-gold/20 sticky top-0 bg-background/95 backdrop-blur-xl z-40">
+    <section className="py-10 border-b border-gold/20 sticky top-0 bg-background/95 backdrop-blur-xl z-40 transition-opacity duration-300" style={{ opacity: isFiltering ? 0.6 : 1 }}>
       <div className="mx-auto max-w-7xl px-6">
-        <div className="flex flex-wrap gap-3 justify-center">
+        <div className="flex flex-wrap gap-3 justify-center" role="group" aria-label="Filter projects by category">
           {categories.map((c, i) => (
             <button
               key={c}
               onClick={() => setFilter(c)}
+              disabled={isFiltering}
               className={`filter-btn px-5 py-2.5 rounded-full text-xs uppercase tracking-widest border transition-all duration-300 ${
                 filter === c
                   ? "bg-gold-gradient text-primary-foreground border-transparent shadow-gold"
-                  : "border-gold/30 text-muted-foreground hover:text-gold hover:border-gold"
-              }`}
+                  : "border-gold/30 text-muted-foreground hover:text-gold hover:border-gold hover:bg-gold/5"
+              } magnetic`}
               style={{ transitionDelay: `${i * 50}ms` }}
+              aria-pressed={filter === c}
             >
               {c}
             </button>
@@ -713,7 +762,7 @@ function AutomationSection() {
   );
 }
 
-function WebsitesSection({ sites }: { sites: WebsiteShowcase[] }) {
+function WebsitesSection({ sites, cardsContainerRef }: { sites: WebsiteShowcase[]; cardsContainerRef: React.RefObject<HTMLDivElement> }) {
   return (
     <section className="py-20 relative overflow-hidden">
       <div className="absolute inset-0 grid-noise opacity-20" />
@@ -732,11 +781,11 @@ function WebsitesSection({ sites }: { sites: WebsiteShowcase[] }) {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div ref={cardsContainerRef} className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
           {sites.map((site) => (
             <article
               key={site.name}
-              className="website-card group relative overflow-hidden rounded-2xl border border-gold/20 bg-card/50 backdrop-blur-sm hover:shadow-card-hover transition-all duration-500"
+              className="website-card group relative overflow-hidden rounded-2xl border border-gold/20 bg-card/50 backdrop-blur-sm transition-all duration-500 will-change-transform"
             >
               <div className="relative aspect-[16/10] overflow-hidden border-b border-gold/20 bg-background">
                 <img

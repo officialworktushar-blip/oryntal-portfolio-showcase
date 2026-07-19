@@ -23,9 +23,9 @@ export function Footer() {
           <p className="mt-6 max-w-sm text-sm text-muted-foreground leading-relaxed">
             We build AI, automation, and full-stack systems for teams who are done wasting time on manual work. India-based, remote-first, GST registered.
           </p>
-          <div className="mt-8 flex flex-wrap gap-4">
-            <a href="mailto:hello@oryntal.com" className="text-sm text-muted-foreground hover:text-gold transition-colors">hello@oryntal.com</a>
-            <span className="text-sm text-muted-foreground">India · Remote-first</span>
+<div className="mt-8 flex flex-wrap gap-4">
+            <a href="mailto:support.oryntal@agency.org.in" className="text-sm text-muted-foreground hover:text-gold transition-colors">support.oryntal@agency.org.in</a>
+            <span className="text-sm text-muted-foreground">India \u2014 Remote-first</span>
             <span className="text-sm text-muted-foreground">GST Registered</span>
           </div>
         </div>

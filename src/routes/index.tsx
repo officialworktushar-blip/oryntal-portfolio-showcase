@@ -19,9 +19,9 @@ gsap.registerPlugin(ScrollTrigger);
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Oryntal — AI, automation & full-stack systems for teams done wasting time" },
+      { title: "Oryntal \u2014 AI, automation & full-stack systems for teams done wasting time" },
       { name: "description", content: "From LLM agents to Shopify storefronts, Oryntal ships production systems in weeks, not quarters." },
-      { property: "og:title", content: "Oryntal — Production systems in weeks, not quarters" },
+      { property: "og:title", content: "Oryntal \u2014 Production systems in weeks, not quarters" },
       { property: "og:description", content: "AI, automation, and full-stack systems for founders and operators who are done wasting time on manual work." },
     ],
   }),
@@ -131,10 +131,75 @@ const stats = [
   { value: 100, suffix: "%", label: "Founder-led" },
 ];
 
+// SplitText-style utility for GSAP
+class SplitText {
+  chars: HTMLElement[] = [];
+  words: HTMLElement[] = [];
+  lines: HTMLElement[] = [];
+  element: HTMLElement;
+
+  constructor(element: HTMLElement, options: { type: string; linesClass?: string }) {
+    this.element = element;
+    this.split(options);
+  }
+
+  split(options: { type: string; linesClass?: string }) {
+    const { type, linesClass = "split-line" } = options;
+    const text = this.element.textContent || "";
+    this.element.innerHTML = "";
+
+    if (type.includes("lines")) {
+      const lines = text.split("\n");
+      lines.forEach((line, i) => {
+        const lineEl = document.createElement("div");
+        lineEl.className = linesClass;
+        lineEl.style.overflow = "hidden";
+        if (type.includes("words")) {
+          const words = line.split(" ");
+          words.forEach((word, j) => {
+            const wordEl = document.createElement("span");
+            wordEl.style.display = "inline-block";
+            wordEl.style.whiteSpace = "nowrap";
+            if (type.includes("chars")) {
+              const chars = word.split("");
+              chars.forEach((char) => {
+                const charEl = document.createElement("span");
+                charEl.style.display = "inline-block";
+                charEl.textContent = char;
+                wordEl.appendChild(charEl);
+                this.chars.push(charEl);
+              });
+            } else {
+              wordEl.textContent = word;
+            }
+            lineEl.appendChild(wordEl);
+            this.words.push(wordEl);
+            if (j < words.length - 1) lineEl.appendChild(document.createTextNode(" "));
+          });
+        } else {
+          lineEl.textContent = line;
+        }
+        this.element.appendChild(lineEl);
+        this.lines.push(lineEl);
+        if (i < lines.length - 1) this.element.appendChild(document.createElement("br"));
+      });
+    }
+  }
+}
+
 function HomePage() {
   const lenisRef = useRef<Lenis | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [capabilityIndex, setCapabilityIndex] = useState(0);
+  const [prefersReduced, setPrefersReduced] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReduced(mediaQuery.matches);
+    const handler = (e: MediaQueryListEvent) => setPrefersReduced(e.matches);
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, []);
 
   useEffect(() => {
     lenisRef.current = new Lenis({
@@ -162,28 +227,41 @@ function HomePage() {
   }, []);
 
   useEffect(() => {
+    if (prefersReduced) return;
+    
     const ctx = gsap.context(() => {
-      gsap.set(".hero-title .line", { y: "100%", opacity: 0 });
-      gsap.set(".hero-subtitle", { y: 30, opacity: 0 });
-      gsap.set(".hero-cta", { y: 30, opacity: 0 });
-      gsap.set(".hero-stats", { y: 30, opacity: 0 });
-      gsap.set(".hero-capability", { y: 20, opacity: 0 });
+      // Hero logo
       gsap.set(".hero-logo", { scale: 0.8, opacity: 0 });
 
-      const tl = gsap.timeline({ defaults: { ease: "power4.out", duration: 1.2 } });
-      tl.to(".hero-logo", { scale: 1, opacity: 1, duration: 1 })
-        .to(".hero-title .line", { y: 0, opacity: 1, stagger: 0.1, duration: 1 }, "-=0.6")
-        .to(".hero-subtitle", { y: 0, opacity: 1, duration: 1 }, "-=0.8")
-        .to(".hero-capability", { y: 0, opacity: 1, duration: 1 }, "-=0.6")
-        .to(".hero-cta", { y: 0, opacity: 1, stagger: 0.1, duration: 1 }, "-=0.4")
-        .to(".hero-stats", { y: 0, opacity: 1, stagger: 0.1, duration: 1 }, "-=0.2");
+      // Split hero title into lines
+      const titleEl = document.querySelector(".hero-title");
+      if (titleEl) {
+        const split = new SplitText(titleEl as HTMLElement, { type: "lines", linesClass: "split-line" });
+        gsap.set(split.lines, { y: "100%", opacity: 0 });
+      }
+
+      gsap.set(".hero-subtitle", { y: 30, opacity: 0 });
+      gsap.set(".hero-capability", { y: 20, opacity: 0 });
+      gsap.set(".hero-cta", { y: 30, opacity: 0 });
+      gsap.set(".hero-stats", { y: 30, opacity: 0 });
+
+      const tl = gsap.timeline({ defaults: { ease: "expo.out", duration: 1.4 } });
+      tl.to(".hero-logo", { scale: 1, opacity: 1, duration: 1.2, ease: "expo.out" })
+        .to(".hero-title .split-line", { y: 0, opacity: 1, stagger: 0.12, duration: 1.2, ease: "expo.out" }, "-=0.7")
+        .to(".hero-subtitle", { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.9")
+        .to(".hero-capability", { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.7")
+        .to(".hero-cta", { y: 0, opacity: 1, stagger: 0.1, duration: 1, ease: "expo.out" }, "-=0.5")
+        .to(".hero-stats", { y: 0, opacity: 1, stagger: 0.1, duration: 1, ease: "power3.out" }, "-=0.3");
     }, scrollRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [prefersReduced]);
 
   useEffect(() => {
+    if (prefersReduced) return;
+
     const ctx = gsap.context(() => {
+      // Reveal animations for sections
       gsap.utils.toArray(".reveal-up").forEach((el: any) => {
         gsap.fromTo(el, { y: 60, opacity: 0 }, {
           y: 0,
@@ -240,11 +318,13 @@ function HomePage() {
         });
       });
 
+      // Stat counters - count up on scroll
       gsap.utils.toArray(".stat-counter").forEach((el: any) => {
         const target = parseInt(el.dataset.value || "0");
+        const suffix = el.dataset.suffix || "";
         gsap.to({ val: 0 }, {
           val: target,
-          duration: 2,
+          duration: 2.5,
           ease: "power3.out",
           scrollTrigger: {
             trigger: el,
@@ -252,11 +332,12 @@ function HomePage() {
             toggleActions: "play none none reverse",
           },
           onUpdate: function() {
-            el.textContent = Math.round(this.targets()[0].val).toLocaleString() + (el.dataset.suffix || "");
+            el.textContent = Math.round(this.targets()[0].val).toLocaleString() + suffix;
           },
         });
       });
 
+      // Service cards staggered
       gsap.utils.toArray(".service-card").forEach((card: any, i) => {
         gsap.fromTo(card, { y: 40, opacity: 0 }, {
           y: 0,
@@ -272,6 +353,7 @@ function HomePage() {
         });
       });
 
+      // Differentiator cards
       gsap.utils.toArray(".differentiator-card").forEach((card: any, i) => {
         gsap.fromTo(card, { y: 40, opacity: 0 }, {
           y: 0,
@@ -287,6 +369,7 @@ function HomePage() {
         });
       });
 
+      // Work cards
       gsap.utils.toArray(".work-card").forEach((card: any, i) => {
         gsap.fromTo(card, { y: 50, opacity: 0 }, {
           y: 0,
@@ -302,6 +385,7 @@ function HomePage() {
         });
       });
 
+      // Process steps
       gsap.utils.toArray(".process-step").forEach((step: any, i) => {
         gsap.fromTo(step, { y: 40, opacity: 0 }, {
           y: 0,
@@ -317,6 +401,7 @@ function HomePage() {
         });
       });
 
+      // FAQ items
       gsap.utils.toArray(".faq-item").forEach((item: any, i) => {
         gsap.fromTo(item, { y: 30, opacity: 0 }, {
           y: 0,
@@ -332,6 +417,7 @@ function HomePage() {
         });
       });
 
+      // Marquee infinite scroll
       gsap.to(".marquee-inner", {
         xPercent: -50,
         ease: "none",
@@ -339,6 +425,7 @@ function HomePage() {
         repeat: -1,
       });
 
+      // Parallax backgrounds
       gsap.utils.toArray(".parallax-bg").forEach((el: any) => {
         gsap.to(el, {
           yPercent: 30,
@@ -351,14 +438,31 @@ function HomePage() {
           },
         });
       });
+
+      // Trusted by marquee - subtle parallax/fade on scroll
+      gsap.fromTo(".trusted-marquee", 
+        { opacity: 0.6, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1.5,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: ".trusted-by-section",
+            start: "top 90%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
+
     }, scrollRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [prefersReduced]);
 
   return (
     <div ref={scrollRef} className="relative">
-      <Hero capabilityIndex={capabilityIndex} />
+      <Hero capabilityIndex={capabilityIndex} prefersReduced={prefersReduced} />
       <TrustedBy />
       <Services />
       <Differentiators />
@@ -370,7 +474,7 @@ function HomePage() {
   );
 }
 
-function Hero({ capabilityIndex }: { capabilityIndex: number }) {
+function Hero({ capabilityIndex, prefersReduced }: { capabilityIndex: number; prefersReduced: boolean }) {
   return (
     <section className="relative min-h-screen flex items-center hero-pattern overflow-hidden">
       <div className="absolute inset-0 grid-noise opacity-30" />
@@ -381,18 +485,18 @@ function Hero({ capabilityIndex }: { capabilityIndex: number }) {
         <div className="max-w-4xl">
           <div className="flex items-center gap-3 mb-10 hero-logo">
             <img src={assetUrl(logoMark)} alt="Oryntal" className="h-10 w-10 rounded-full ring-1 ring-gold/50" />
-            <span className="text-[11px] uppercase tracking-[0.35em] text-muted-foreground">Oryntal — Est. 2025</span>
+            <span className="text-[11px] uppercase tracking-[0.35em] text-muted-foreground">Oryntal \u2014 Est. 2025</span>
           </div>
           
           <h1 className="font-display text-5xl md:text-7xl lg:text-[5.5rem] leading-[1.02] tracking-tight hero-title">
-            <span className="line block">We build AI, automation, and</span>
-            <span className="line block">full-stack systems for teams</span>
-            <span className="line block">who are done wasting time</span>
-            <span className="line block">on manual work.</span>
+            We build AI, automation, and
+            full-stack systems for teams
+            who are done wasting time
+            on manual work.
           </h1>
           
           <p className="mt-8 max-w-2xl text-lg md:text-xl text-muted-foreground leading-relaxed hero-subtitle">
-            From LLM agents to Shopify storefronts — Oryntal ships production systems in weeks, not quarters.
+            From LLM agents to Shopify storefronts \u2014 Oryntal ships production systems in weeks, not quarters.
           </p>
           
           <div className="mt-6 flex items-center gap-3 text-sm text-muted-foreground hero-capability">
@@ -434,16 +538,16 @@ function Hero({ capabilityIndex }: { capabilityIndex: number }) {
 function TrustedBy() {
   const loop = [...trustedBrands, ...trustedBrands];
   return (
-    <section className="py-16 border-t border-gold/20 border-b border-gold/20 relative overflow-hidden">
+    <section className="py-16 border-t border-gold/20 border-b border-gold/20 relative overflow-hidden trusted-by-section">
       <div className="absolute inset-0 grid-noise opacity-20" />
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="flex flex-col md:flex-row md:items-center gap-8">
           <div className="shrink-0 md:pr-10 md:border-r md:border-gold/20 reveal-left">
             <div className="text-[11px] uppercase tracking-[0.3em] text-muted-foreground mb-2">Trusted by</div>
             <div className="font-display text-3xl md:text-4xl text-gold gradient-text-clamp">50+ organisations</div>
-            <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground mt-1">GST registered · India & global</div>
+            <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground mt-1">GST registered \u2014 India & global</div>
           </div>
-          <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] reveal-right">
+          <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] reveal-right trusted-marquee">
             <div className="marquee-inner flex gap-10 whitespace-nowrap">
               {loop.map((b, idx) => (
                 <span key={idx} className="text-sm md:text-base uppercase tracking-[0.15em] text-muted-foreground/80 hover:text-gold transition-colors duration-300 whitespace-nowrap px-2">
@@ -472,11 +576,11 @@ function Services() {
             Instead of stitching together three agencies, you get strategy, engineering, and delivery from a single team that owns the outcome end-to-end.
           </p>
         </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 border-t border-l border-gold/20">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-14">
           {services.map((s, idx) => (
             <div
               key={s.t}
-              className="service-card group card-hover relative border-r border-b border-gold/20 p-8 bg-card/50 backdrop-blur-sm"
+              className="service-card group card-hover relative bg-card/50 backdrop-blur-sm rounded-xl overflow-hidden border border-gold/20 p-8"
             >
               <div className="flex items-baseline justify-between mb-6">
                 <span className="font-mono text-xs text-gold">{s.n}</span>
@@ -504,9 +608,9 @@ function Differentiators() {
             The difference is <span className="text-gold italic gradient-text-clamp">how we ship.</span>
           </h2>
         </div>
-        <div className="grid md:grid-cols-2 gap-x-16 gap-y-14">
+        <div className="grid md:grid-cols-2 gap-x-12 gap-y-14">
           {differentiators.map((d, idx) => (
-            <div key={d.t} className="differentiator-card relative">
+            <div key={d.t} className="differentiator-card relative p-8">
               <div className="absolute -left-8 top-4 font-mono text-6xl text-gold/10 font-display">{String(idx + 1).padStart(2, '0')}</div>
               <div className="font-mono text-xs text-gold mb-4 relative z-10">0{idx + 1}</div>
               <h3 className="font-display text-2xl md:text-3xl mb-4 relative z-10">{d.t}</h3>
@@ -525,13 +629,13 @@ function SelectedWorks() {
       <div className="absolute inset-0 grid-noise opacity-20" />
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="flex items-end justify-between flex-wrap gap-6 mb-16 reveal-up">
-          <div>
+          <div className="max-w-3xl">
             <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">Selected work</div>
-            <h2 className="font-display text-4xl md:text-6xl">
+            <h2 className="font-display text-4xl md:text-6xl leading-tight">
               A few we're <span className="text-gold italic gradient-text-clamp">proud of.</span>
             </h2>
           </div>
-          <Link to="/projects" className="btn-ghost self-end magnetic">
+          <Link to="/projects" className="btn-ghost self-end magnetic shrink-0">
             See all work
             <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
           </Link>
@@ -548,12 +652,12 @@ function SelectedWorks() {
                     loading="lazy"
                     className="h-full w-full object-cover transition-all duration-1000 group-hover:scale-[1.05]"
                   />
-                  <div className="absolute top-4 left-4 text-[10px] uppercase tracking-[0.2em] text-gold bg-background/80 backdrop-blur px-2.5 py-1 border border-gold/40">
+                  <div className="absolute top-4 left-4 text-[10px] uppercase tracking-[0.2em] text-gold bg-background/80 backdrop-blur px-2.5 py-1 border border-gold/40 rounded-full">
                     {w.tag}
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </div>
-                <div className="pt-6">
+                <div className="p-6 pt-8">
                   <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-2">{w.c}</div>
                   <h3 className="font-display text-2xl mb-4 group-hover:text-gold transition-colors duration-300">{w.t}</h3>
                   <div className="space-y-4">
@@ -593,11 +697,11 @@ function Process() {
             Four steps from <span className="text-gold italic gradient-text-clamp">hello</span> to <span className="text-gold italic gradient-text-clamp">shipped.</span>
           </h2>
         </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 border-t border-l border-gold/20">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-14">
           {processSteps.map((s, idx) => (
             <div
               key={s.n}
-              className="process-step relative border-r border-b border-gold/20 p-8 bg-card/30 backdrop-blur-sm group"
+              className="process-step relative bg-card/30 backdrop-blur-sm rounded-xl overflow-hidden border border-gold/20 p-8 group"
             >
               <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
               <div className="font-mono text-4xl text-gold/30 mb-6 group-hover:text-gold transition-colors duration-300">{s.n}</div>
@@ -667,7 +771,7 @@ function CTA() {
     <section className="py-32 border-t border-gold/20 relative overflow-hidden">
       <div className="absolute inset-0 grid-noise opacity-20" />
       <div className="absolute inset-0 bg-gradient-to-br from-gold/5 via-transparent to-transparent" />
-      <div className="relative mx-auto max-w-5xl px-6">
+      <div className="relative mx-auto max-w-7xl px-6">
         <div className="text-center reveal-up">
           <h2 className="font-display text-5xl md:text-7xl leading-tight max-w-3xl mx-auto">
             Have a project? <span className="text-gold italic gradient-text-clamp">Let's talk.</span>
@@ -675,7 +779,7 @@ function CTA() {
           <p className="mt-8 max-w-xl text-lg text-muted-foreground mx-auto">
             Tell us what you're trying to build or fix. We reply within one working day with a real opinion — never a sales deck.
           </p>
-          <div className="mt-12 flex flex-wrap gap-4 justify-center">
+<div className="mt-12 flex flex-wrap gap-4 justify-center">
             <Link to="/contact" className="btn-primary magnetic">
               Get a Free Project Estimate
             </Link>

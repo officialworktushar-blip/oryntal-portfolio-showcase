@@ -8,6 +8,36 @@ import Lenis from "lenis";
 
 gsap.registerPlugin(ScrollTrigger);
 
+// SplitText-style utility for GSAP
+class SplitText {
+  lines: HTMLElement[] = [];
+  element: HTMLElement;
+
+  constructor(element: HTMLElement, options: { type: string; linesClass?: string }) {
+    this.element = element;
+    this.split(options);
+  }
+
+  split(options: { type: string; linesClass?: string }) {
+    const { type, linesClass = "split-line" } = options;
+    const text = this.element.textContent || "";
+    this.element.innerHTML = "";
+
+    if (type.includes("lines")) {
+      const lines = text.split("\n");
+      lines.forEach((line, i) => {
+        const lineEl = document.createElement("div");
+        lineEl.className = linesClass;
+        lineEl.style.overflow = "hidden";
+        lineEl.textContent = line;
+        this.element.appendChild(lineEl);
+        this.lines.push(lineEl);
+        if (i < lines.length - 1) this.element.appendChild(document.createElement("br"));
+      });
+    }
+  }
+}
+
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
@@ -37,6 +67,8 @@ function ContactPage() {
   });
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [prefersReduced, setPrefersReduced] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const toggle = (s: string) =>
     setSelected((p) => (p.includes(s) ? p.filter((x) => x !== s) : [...p, s]));
@@ -62,9 +94,22 @@ function ContactPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      setSubmitted(true);
+      setShowSuccess(true);
+      // Simulate form submission
+      setTimeout(() => {
+        setSubmitted(true);
+        setShowSuccess(false);
+      }, 800);
     }
   };
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReduced(mediaQuery.matches);
+    const handler = (e: MediaQueryListEvent) => setPrefersReduced(e.matches);
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, []);
 
   useEffect(() => {
     lenisRef.current = new Lenis({
@@ -88,58 +133,81 @@ function ContactPage() {
     };
   }, []);
 
+  // Hero and form animations
   useEffect(() => {
+    if (prefersReduced) return;
+    
     const ctx = gsap.context(() => {
-      gsap.set(".contact-hero-title .line", { y: "100%", opacity: 0 });
-      gsap.set(".contact-hero-subtitle", { y: 30, opacity: 0 });
-      gsap.set(".contact-form-field", { y: 30, opacity: 0 });
-      gsap.set(".contact-info-item", { x: -30, opacity: 0 });
-
-      const tl = gsap.timeline({ defaults: { ease: "power4.out", duration: 1 } });
-      tl.to(".contact-hero-title .line", { y: 0, opacity: 1, stagger: 0.1, duration: 1 })
-        .to(".contact-hero-subtitle", { y: 0, opacity: 1, duration: 1 }, "-=0.6")
-        .to(".contact-form-field", { y: 0, opacity: 1, stagger: 0.08, duration: 0.8 }, "-=0.4")
-        .to(".contact-info-item", { x: 0, opacity: 1, stagger: 0.1, duration: 0.8 }, "-=0.2");
-
-      gsap.utils.toArray(".service-chip").forEach((chip: any, i) => {
-        gsap.fromTo(chip, { scale: 0.8, opacity: 0 }, {
-          scale: 1,
-          opacity: 1,
-          duration: 0.5,
-          delay: i * 0.05,
-          ease: "back.out(1.7)",
-          scrollTrigger: {
-            trigger: chip,
-            start: "top 95%",
-            toggleActions: "play none none reverse",
-          },
-        });
-      });
-
-      gsap.utils.toArray(".budget-option").forEach((opt: any, i) => {
-        gsap.fromTo(opt, { scale: 0.8, opacity: 0 }, {
-          scale: 1,
-          opacity: 1,
-          duration: 0.5,
-          delay: i * 0.05,
-          ease: "back.out(1.7)",
-          scrollTrigger: {
-            trigger: opt,
-            start: "top 95%",
-            toggleActions: "play none none reverse",
-          },
-        });
-      });
+      // Hero title - SplitText lines
+      const titleEl = document.querySelector(".contact-hero-title");
+      if (titleEl) {
+        const split = new SplitText(titleEl as HTMLElement, { type: "lines", linesClass: "split-line" });
+        gsap.set(split.lines, { y: "100%", opacity: 0 });
+        
+        const tl = gsap.timeline({ defaults: { ease: "expo.out", duration: 1.2 } });
+        tl.to(split.lines, { y: 0, opacity: 1, stagger: 0.12, duration: 1.2 }, 0)
+          .to(".contact-hero-subtitle", { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.8")
+          .to(".contact-form-field", { y: 0, opacity: 1, stagger: 0.08, duration: 0.8, ease: "expo.out" }, "-=0.6")
+          .to(".contact-info-item", { x: 0, opacity: 1, stagger: 0.1, duration: 0.8, ease: "power3.out" }, "-=0.4")
+          .to(".service-chip", { scale: 1, opacity: 1, stagger: 0.05, duration: 0.5, ease: "back.out(1.7)" }, "-=0.3")
+          .to(".budget-option", { scale: 1, opacity: 1, stagger: 0.05, duration: 0.5, ease: "back.out(1.7)" }, "-=0.2");
+      }
     }, scrollRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [prefersReduced]);
+
+  // Success state animation
+  useEffect(() => {
+    if (submitted && !prefersReduced) {
+      gsap.fromTo(".success-content", 
+        { scale: 0.9, opacity: 0, y: 20 },
+        { scale: 1, opacity: 1, y: 0, duration: 0.6, ease: "expo.out" }
+      );
+      gsap.fromTo(".success-icon", 
+        { scale: 0, rotation: -180 },
+        { scale: 1, rotation: 0, duration: 0.8, ease: "elastic.out(1, 0.5)", delay: 0.2 }
+      );
+      gsap.fromTo(".success-text", 
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.5, ease: "power3.out", stagger: 0.1, delay: 0.4 }
+      );
+    }
+  }, [submitted, prefersReduced]);
+
+  // Magnetic button effect for submit
+  useEffect(() => {
+    if (prefersReduced) return;
+    
+    const submitBtn = document.querySelector(".submit-btn") as HTMLElement;
+    if (!submitBtn) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = submitBtn.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      gsap.to(submitBtn, { x: x * 0.3, y: y * 0.3, duration: 0.3, ease: "power3.out" });
+    };
+
+    const handleMouseLeave = () => {
+      gsap.to(submitBtn, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.3)" });
+    };
+
+    submitBtn.addEventListener("mousemove", handleMouseMove);
+    submitBtn.addEventListener("mouseleave", handleMouseLeave);
+
+    return () => {
+      submitBtn.removeEventListener("mousemove", handleMouseMove);
+      submitBtn.removeEventListener("mouseleave", handleMouseLeave);
+    };
+  }, [prefersReduced, submitted]);
 
   return (
     <div ref={scrollRef} className="relative min-h-screen">
       <Hero />
       <FormSection
         submitted={submitted}
+        showSuccess={showSuccess}
         selected={selected}
         setSelected={setSelected}
         budget={budget}
@@ -178,6 +246,7 @@ function Hero() {
 
 function FormSection({
   submitted,
+  showSuccess,
   selected,
   setSelected,
   budget,
@@ -191,6 +260,7 @@ function FormSection({
   handleSubmit,
 }: {
   submitted: boolean;
+  showSuccess: boolean;
   selected: string[];
   setSelected: (s: string[]) => void;
   budget: string;
@@ -211,6 +281,14 @@ function FormSection({
           <div className="relative">
             {submitted ? (
               <SuccessState />
+            ) : showSuccess ? (
+              <div className="success-content text-center py-16">
+                <div className="success-icon inline-block h-20 w-20 rounded-full bg-gold-gradient mb-6 flex items-center justify-center">
+                  <svg className="w-10 h-10 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                </div>
+                <h2 className="success-text font-display text-3xl mb-3">Brief received.</h2>
+                <p className="success-text text-muted-foreground mb-6">We'll reply from support.oryntal@agency.org.in within one working day.</p>
+              </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-7">
                 <div className="grid md:grid-cols-2 gap-6">
@@ -322,7 +400,7 @@ function FormSection({
 
                 <button
                   type="submit"
-                  className="btn-primary w-full magnetic"
+                  className="submit-btn btn-primary w-full magnetic relative overflow-hidden"
                 >
                   <span className="relative z-10">Send Brief</span>
                   <span className="absolute inset-0 bg-gold-soft/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -333,7 +411,7 @@ function FormSection({
         </div>
 
         <aside className="space-y-8">
-          <ContactInfoItem icon="✉" label="Direct" value="hello@oryntal.com" href="mailto:hello@oryntal.com" />
+          <ContactInfoItem icon="✉" label="Direct" value="support.oryntal@agency.org.in" href="mailto:support.oryntal@agency.org.in" />
           <ContactInfoItem icon="⚡" label="Response Time" value="Within 1 working day. Always." />
           <ContactInfoItem icon="🤝" label="Engagement Model" value="Fixed-scope projects, retainers, or fractional CTO arrangements. NDA available on request." />
           <ContactInfoItem icon="🌍" label="Time Zones" value="UTC −5 → UTC +8 covered" />
@@ -345,12 +423,12 @@ function FormSection({
 
 function SuccessState() {
   return (
-    <div className="text-center py-16">
-      <div className="inline-block h-20 w-20 rounded-full bg-gold-gradient mb-6 flex items-center justify-center">
+    <div className="success-content text-center py-16">
+      <div className="success-icon inline-block h-20 w-20 rounded-full bg-gold-gradient mb-6 flex items-center justify-center">
         <svg className="w-10 h-10 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
       </div>
-      <h2 className="font-display text-3xl mb-3">Brief received.</h2>
-      <p className="text-muted-foreground mb-6">We'll reply from hello@oryntal.com within one working day.</p>
+      <h2 className="success-text font-display text-3xl mb-3">Brief received.</h2>
+      <p className="success-text text-muted-foreground mb-6">We'll reply from support.oryntal@agency.org.in within one working day.</p>
       <button
         onClick={() => window.location.reload()}
         className="btn-secondary magnetic"
