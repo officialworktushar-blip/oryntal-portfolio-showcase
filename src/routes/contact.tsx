@@ -1,5 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+"use client";
+
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Lenis from "lenis";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -17,153 +24,436 @@ const budgets = ["< $10k", "$10–25k", "$25–60k", "$60k+", "Retainer"];
 const services = ["AI", "Automation", "Full Stack", "Shopify", "WordPress", "Mobile App"];
 
 function ContactPage() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const lenisRef = useRef<Lenis | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
+  const [budget, setBudget] = useState<string>("");
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    company: "",
+    message: "",
+  });
+  const [focusedField, setFocusedField] = useState<string | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const toggle = (s: string) =>
     setSelected((p) => (p.includes(s) ? p.filter((x) => x !== s) : [...p, s]));
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
+  };
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+    if (!formData.name.trim()) newErrors.name = "Name is required";
+    if (!formData.email.trim()) newErrors.email = "Email is required";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = "Invalid email format";
+    if (!formData.message.trim()) newErrors.message = "Message is required";
+    if (selected.length === 0) newErrors.services = "Select at least one service";
+    if (!budget) newErrors.budget = "Select a budget range";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validateForm()) {
+      setSubmitted(true);
+    }
+  };
+
+  useEffect(() => {
+    lenisRef.current = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smooth: true,
+      smoothTouch: false,
+      touchMultiplier: 2,
+    });
+
+    function raf(time: number) {
+      lenisRef.current?.raf(time);
+      ScrollTrigger.update();
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenisRef.current?.destroy();
+      ScrollTrigger.getAll().forEach(t => t.kill());
+    };
+  }, []);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.set(".contact-hero-title .line", { y: "100%", opacity: 0 });
+      gsap.set(".contact-hero-subtitle", { y: 30, opacity: 0 });
+      gsap.set(".contact-form-field", { y: 30, opacity: 0 });
+      gsap.set(".contact-info-item", { x: -30, opacity: 0 });
+
+      const tl = gsap.timeline({ defaults: { ease: "power4.out", duration: 1 } });
+      tl.to(".contact-hero-title .line", { y: 0, opacity: 1, stagger: 0.1, duration: 1 })
+        .to(".contact-hero-subtitle", { y: 0, opacity: 1, duration: 1 }, "-=0.6")
+        .to(".contact-form-field", { y: 0, opacity: 1, stagger: 0.08, duration: 0.8 }, "-=0.4")
+        .to(".contact-info-item", { x: 0, opacity: 1, stagger: 0.1, duration: 0.8 }, "-=0.2");
+
+      gsap.utils.toArray(".service-chip").forEach((chip: any, i) => {
+        gsap.fromTo(chip, { scale: 0.8, opacity: 0 }, {
+          scale: 1,
+          opacity: 1,
+          duration: 0.5,
+          delay: i * 0.05,
+          ease: "back.out(1.7)",
+          scrollTrigger: {
+            trigger: chip,
+            start: "top 95%",
+            toggleActions: "play none none reverse",
+          },
+        });
+      });
+
+      gsap.utils.toArray(".budget-option").forEach((opt: any, i) => {
+        gsap.fromTo(opt, { scale: 0.8, opacity: 0 }, {
+          scale: 1,
+          opacity: 1,
+          duration: 0.5,
+          delay: i * 0.05,
+          ease: "back.out(1.7)",
+          scrollTrigger: {
+            trigger: opt,
+            start: "top 95%",
+            toggleActions: "play none none reverse",
+          },
+        });
+      });
+    }, scrollRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <>
-      <section className="border-b border-gold">
-        <div className="relative mx-auto max-w-4xl px-6 py-24 md:py-32">
-          <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">Contact</div>
-          <h1 className="font-display text-5xl md:text-7xl leading-[1.05]">
-            Tell us what you <span className="text-gold italic">want to build.</span>
-          </h1>
-          <p className="mt-6 max-w-xl text-lg text-muted-foreground">
-            One reply within a working day. No drip campaigns, no discovery decks — just a real opinion from the people who'll do the work.
-          </p>
-        </div>
-      </section>
+    <div ref={scrollRef} className="relative min-h-screen">
+      <Hero />
+      <FormSection
+        submitted={submitted}
+        selected={selected}
+        setSelected={setSelected}
+        budget={budget}
+        setBudget={setBudget}
+        formData={formData}
+        setFormData={setFormData}
+        focusedField={focusedField}
+        setFocusedField={setFocusedField}
+        errors={errors}
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+      />
+      <InfoSection />
+    </div>
+  );
+}
 
-      <section className="py-20">
-        <div className="mx-auto max-w-5xl px-6 grid lg:grid-cols-[1fr_320px] gap-12">
-          <div className="rounded-3xl border border-gold bg-card p-8 md:p-12">
+function Hero() {
+  return (
+    <section className="relative border-b border-gold/20 overflow-hidden">
+      <div className="absolute inset-0 grid-noise opacity-20" />
+      <div className="absolute inset-0 bg-gradient-to-br from-gold/5 via-transparent to-transparent" />
+      <div className="relative mx-auto max-w-4xl px-6 py-24 md:py-32">
+        <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">Contact</div>
+        <h1 className="font-display text-5xl md:text-7xl leading-[1.05] contact-hero-title">
+          <span className="line block">Tell us what you</span>
+          <span className="line block"><span className="text-gold italic gradient-text-clamp">want to build.</span></span>
+        </h1>
+        <p className="mt-6 max-w-xl text-lg text-muted-foreground contact-hero-subtitle">
+          One reply within a working day. No drip campaigns, no discovery decks — just a real opinion from the people who'll do the work.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+function FormSection({
+  submitted,
+  selected,
+  setSelected,
+  budget,
+  setBudget,
+  formData,
+  setFormData,
+  focusedField,
+  setFocusedField,
+  errors,
+  handleChange,
+  handleSubmit,
+}: {
+  submitted: boolean;
+  selected: string[];
+  setSelected: (s: string[]) => void;
+  budget: string;
+  setBudget: (s: string) => void;
+  formData: Record<string, string>;
+  setFormData: (d: Record<string, string>) => void;
+  focusedField: string | null;
+  setFocusedField: (s: string | null) => void;
+  errors: Record<string, string>;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  handleSubmit: (e: React.FormEvent) => void;
+}) {
+  return (
+    <section className="py-20">
+      <div className="mx-auto max-w-5xl px-6 grid lg:grid-cols-[1fr_320px] gap-12">
+        <div className="rounded-3xl border border-gold/20 bg-card/50 backdrop-blur-sm p-8 md:p-12 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-gold/5 via-transparent to-transparent" />
+          <div className="relative">
             {submitted ? (
-              <div className="text-center py-16">
-                <div className="inline-block h-16 w-16 rounded-full bg-gold-gradient mb-6 glow-gold" />
-                <h2 className="font-display text-3xl mb-3">Brief received.</h2>
-                <p className="text-muted-foreground">We'll reply from hello@oryntal.com within one working day.</p>
-              </div>
+              <SuccessState />
             ) : (
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setSubmitted(true);
-                }}
-                className="space-y-8"
-              >
+              <form onSubmit={handleSubmit} className="space-y-7">
                 <div className="grid md:grid-cols-2 gap-6">
-                  <Field label="Your name" name="name" placeholder="Jane Mercer" required />
-                  <Field label="Email" name="email" type="email" placeholder="jane@company.com" required />
+                  <AnimatedField
+                    label="Your name"
+                    name="name"
+                    placeholder="Jane Mercer"
+                    value={formData.name}
+                    onChange={handleChange}
+                    onFocus={() => setFocusedField("name")}
+                    onBlur={() => setFocusedField(null)}
+                    error={errors.name}
+                    focused={focusedField === "name"}
+                    required
+                    className="contact-form-field"
+                  />
+                  <AnimatedField
+                    label="Email"
+                    name="email"
+                    type="email"
+                    placeholder="jane@company.com"
+                    value={formData.email}
+                    onChange={handleChange}
+                    onFocus={() => setFocusedField("email")}
+                    onBlur={() => setFocusedField(null)}
+                    error={errors.email}
+                    focused={focusedField === "email"}
+                    required
+                    className="contact-form-field"
+                  />
                 </div>
-                <Field label="Company" name="company" placeholder="Acme Co." />
+                <AnimatedField
+                  label="Company"
+                  name="company"
+                  placeholder="Acme Co."
+                  value={formData.company}
+                  onChange={handleChange}
+                  onFocus={() => setFocusedField("company")}
+                  onBlur={() => setFocusedField(null)}
+                  focused={focusedField === "company"}
+                  className="contact-form-field"
+                />
 
-                <div>
+                <div className="contact-form-field">
                   <label className="block text-xs uppercase tracking-widest text-gold mb-3">What do you need?</label>
-                <div className="flex flex-wrap gap-2">
-                  {services.map((s) => (
-                    <button
-                      type="button"
-                      key={s}
-                      onClick={() => toggle(s)}
-                      className={`px-4 py-2 rounded-full text-xs uppercase tracking-widest border transition-all ${
-                        selected.includes(s)
-                          ? "bg-gold-gradient text-primary-foreground border-transparent hover:brightness-110"
-                          : "border-gold text-muted-foreground hover:text-gold"
-                      }`}
-                    >
-                      {s}
-                    </button>
-                  ))}
-                </div>
+                  <div className="flex flex-wrap gap-2" role="group" aria-label="Services needed">
+                    {services.map((s, i) => (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={() => setSelected((p) => (p.includes(s) ? p.filter((x) => x !== s) : [...p, s]))}
+                        className={`service-chip px-4 py-2.5 rounded-full text-xs uppercase tracking-widest border transition-all duration-300 ${
+                          selected.includes(s)
+                            ? "bg-gold-gradient text-primary-foreground border-transparent shadow-gold"
+                            : "border-gold/30 text-muted-foreground hover:text-gold hover:border-gold hover:bg-gold/5"
+                        } magnetic`}
+                        style={{ transitionDelay: `${i * 50}ms` }}
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
+                  {errors.services && <p className="mt-2 text-sm text-destructive">{errors.services}</p>}
                 </div>
 
-                <div>
+                <div className="contact-form-field">
                   <label className="block text-xs uppercase tracking-widest text-gold mb-3">Budget</label>
-                <div className="flex flex-wrap gap-2">
-                  {budgets.map((b) => (
-                    <label key={b} className="cursor-pointer">
-                      <input type="radio" name="budget" value={b} className="peer sr-only" />
-                      <span className="block px-4 py-2 rounded-full text-xs uppercase tracking-widest border border-gold text-muted-foreground hover:text-gold hover:border-gold hover:bg-gold/10 peer-checked:bg-gold-gradient peer-checked:text-primary-foreground peer-checked:border-transparent peer-checked:hover:text-primary-foreground peer-checked:hover:brightness-110 transition-all">
-                        {b}
-                      </span>
-                    </label>
-                  ))}
-                </div>
+                  <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Budget range">
+                    {budgets.map((b, i) => (
+                      <label key={b} className="budget-option cursor-pointer">
+                        <input
+                          type="radio"
+                          name="budget"
+                          value={b}
+                          checked={budget === b}
+                          onChange={() => setBudget(b)}
+                          className="peer sr-only"
+                        />
+                        <span className={`block px-4 py-2.5 rounded-full text-xs uppercase tracking-widest border transition-all duration-300 ${
+                          budget === b
+                            ? "bg-gold-gradient text-primary-foreground border-transparent shadow-gold"
+                            : "border-gold/30 text-muted-foreground hover:text-gold hover:border-gold hover:bg-gold/5"
+                        } magnetic`}>
+                          {b}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                  {errors.budget && <p className="mt-2 text-sm text-destructive">{errors.budget}</p>}
                 </div>
 
-                <div>
+                <div className="contact-form-field">
                   <label className="block text-xs uppercase tracking-widest text-gold mb-3">The brief</label>
                   <textarea
                     name="message"
                     rows={6}
                     required
                     placeholder="What are you trying to build, change, or fix? The more specific, the sharper our reply."
-                    className="w-full rounded-xl border border-gold bg-background px-5 py-4 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-gold transition-all"
+                    value={formData.message}
+                    onChange={handleChange}
+                    onFocus={() => setFocusedField("message")}
+                    onBlur={() => setFocusedField(null)}
+                    className={`animated-textarea w-full rounded-xl border bg-background px-5 py-4 text-foreground placeholder:text-muted-foreground focus:outline-none transition-all duration-300 ${
+                      focusedField === "message" ? "border-gold ring-2 ring-gold/20" : "border-gold/30 hover:border-gold"
+                    }`}
                   />
+                  {errors.message && <p className="mt-2 text-sm text-destructive">{errors.message}</p>}
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full rounded-full bg-gold-gradient py-4 text-sm uppercase tracking-widest text-primary-foreground font-medium shadow-gold hover:scale-[1.01] transition-transform"
+                  className="btn-primary w-full magnetic"
                 >
-                  Send Brief
+                  <span className="relative z-10">Send Brief</span>
+                  <span className="absolute inset-0 bg-gold-soft/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
                 </button>
               </form>
             )}
           </div>
-
-          <aside className="space-y-8">
-            <div>
-              <div className="text-xs uppercase tracking-widest text-gold mb-2">Direct</div>
-              <a href="mailto:hello@oryntal.com" className="font-display text-2xl hover:text-gold transition-colors">hello@oryntal.com</a>
-            </div>
-            <div>
-              <div className="text-xs uppercase tracking-widest text-gold mb-2">Response Time</div>
-              <p className="text-foreground">Within 1 working day. Always.</p>
-            </div>
-            <div>
-              <div className="text-xs uppercase tracking-widest text-gold mb-2">Engagement Model</div>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                Fixed-scope projects, retainers, or fractional CTO arrangements. NDA available on request.
-              </p>
-            </div>
-            <div>
-              <div className="text-xs uppercase tracking-widest text-gold mb-2">Time Zones</div>
-              <p className="text-muted-foreground text-sm">UTC −5 → UTC +8 covered</p>
-            </div>
-          </aside>
         </div>
-      </section>
-    </>
+
+        <aside className="space-y-8">
+          <ContactInfoItem icon="✉" label="Direct" value="hello@oryntal.com" href="mailto:hello@oryntal.com" />
+          <ContactInfoItem icon="⚡" label="Response Time" value="Within 1 working day. Always." />
+          <ContactInfoItem icon="🤝" label="Engagement Model" value="Fixed-scope projects, retainers, or fractional CTO arrangements. NDA available on request." />
+          <ContactInfoItem icon="🌍" label="Time Zones" value="UTC −5 → UTC +8 covered" />
+        </aside>
+      </div>
+    </section>
   );
 }
 
-function Field({
+function SuccessState() {
+  return (
+    <div className="text-center py-16">
+      <div className="inline-block h-20 w-20 rounded-full bg-gold-gradient mb-6 flex items-center justify-center">
+        <svg className="w-10 h-10 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+      </div>
+      <h2 className="font-display text-3xl mb-3">Brief received.</h2>
+      <p className="text-muted-foreground mb-6">We'll reply from hello@oryntal.com within one working day.</p>
+      <button
+        onClick={() => window.location.reload()}
+        className="btn-secondary magnetic"
+      >
+        Send Another
+      </button>
+    </div>
+  );
+}
+
+function AnimatedField({
   label,
   name,
   type = "text",
   placeholder,
+  value,
+  onChange,
+  onFocus,
+  onBlur,
+  error,
+  focused,
   required,
+  className = "",
 }: {
   label: string;
   name: string;
   type?: string;
   placeholder?: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onFocus: () => void;
+  onBlur: () => void;
+  error?: string;
+  focused: boolean;
   required?: boolean;
+  className?: string;
 }) {
   return (
-    <div>
-      <label className="block text-xs uppercase tracking-widest text-gold mb-3">{label}</label>
-      <input
-        name={name}
-        type={type}
-        required={required}
-        placeholder={placeholder}
-        className="w-full rounded-xl border border-gold bg-background px-5 py-3.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-gold transition-all"
-      />
+    <div className={className}>
+      <label className={`block text-xs uppercase tracking-widest text-gold mb-3 transition-colors ${focused ? "text-gold" : ""}`}>
+        {label} {required && <span className="text-destructive">*</span>}
+      </label>
+      <div className="relative">
+        <input
+          name={name}
+          type={type}
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          className={`animated-input w-full rounded-xl bg-background px-5 py-3.5 text-foreground placeholder:text-muted-foreground focus:outline-none transition-all duration-300 ${
+            focused || value ? "border-gold ring-2 ring-gold/20" : "border-gold/30 hover:border-gold"
+          } ${error ? "border-destructive" : ""}`}
+        />
+        {error && (
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 text-destructive">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+          </div>
+        )}
+        <div className={`absolute bottom-0 left-0 h-px transition-all duration-300 ${focused || value ? "w-full bg-gold" : "w-0 bg-gold/30"}`} />
+      </div>
+      {error && <p className="mt-2 text-sm text-destructive">{error}</p>}
+    </div>
+  );
+}
+
+function ContactInfoItem({ icon, label, value, href }: { icon: string; label: string; value: string; href?: string }) {
+  return (
+    <div className="contact-info-item group">
+      <div className="text-xs uppercase tracking-widest text-gold mb-2">{label}</div>
+      {href ? (
+        <a href={href} className="font-display text-2xl hover:text-gold transition-colors duration-300 inline-block group-hover:translate-x-1 magnetic">
+          {value}
+        </a>
+      ) : (
+        <p className="text-foreground text-lg">{value}</p>
+      )}
+    </div>
+  );
+}
+
+function InfoSection() {
+  return (
+    <section className="py-20 border-t border-gold/20 relative overflow-hidden">
+      <div className="absolute inset-0 grid-noise opacity-20" />
+      <div className="relative mx-auto max-w-5xl px-6">
+        <div className="grid md:grid-cols-3 gap-8">
+          <StatCard value="24h" label="Average Response" description="We reply within one working day" />
+          <StatCard value="50+" label="Projects Delivered" description="AI, automation, and web systems shipped" />
+          <StatCard value="100%" label="Founder-Led" description="Direct access to decision makers" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function StatCard({ value, label, description }: { value: string; label: string; description: string }) {
+  return (
+    <div className="rounded-2xl border border-gold/20 bg-card/50 backdrop-blur-sm p-6 text-center hover:border-gold/50 hover:shadow-card-hover transition-all duration-500">
+      <div className="font-display text-4xl md:text-5xl text-gold gradient-text-clamp mb-2">{value}</div>
+      <h3 className="font-display text-xl mb-1">{label}</h3>
+      <p className="text-sm text-muted-foreground">{description}</p>
     </div>
   );
 }

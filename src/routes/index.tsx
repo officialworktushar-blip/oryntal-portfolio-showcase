@@ -1,6 +1,11 @@
+"use client";
+
 import { assetUrl } from "@/lib/asset-url";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Lenis from "lenis";
 import logoMark from "@/assets/oryntal-mark.asset.json";
 import meet2pro from "@/assets/meet2pro.png.asset.json";
 import qr2review from "@/assets/qr2review.png.asset.json";
@@ -8,6 +13,8 @@ import whatsappRag from "@/assets/whatsapp-rag.jpg.asset.json";
 import eshopwebStore from "@/assets/site-shots/eshopweb-store.asset.json";
 import theKaftanCompany from "@/assets/site-shots/the-kaftan-company.asset.json";
 import clouShot from "@/assets/site-shots/clou.asset.json";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -22,123 +29,12 @@ export const Route = createFileRoute("/")({
 });
 
 const rotatingCapabilities = ["LLM agents.", "Automated workflows.", "Full-stack apps.", "Shopify storefronts."];
-
-function HomePage() {
-  return (
-    <>
-      <Hero />
-      <TrustedBy />
-      <Services />
-      <Differentiators />
-      <SelectedWorks />
-      <Process />
-      <FAQGrid />
-      <CTA />
-    </>
-  );
-}
-
-// ---------- HERO ----------
-function Hero() {
-  const [i, setI] = useState(0);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const t = setInterval(() => setI((p) => (p + 1) % rotatingCapabilities.length), 3000);
-    const v = setTimeout(() => setVisible(true), 100);
-    return () => { clearInterval(t); clearTimeout(v); };
-  }, []);
-  return (
-    <section className="relative min-h-screen flex items-center hero-pattern overflow-hidden">
-      <div className="absolute inset-0 grid-noise" />
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-transparent" />
-      <div className="relative mx-auto max-w-7xl px-6 pt-28 pb-24 md:pt-40 md:pb-32">
-        <div className="max-w-4xl">
-          <div className="flex items-center gap-3 mb-10 animate-fade-in-down">
-            <img src={assetUrl(logoMark)} alt="Oryntal" className="h-10 w-10 rounded-full ring-1 ring-gold/50" />
-            <span className="text-[11px] uppercase tracking-[0.35em] text-muted-foreground">Oryntal — Est. 2025</span>
-          </div>
-          <h1 className="font-display text-5xl md:text-7xl lg:text-[5.5rem] leading-[1.02] tracking-tight animate-slide-up-reveal">
-            We build AI, automation, and full-stack systems for teams who are done wasting time on manual work.
-          </h1>
-          <p className="mt-8 max-w-2xl text-lg md:text-xl text-muted-foreground leading-relaxed animate-fade-in-up delay-200">
-            From LLM agents to Shopify storefronts — Oryntal ships production systems in weeks, not quarters.
-          </p>
-          <div className="mt-6 flex items-center gap-3 text-sm text-muted-foreground animate-fade-in-up delay-300">
-            <span>We ship</span>
-            <span key={i} className="font-display italic text-gold text-lg min-w-[220px] animate-text-reveal">{rotatingCapabilities[i]}</span>
-          </div>
-          <div className="mt-12 flex flex-wrap gap-4 animate-fade-in-up delay-400">
-            <Link to="/contact" className="btn-primary">
-              Get a Free Project Estimate
-            </Link>
-            <Link to="/projects" className="btn-secondary">
-              See Our Work
-            </Link>
-          </div>
-        </div>
-
-        <div className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-10 border-t border-gold/30 pt-12 animate-fade-in-up delay-500">
-          {[
-            ["120+", "Systems shipped"],
-            ["2025", "Agency established"],
-            ["6", "Disciplines under one roof"],
-            ["100%", "Founder-led delivery"],
-          ].map(([k, v]) => (
-            <div key={v} className="relative">
-              <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="font-display text-4xl md:text-5xl text-gold gradient-text-clamp">{k}</div>
-              <div className="mt-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">{v}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Scroll indicator */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-float-gentle animate-fade-in-up delay-1000">
-        <div className="flex flex-col items-center gap-2 text-xs text-muted-foreground">
-          <span className="uppercase tracking-widest">Scroll</span>
-          <svg className="w-5 h-5 text-gold/50 animate-float-gentle" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ---------- TRUSTED BY ----------
 const trustedBrands = [
   "Rahman Textiles", "Indigo Mart", "Bengal Foods", "Padma Logistics",
   "Nexus Pharma", "Aarong Crafts", "Helix Networks", "Northwind Goods",
   "Atlas Energy", "Lumen Co.", "Crest Finance", "Sentinel B2B",
 ];
 
-function TrustedBy() {
-  const loop = [...trustedBrands, ...trustedBrands];
-  return (
-    <section className="py-16 border-t border-gold/20 border-b border-gold/20 relative overflow-hidden">
-      <div className="absolute inset-0 grid-noise opacity-20" />
-      <div className="relative mx-auto max-w-7xl px-6">
-        <div className="flex flex-col md:flex-row md:items-center gap-8">
-          <div className="shrink-0 md:pr-10 md:border-r md:border-gold/20 animate-fade-in-left">
-            <div className="text-[11px] uppercase tracking-[0.3em] text-muted-foreground mb-2">Trusted by</div>
-            <div className="font-display text-3xl md:text-4xl text-gold gradient-text-clamp">50+ organisations</div>
-            <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground mt-1">GST registered · India & global</div>
-          </div>
-          <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] animate-fade-in-right">
-            <div className="flex gap-10 animate-marquee whitespace-nowrap">
-              {loop.map((b, idx) => (
-                <span key={idx} className="text-sm md:text-base uppercase tracking-[0.15em] text-muted-foreground/80 hover:text-gold transition-colors duration-300 whitespace-nowrap px-2">
-                  {b}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ---------- SERVICES ----------
 const services = [
   { n: "01", t: "AI Engineering", d: "LLM agents, RAG systems, and fine-tuned models that answer questions, draft work, and take actions inside your existing tools.", icon: "🧠" },
   { n: "02", t: "Automation", d: "n8n and custom pipelines that move data between the apps your team already uses, so nobody copy-pastes anything again.", icon: "⚡" },
@@ -148,43 +44,6 @@ const services = [
   { n: "06", t: "Mobile Apps", d: "React Native apps for iOS and Android from a single codebase, so you ship to both stores in one project.", icon: "📱" },
 ];
 
-function Services() {
-  return (
-    <section className="py-32 border-t border-gold/20 border-b border-gold/20 relative overflow-hidden">
-      <div className="absolute inset-0 grid-noise opacity-20" />
-      <div className="relative mx-auto max-w-7xl px-6">
-        <div className="max-w-3xl mb-16 animate-fade-in-up">
-          <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">What we do</div>
-          <h2 className="font-display text-4xl md:text-6xl leading-tight">
-            Six disciplines. <span className="text-gold italic gradient-text-clamp">One team.</span>
-          </h2>
-          <p className="mt-6 text-lg text-muted-foreground max-w-2xl">
-            Instead of stitching together three agencies, you get strategy, engineering, and delivery from a single team that owns the outcome end-to-end.
-          </p>
-        </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 border-t border-l border-gold/20">
-          {services.map((s, idx) => (
-            <div
-              key={s.t}
-              className="group card-hover relative border-r border-b border-gold/20 p-8 bg-card/50 backdrop-blur-sm animate-fade-in-up"
-              style={{ animationDelay: `${idx * 100}ms` }}
-            >
-              <div className="flex items-baseline justify-between mb-6">
-                <span className="font-mono text-xs text-gold">{s.n}</span>
-                <div className="text-4xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform group-hover:translate-y-[-4px]">{s.icon}</div>
-              </div>
-              <h3 className="font-display text-2xl mb-3 group-hover:text-gold transition-colors duration-300">{s.t}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">{s.d}</p>
-              <div className="absolute bottom-0 left-0 w-0 h-px bg-gold transition-all duration-500 group-hover:w-full" />
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ---------- DIFFERENTIATORS ----------
 const differentiators = [
   { t: "Ship in weeks, not quarters", d: "Most projects go live in 3–8 weeks. We scope tight, cut waste, and get you into production while other agencies are still writing SOWs." },
   { t: "Founder-led on every project", d: "You talk to the people writing the code and shipping the models. No account managers, no discovery deck theatre, no ticket-forwarding." },
@@ -192,33 +51,6 @@ const differentiators = [
   { t: "Systems you can actually own", d: "Clean code, real docs, boring stack choices where they matter. When we hand off, your team can extend the work without calling us back." },
 ];
 
-function Differentiators() {
-  return (
-    <section className="py-32 border-t border-gold/20 border-b border-gold/20 relative overflow-hidden">
-      <div className="absolute inset-0 grid-noise opacity-20" />
-      <div className="relative mx-auto max-w-7xl px-6">
-        <div className="max-w-3xl mb-16 animate-fade-in-up">
-          <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">Why Oryntal</div>
-          <h2 className="font-display text-4xl md:text-6xl leading-tight">
-            The difference is <span className="text-gold italic gradient-text-clamp">how we ship.</span>
-          </h2>
-        </div>
-        <div className="grid md:grid-cols-2 gap-x-16 gap-y-14">
-          {differentiators.map((d, idx) => (
-            <div key={d.t} className="relative animate-fade-in-up" style={{ animationDelay: `${idx * 100}ms` }}>
-              <div className="absolute -left-8 top-4 font-mono text-6xl text-gold/10 font-display">{String(idx + 1).padStart(2, '0')}</div>
-              <div className="font-mono text-xs text-gold mb-4 relative z-10">0{idx + 1}</div>
-              <h3 className="font-display text-2xl md:text-3xl mb-4 relative z-10">{d.t}</h3>
-              <p className="text-muted-foreground leading-relaxed relative z-10">{d.d}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ---------- SELECTED WORKS ----------
 const works = [
   {
     t: "Meet2Pro",
@@ -276,39 +108,430 @@ const works = [
   },
 ];
 
-function SelectedWorks() {
-  const [visibleCards, setVisibleCards] = useState<Set<number>>(new Set());
-  const observerRef = useRef<IntersectionObserver | null>(null);
+const processSteps = [
+  { n: "01", t: "Discovery call", d: "A 30-minute conversation. We ask the specific questions that surface what's actually slow, broken, or expensive in your operation." },
+  { n: "02", t: "Written scope & estimate", d: "You get a fixed scope, a fixed price, and a real timeline within 3 working days — no proposal decks, no sales games." },
+  { n: "03", t: "Build in the open", d: "Weekly demos, a shared Notion, and access to staging from day one. You see the work take shape, not just the invoice." },
+  { n: "04", t: "Ship & hand over", d: "We deploy to production, hand over clean code and documentation, and stay on call for two weeks while your team gets comfortable." },
+];
+
+const faqs = [
+  { q: "How fast can you actually ship?", a: "Most projects go live in 3–8 weeks. Complex AI or full-stack builds run 8–14 weeks. We give you a real timeline before you sign anything." },
+  { q: "What does a project cost?", a: "Fixed-scope projects start around $6k. Retainers from $3k/month. Every quote is written down, itemised, and fixed — no surprise invoices." },
+  { q: "We already have engineers. Why bring you in?", a: "Most engagements augment an in-house team with senior AI, automation, or e-commerce specialists for a fixed window. Extra capacity, no headcount." },
+  { q: "Do you sign NDAs?", a: "Yes, before any commercial conversation. We can also work under your MSA." },
+  { q: "Where are you based?", a: "India, remote-first, GST registered. We work with clients across Asia, Europe, and North America." },
+  { q: "What happens after launch?", a: "Two weeks of included support while your team settles in, then an optional retainer for maintenance, monitoring, and new features." },
+];
+
+const stats = [
+  { value: 120, suffix: "+", label: "Systems shipped" },
+  { value: 2025, suffix: "", label: "Agency established" },
+  { value: 6, suffix: "", label: "Disciplines" },
+  { value: 100, suffix: "%", label: "Founder-led" },
+];
+
+function HomePage() {
+  const lenisRef = useRef<Lenis | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [capabilityIndex, setCapabilityIndex] = useState(0);
 
   useEffect(() => {
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const idx = Number(entry.target.dataset.idx);
-            setVisibleCards((prev) => new Set([...prev, idx]));
-            observerRef.current?.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.1, rootMargin: "50px" }
-    );
+    lenisRef.current = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smooth: true,
+      smoothTouch: false,
+      touchMultiplier: 2,
+    });
 
-    return () => observerRef.current?.disconnect();
+    function raf(time: number) {
+      lenisRef.current?.raf(time);
+      ScrollTrigger.update();
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    const interval = setInterval(() => setCapabilityIndex((p) => (p + 1) % rotatingCapabilities.length), 3000);
+
+    return () => {
+      lenisRef.current?.destroy();
+      clearInterval(interval);
+      ScrollTrigger.getAll().forEach(t => t.kill());
+    };
   }, []);
 
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.set(".hero-title .line", { y: "100%", opacity: 0 });
+      gsap.set(".hero-subtitle", { y: 30, opacity: 0 });
+      gsap.set(".hero-cta", { y: 30, opacity: 0 });
+      gsap.set(".hero-stats", { y: 30, opacity: 0 });
+      gsap.set(".hero-capability", { y: 20, opacity: 0 });
+      gsap.set(".hero-logo", { scale: 0.8, opacity: 0 });
+
+      const tl = gsap.timeline({ defaults: { ease: "power4.out", duration: 1.2 } });
+      tl.to(".hero-logo", { scale: 1, opacity: 1, duration: 1 })
+        .to(".hero-title .line", { y: 0, opacity: 1, stagger: 0.1, duration: 1 }, "-=0.6")
+        .to(".hero-subtitle", { y: 0, opacity: 1, duration: 1 }, "-=0.8")
+        .to(".hero-capability", { y: 0, opacity: 1, duration: 1 }, "-=0.6")
+        .to(".hero-cta", { y: 0, opacity: 1, stagger: 0.1, duration: 1 }, "-=0.4")
+        .to(".hero-stats", { y: 0, opacity: 1, stagger: 0.1, duration: 1 }, "-=0.2");
+    }, scrollRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.utils.toArray(".reveal-up").forEach((el: any) => {
+        gsap.fromTo(el, { y: 60, opacity: 0 }, {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 85%",
+            toggleActions: "play none none reverse",
+          },
+        });
+      });
+
+      gsap.utils.toArray(".reveal-left").forEach((el: any) => {
+        gsap.fromTo(el, { x: -60, opacity: 0 }, {
+          x: 0,
+          opacity: 1,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 85%",
+            toggleActions: "play none none reverse",
+          },
+        });
+      });
+
+      gsap.utils.toArray(".reveal-right").forEach((el: any) => {
+        gsap.fromTo(el, { x: 60, opacity: 0 }, {
+          x: 0,
+          opacity: 1,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 85%",
+            toggleActions: "play none none reverse",
+          },
+        });
+      });
+
+      gsap.utils.toArray(".reveal-scale").forEach((el: any) => {
+        gsap.fromTo(el, { scale: 0.9, opacity: 0 }, {
+          scale: 1,
+          opacity: 1,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 85%",
+            toggleActions: "play none none reverse",
+          },
+        });
+      });
+
+      gsap.utils.toArray(".stat-counter").forEach((el: any) => {
+        const target = parseInt(el.dataset.value || "0");
+        gsap.to({ val: 0 }, {
+          val: target,
+          duration: 2,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 85%",
+            toggleActions: "play none none reverse",
+          },
+          onUpdate: function() {
+            el.textContent = Math.round(this.targets()[0].val).toLocaleString() + (el.dataset.suffix || "");
+          },
+        });
+      });
+
+      gsap.utils.toArray(".service-card").forEach((card: any, i) => {
+        gsap.fromTo(card, { y: 40, opacity: 0 }, {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          delay: i * 0.1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 90%",
+            toggleActions: "play none none reverse",
+          },
+        });
+      });
+
+      gsap.utils.toArray(".differentiator-card").forEach((card: any, i) => {
+        gsap.fromTo(card, { y: 40, opacity: 0 }, {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          delay: i * 0.1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 90%",
+            toggleActions: "play none none reverse",
+          },
+        });
+      });
+
+      gsap.utils.toArray(".work-card").forEach((card: any, i) => {
+        gsap.fromTo(card, { y: 50, opacity: 0 }, {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          delay: i * 0.1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 90%",
+            toggleActions: "play none none reverse",
+          },
+        });
+      });
+
+      gsap.utils.toArray(".process-step").forEach((step: any, i) => {
+        gsap.fromTo(step, { y: 40, opacity: 0 }, {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          delay: i * 0.1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: step,
+            start: "top 90%",
+            toggleActions: "play none none reverse",
+          },
+        });
+      });
+
+      gsap.utils.toArray(".faq-item").forEach((item: any, i) => {
+        gsap.fromTo(item, { y: 30, opacity: 0 }, {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          delay: i * 0.05,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: item,
+            start: "top 90%",
+            toggleActions: "play none none reverse",
+          },
+        });
+      });
+
+      gsap.to(".marquee-inner", {
+        xPercent: -50,
+        ease: "none",
+        duration: 30,
+        repeat: -1,
+      });
+
+      gsap.utils.toArray(".parallax-bg").forEach((el: any) => {
+        gsap.to(el, {
+          yPercent: 30,
+          ease: "none",
+          scrollTrigger: {
+            trigger: el,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1,
+          },
+        });
+      });
+    }, scrollRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <div ref={scrollRef} className="relative">
+      <Hero capabilityIndex={capabilityIndex} />
+      <TrustedBy />
+      <Services />
+      <Differentiators />
+      <SelectedWorks />
+      <Process />
+      <FAQGrid />
+      <CTA />
+    </div>
+  );
+}
+
+function Hero({ capabilityIndex }: { capabilityIndex: number }) {
+  return (
+    <section className="relative min-h-screen flex items-center hero-pattern overflow-hidden">
+      <div className="absolute inset-0 grid-noise opacity-30" />
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-background/80 to-transparent" />
+      <div className="absolute inset-0 parallax-bg" style={{ background: "radial-gradient(ellipse 80% 50% at 50% -20%, rgba(201, 162, 75, 0.08), transparent), radial-gradient(circle at 20% 80%, rgba(201, 162, 75, 0.05), transparent 40%), radial-gradient(circle at 80% 20%, rgba(201, 162, 75, 0.05), transparent 40%)" }} />
+      
+      <div className="relative mx-auto max-w-7xl px-6 pt-28 pb-24 md:pt-40 md:pb-32">
+        <div className="max-w-4xl">
+          <div className="flex items-center gap-3 mb-10 hero-logo">
+            <img src={assetUrl(logoMark)} alt="Oryntal" className="h-10 w-10 rounded-full ring-1 ring-gold/50" />
+            <span className="text-[11px] uppercase tracking-[0.35em] text-muted-foreground">Oryntal — Est. 2025</span>
+          </div>
+          
+          <h1 className="font-display text-5xl md:text-7xl lg:text-[5.5rem] leading-[1.02] tracking-tight hero-title">
+            <span className="line block">We build AI, automation, and</span>
+            <span className="line block">full-stack systems for teams</span>
+            <span className="line block">who are done wasting time</span>
+            <span className="line block">on manual work.</span>
+          </h1>
+          
+          <p className="mt-8 max-w-2xl text-lg md:text-xl text-muted-foreground leading-relaxed hero-subtitle">
+            From LLM agents to Shopify storefronts — Oryntal ships production systems in weeks, not quarters.
+          </p>
+          
+          <div className="mt-6 flex items-center gap-3 text-sm text-muted-foreground hero-capability">
+            <span>We ship</span>
+            <span className="font-display italic text-gold text-lg min-w-[220px] transition-all duration-500">{rotatingCapabilities[capabilityIndex]}</span>
+          </div>
+          
+          <div className="mt-12 flex flex-wrap gap-4 hero-cta">
+            <Link to="/contact" className="btn-primary magnetic">
+              Get a Free Project Estimate
+            </Link>
+            <Link to="/projects" className="btn-secondary magnetic">
+              See Our Work
+            </Link>
+          </div>
+        </div>
+
+        <div className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-10 border-t border-gold/30 pt-12 hero-stats">
+          {stats.map((stat) => (
+            <div key={stat.label} className="relative group">
+              <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="font-display text-4xl md:text-5xl text-gold gradient-text-clamp stat-counter" data-value={stat.value} data-suffix={stat.suffix}>{stat.value}{stat.suffix}</div>
+              <div className="mt-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-float-gentle">
+        <div className="flex flex-col items-center gap-2 text-xs text-muted-foreground">
+          <span className="uppercase tracking-widest">Scroll</span>
+          <svg className="w-5 h-5 text-gold/50 animate-float-gentle" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TrustedBy() {
+  const loop = [...trustedBrands, ...trustedBrands];
+  return (
+    <section className="py-16 border-t border-gold/20 border-b border-gold/20 relative overflow-hidden">
+      <div className="absolute inset-0 grid-noise opacity-20" />
+      <div className="relative mx-auto max-w-7xl px-6">
+        <div className="flex flex-col md:flex-row md:items-center gap-8">
+          <div className="shrink-0 md:pr-10 md:border-r md:border-gold/20 reveal-left">
+            <div className="text-[11px] uppercase tracking-[0.3em] text-muted-foreground mb-2">Trusted by</div>
+            <div className="font-display text-3xl md:text-4xl text-gold gradient-text-clamp">50+ organisations</div>
+            <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground mt-1">GST registered · India & global</div>
+          </div>
+          <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] reveal-right">
+            <div className="marquee-inner flex gap-10 whitespace-nowrap">
+              {loop.map((b, idx) => (
+                <span key={idx} className="text-sm md:text-base uppercase tracking-[0.15em] text-muted-foreground/80 hover:text-gold transition-colors duration-300 whitespace-nowrap px-2">
+                  {b}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Services() {
   return (
     <section className="py-32 border-t border-gold/20 border-b border-gold/20 relative overflow-hidden">
       <div className="absolute inset-0 grid-noise opacity-20" />
       <div className="relative mx-auto max-w-7xl px-6">
-        <div className="flex items-end justify-between flex-wrap gap-6 mb-16 animate-fade-in-up">
+        <div className="max-w-3xl mb-16 reveal-up">
+          <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">What we do</div>
+          <h2 className="font-display text-4xl md:text-6xl leading-tight">
+            Six disciplines. <span className="text-gold italic gradient-text-clamp">One team.</span>
+          </h2>
+          <p className="mt-6 text-lg text-muted-foreground max-w-2xl">
+            Instead of stitching together three agencies, you get strategy, engineering, and delivery from a single team that owns the outcome end-to-end.
+          </p>
+        </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 border-t border-l border-gold/20">
+          {services.map((s, idx) => (
+            <div
+              key={s.t}
+              className="service-card group card-hover relative border-r border-b border-gold/20 p-8 bg-card/50 backdrop-blur-sm"
+            >
+              <div className="flex items-baseline justify-between mb-6">
+                <span className="font-mono text-xs text-gold">{s.n}</span>
+                <div className="text-4xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform group-hover:-translate-y-1 group-hover:rotate-3">{s.icon}</div>
+              </div>
+              <h3 className="font-display text-2xl mb-3 group-hover:text-gold transition-colors duration-300">{s.t}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">{s.d}</p>
+              <div className="absolute bottom-0 left-0 w-0 h-px bg-gold transition-all duration-500 group-hover:w-full" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Differentiators() {
+  return (
+    <section className="py-32 border-t border-gold/20 border-b border-gold/20 relative overflow-hidden">
+      <div className="absolute inset-0 grid-noise opacity-20" />
+      <div className="relative mx-auto max-w-7xl px-6">
+        <div className="max-w-3xl mb-16 reveal-up">
+          <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">Why Oryntal</div>
+          <h2 className="font-display text-4xl md:text-6xl leading-tight">
+            The difference is <span className="text-gold italic gradient-text-clamp">how we ship.</span>
+          </h2>
+        </div>
+        <div className="grid md:grid-cols-2 gap-x-16 gap-y-14">
+          {differentiators.map((d, idx) => (
+            <div key={d.t} className="differentiator-card relative">
+              <div className="absolute -left-8 top-4 font-mono text-6xl text-gold/10 font-display">{String(idx + 1).padStart(2, '0')}</div>
+              <div className="font-mono text-xs text-gold mb-4 relative z-10">0{idx + 1}</div>
+              <h3 className="font-display text-2xl md:text-3xl mb-4 relative z-10">{d.t}</h3>
+              <p className="text-muted-foreground leading-relaxed relative z-10">{d.d}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function SelectedWorks() {
+  return (
+    <section className="py-32 border-t border-gold/20 border-b border-gold/20 relative overflow-hidden">
+      <div className="absolute inset-0 grid-noise opacity-20" />
+      <div className="relative mx-auto max-w-7xl px-6">
+        <div className="flex items-end justify-between flex-wrap gap-6 mb-16 reveal-up">
           <div>
             <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">Selected work</div>
             <h2 className="font-display text-4xl md:text-6xl">
               A few we're <span className="text-gold italic gradient-text-clamp">proud of.</span>
             </h2>
           </div>
-          <Link to="/projects" className="btn-ghost self-end">
+          <Link to="/projects" className="btn-ghost self-end magnetic">
             See all work
             <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
           </Link>
@@ -318,12 +541,12 @@ function SelectedWorks() {
             const isExternal = w.href.startsWith("http");
             const Inner = (
               <>
-                <div className="relative aspect-[4/3] overflow-hidden bg-card border border-gold/20 image-reveal" data-idx={idx} ref={(el) => observerRef.current?.observe(el)}>
+                <div className="relative aspect-[4/3] overflow-hidden bg-card border border-gold/20">
                   <img
                     src={w.image}
                     alt={w.t}
                     loading="lazy"
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                    className="h-full w-full object-cover transition-all duration-1000 group-hover:scale-[1.05]"
                   />
                   <div className="absolute top-4 left-4 text-[10px] uppercase tracking-[0.2em] text-gold bg-background/80 backdrop-blur px-2.5 py-1 border border-gold/40">
                     {w.tag}
@@ -346,7 +569,7 @@ function SelectedWorks() {
                 </div>
               </>
             );
-            const cls = "group block card-hover bg-card/30 backdrop-blur-sm rounded-xl overflow-hidden border border-gold/20";
+            const cls = "work-card group block card-hover bg-card/30 backdrop-blur-sm rounded-xl overflow-hidden border border-gold/20";
             return isExternal ? (
               <a key={w.t} href={w.href} target="_blank" rel="noopener noreferrer" className={cls}>{Inner}</a>
             ) : (
@@ -359,20 +582,12 @@ function SelectedWorks() {
   );
 }
 
-// ---------- PROCESS ----------
-const processSteps = [
-  { n: "01", t: "Discovery call", d: "A 30-minute conversation. We ask the specific questions that surface what's actually slow, broken, or expensive in your operation." },
-  { n: "02", t: "Written scope & estimate", d: "You get a fixed scope, a fixed price, and a real timeline within 3 working days — no proposal decks, no sales games." },
-  { n: "03", t: "Build in the open", d: "Weekly demos, a shared Notion, and access to staging from day one. You see the work take shape, not just the invoice." },
-  { n: "04", t: "Ship & hand over", d: "We deploy to production, hand over clean code and documentation, and stay on call for two weeks while your team gets comfortable." },
-];
-
 function Process() {
   return (
     <section className="py-32 border-t border-gold/20 border-b border-gold/20 relative overflow-hidden">
       <div className="absolute inset-0 grid-noise opacity-20" />
       <div className="relative mx-auto max-w-7xl px-6">
-        <div className="max-w-3xl mb-16 animate-fade-in-up">
+        <div className="max-w-3xl mb-16 reveal-up">
           <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">How we work</div>
           <h2 className="font-display text-4xl md:text-6xl leading-tight">
             Four steps from <span className="text-gold italic gradient-text-clamp">hello</span> to <span className="text-gold italic gradient-text-clamp">shipped.</span>
@@ -382,8 +597,7 @@ function Process() {
           {processSteps.map((s, idx) => (
             <div
               key={s.n}
-              className="relative border-r border-b border-gold/20 p-8 bg-card/30 backdrop-blur-sm group animate-fade-in-up"
-              style={{ animationDelay: `${idx * 100}ms` }}
+              className="process-step relative border-r border-b border-gold/20 p-8 bg-card/30 backdrop-blur-sm group"
             >
               <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
               <div className="font-mono text-4xl text-gold/30 mb-6 group-hover:text-gold transition-colors duration-300">{s.n}</div>
@@ -398,16 +612,6 @@ function Process() {
   );
 }
 
-// ---------- FAQ ----------
-const faqs = [
-  { q: "How fast can you actually ship?", a: "Most projects go live in 3–8 weeks. Complex AI or full-stack builds run 8–14 weeks. We give you a real timeline before you sign anything." },
-  { q: "What does a project cost?", a: "Fixed-scope projects start around $6k. Retainers from $3k/month. Every quote is written down, itemised, and fixed — no surprise invoices." },
-  { q: "We already have engineers. Why bring you in?", a: "Most engagements augment an in-house team with senior AI, automation, or e-commerce specialists for a fixed window. Extra capacity, no headcount." },
-  { q: "Do you sign NDAs?", a: "Yes, before any commercial conversation. We can also work under your MSA." },
-  { q: "Where are you based?", a: "India, remote-first, GST registered. We work with clients across Asia, Europe, and North America." },
-  { q: "What happens after launch?", a: "Two weeks of included support while your team settles in, then an optional retainer for maintenance, monitoring, and new features." },
-];
-
 function FAQGrid() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
@@ -415,7 +619,7 @@ function FAQGrid() {
     <section className="py-32 border-t border-gold/20 border-b border-gold/20 relative overflow-hidden">
       <div className="absolute inset-0 grid-noise opacity-20" />
       <div className="relative mx-auto max-w-5xl px-6">
-        <div className="mb-16 animate-fade-in-up">
+        <div className="mb-16 reveal-up">
           <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">FAQ</div>
           <h2 className="font-display text-4xl md:text-6xl">
             Answered <span className="text-gold italic gradient-text-clamp">before</span> you ask.
@@ -423,7 +627,7 @@ function FAQGrid() {
         </div>
         <div className="divide-y divide-gold/20 border-y border-gold/20">
           {faqs.map((f, i) => (
-            <div key={f.q} className="group animate-fade-in-up" style={{ animationDelay: `${i * 50}ms` }}>
+            <div key={f.q} className="faq-item group">
               <button
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
                 className="grid md:grid-cols-[80px_1fr] gap-6 py-8 w-full text-left"
@@ -458,14 +662,13 @@ function FAQGrid() {
   );
 }
 
-// ---------- CTA ----------
 function CTA() {
   return (
     <section className="py-32 border-t border-gold/20 relative overflow-hidden">
       <div className="absolute inset-0 grid-noise opacity-20" />
       <div className="absolute inset-0 bg-gradient-to-br from-gold/5 via-transparent to-transparent" />
       <div className="relative mx-auto max-w-5xl px-6">
-        <div className="text-center animate-fade-in-up">
+        <div className="text-center reveal-up">
           <h2 className="font-display text-5xl md:text-7xl leading-tight max-w-3xl mx-auto">
             Have a project? <span className="text-gold italic gradient-text-clamp">Let's talk.</span>
           </h2>
@@ -473,10 +676,10 @@ function CTA() {
             Tell us what you're trying to build or fix. We reply within one working day with a real opinion — never a sales deck.
           </p>
           <div className="mt-12 flex flex-wrap gap-4 justify-center">
-            <Link to="/contact" className="btn-primary">
+            <Link to="/contact" className="btn-primary magnetic">
               Get a Free Project Estimate
             </Link>
-            <Link to="/projects" className="btn-secondary">
+            <Link to="/projects" className="btn-secondary magnetic">
               See Our Work
             </Link>
           </div>

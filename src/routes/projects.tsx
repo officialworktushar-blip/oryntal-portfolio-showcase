@@ -1,6 +1,11 @@
+"use client";
+
 import { assetUrl } from "@/lib/asset-url";
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Lenis from "lenis";
 import meet2pro from "@/assets/meet2pro.png.asset.json";
 import qr2review from "@/assets/qr2review.png.asset.json";
 import aiSos from "@/assets/ai-sos.png.asset.json";
@@ -32,6 +37,30 @@ import antoineLours from "@/assets/site-shots/antoine-lours.asset.json";
 import nightfallGroup from "@/assets/site-shots/nightfall-group.asset.json";
 import hiltonHyland from "@/assets/site-shots/hilton-hyland.asset.json";
 import blueMarineFoundation from "@/assets/site-shots/blue-marine-foundation.asset.json";
+
+gsap.registerPlugin(ScrollTrigger);
+
+export const Route = createFileRoute("/projects")({
+  head: () => ({
+    meta: [
+      { title: "Our Work — AI, Automation, Web, Shopify & WordPress | Oryntal" },
+      {
+        name: "description",
+        content:
+          "Selected client work across AI, automation, full-stack, Shopify, WordPress, and mobile — real production systems, real live sites.",
+      },
+      { property: "og:title", content: "Our Work | Oryntal" },
+      {
+        property: "og:description",
+        content: "Selected client work across AI, automation, full-stack, Shopify, WordPress, and mobile.",
+      },
+    ],
+  }),
+  component: ProjectsPage,
+});
+
+const categories = ["All", "AI", "Automation", "Full Stack", "Shopify", "WordPress", "App"] as const;
+type Cat = (typeof categories)[number];
 
 interface LLMModel {
   name: string;
@@ -135,28 +164,6 @@ const automations: AutomationItem[] = [
       "One AI manager plans, writes, repurposes, schedules, and reports across every channel — keeping brand voice consistent and your calendar full.",
   },
 ];
-
-export const Route = createFileRoute("/projects")({
-  head: () => ({
-    meta: [
-      { title: "Our Work — AI, Automation, Web, Shopify & WordPress | Oryntal" },
-      {
-        name: "description",
-        content:
-          "Selected client work across AI, automation, full-stack, Shopify, WordPress, and mobile — real production systems, real live sites.",
-      },
-      { property: "og:title", content: "Our Work | Oryntal" },
-      {
-        property: "og:description",
-        content: "Selected client work across AI, automation, full-stack, Shopify, WordPress, and mobile.",
-      },
-    ],
-  }),
-  component: ProjectsPage,
-});
-
-const categories = ["All", "AI", "Automation", "Full Stack", "Shopify", "WordPress", "App"] as const;
-type Cat = (typeof categories)[number];
 
 interface WebsiteShowcase {
   name: string;
@@ -384,243 +391,388 @@ function showcaseCardLabel(category: WebsiteShowcase["category"]) {
 }
 
 function ProjectsPage() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const lenisRef = useRef<Lenis | null>(null);
   const [filter, setFilter] = useState<Cat>("All");
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+
+  useEffect(() => {
+    lenisRef.current = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smooth: true,
+      smoothTouch: false,
+      touchMultiplier: 2,
+    });
+
+    function raf(time: number) {
+      lenisRef.current?.raf(time);
+      ScrollTrigger.update();
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenisRef.current?.destroy();
+      ScrollTrigger.getAll().forEach(t => t.kill());
+    };
+  }, []);
+
   const visibleWebsiteShowcases =
     filter === "All"
       ? websiteShowcases
       : websiteShowcases.filter((site) => site.category === filter);
 
-  return (
-    <>
-      <section className="border-b border-gold">
-        <div className="relative mx-auto max-w-7xl px-6 py-24 md:py-32">
-          <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">Our work · 2024 – 2026</div>
-          <h1 className="font-display text-5xl md:text-7xl max-w-4xl leading-[1.05]">
-            Real projects. <span className="text-gold italic">Real live sites.</span>
-          </h1>
-          <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
-            Browse client work by discipline. Every card links directly to the production site with a real screenshot — no mockups, no stock imagery.
-          </p>
-        </div>
-      </section>
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.set(".projects-hero-title .line", { y: "100%", opacity: 0 });
+      gsap.set(".projects-hero-subtitle", { y: 30, opacity: 0 });
+      gsap.set(".filter-btn", { y: 20, opacity: 0 });
 
-      <section className="py-16 border-b border-gold sticky top-16 bg-background/90 backdrop-blur-xl z-40">
-        <div className="mx-auto max-w-7xl px-6 flex flex-wrap gap-3">
-          {categories.map((c) => (
+      const tl = gsap.timeline({ defaults: { ease: "power4.out", duration: 1 } });
+      tl.to(".projects-hero-title .line", { y: 0, opacity: 1, stagger: 0.1, duration: 1 })
+        .to(".projects-hero-subtitle", { y: 0, opacity: 1, duration: 1 }, "-=0.6")
+        .to(".filter-btn", { y: 0, opacity: 1, stagger: 0.05, duration: 0.8 }, "-=0.4");
+
+      gsap.utils.toArray(".section-title").forEach((title: any) => {
+        gsap.fromTo(title, { y: 40, opacity: 0 }, {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: title,
+            start: "top 85%",
+            toggleActions: "play none none reverse",
+          },
+        });
+      });
+
+      gsap.utils.toArray(".ai-model-card").forEach((card: any, i) => {
+        gsap.fromTo(card, { y: 50, opacity: 0, rotateX: -5 }, {
+          y: 0,
+          opacity: 1,
+          rotateX: 0,
+          duration: 1,
+          delay: i * 0.1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 90%",
+            toggleActions: "play none none reverse",
+          },
+        });
+      });
+
+      gsap.utils.toArray(".automation-card").forEach((card: any, i) => {
+        gsap.fromTo(card, { y: 50, opacity: 0, scale: 0.95 }, {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 1,
+          delay: i * 0.1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 90%",
+            toggleActions: "play none none reverse",
+          },
+        });
+      });
+
+      gsap.utils.toArray(".website-card").forEach((card: any, i) => {
+        gsap.fromTo(card, { y: 60, opacity: 0 }, {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          delay: i * 0.08,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 90%",
+            toggleActions: "play none none reverse",
+          },
+        });
+      });
+
+      gsap.utils.toArray(".coming-soon-card").forEach((card: any) => {
+        gsap.fromTo(card, { y: 40, opacity: 0 }, {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 90%",
+            toggleActions: "play none none reverse",
+          },
+        });
+      });
+    }, scrollRef);
+
+    return () => ctx.revert();
+  }, [filter]);
+
+  return (
+    <div ref={scrollRef} className="relative">
+      <Hero />
+      <FilterBar filter={filter} setFilter={setFilter} />
+      {(filter === "All" || filter === "AI") && <AIModelsSection />}
+      {(filter === "All" || filter === "Automation") && <AutomationSection />}
+      {(filter === "All" || filter === "Full Stack" || filter === "Shopify" || filter === "WordPress") && (
+        <WebsitesSection sites={visibleWebsiteShowcases} />
+      )}
+    </div>
+  );
+}
+
+function Hero() {
+  return (
+    <section className="relative border-b border-gold/20 overflow-hidden">
+      <div className="absolute inset-0 grid-noise opacity-20" />
+      <div className="relative mx-auto max-w-7xl px-6 py-24 md:py-32">
+        <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">Our work · 2024 – 2026</div>
+        <h1 className="font-display text-5xl md:text-7xl max-w-4xl leading-[1.05] projects-hero-title">
+          <span className="line block">Real projects.</span>
+          <span className="line block"><span className="text-gold italic gradient-text-clamp">Real live sites.</span></span>
+        </h1>
+        <p className="mt-6 max-w-2xl text-lg text-muted-foreground projects-hero-subtitle">
+          Browse client work by discipline. Every card links directly to the production site with a real screenshot — no mockups, no stock imagery.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+function FilterBar({ filter, setFilter }: { filter: Cat; setFilter: (f: Cat) => void }) {
+  return (
+    <section className="py-12 border-b border-gold/20 sticky top-0 bg-background/95 backdrop-blur-xl z-40">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="flex flex-wrap gap-3 justify-center">
+          {categories.map((c, i) => (
             <button
               key={c}
               onClick={() => setFilter(c)}
-              className={`px-5 py-2.5 rounded-full text-xs uppercase tracking-widest border transition-all ${
+              className={`filter-btn px-5 py-2.5 rounded-full text-xs uppercase tracking-widest border transition-all duration-300 ${
                 filter === c
                   ? "bg-gold-gradient text-primary-foreground border-transparent shadow-gold"
-                  : "border-gold text-muted-foreground hover:text-gold"
+                  : "border-gold/30 text-muted-foreground hover:text-gold hover:border-gold"
               }`}
+              style={{ transitionDelay: `${i * 50}ms` }}
             >
               {c}
             </button>
           ))}
         </div>
-      </section>
+      </div>
+    </section>
+  );
+}
 
-      {(filter === "All" || filter === "AI") && (
-        <section className="py-20 border-b border-gold/40 relative overflow-hidden">
-          <div className="absolute inset-0 grid-noise opacity-20 pointer-events-none" />
-          <div className="relative mx-auto max-w-7xl px-6">
-            <div className="flex items-end justify-between flex-wrap gap-4 mb-12">
-              <div>
-                <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">AI · LLM Products</div>
-                <h2 className="font-display text-4xl md:text-5xl leading-tight">
-                  Production-ready <span className="text-gold italic">AI products.</span>
-                </h2>
-              </div>
-              <p className="text-sm text-muted-foreground max-w-xs">
-                A growing family of business-ready LLM tools we build in-house. <span className="text-gold">More coming every quarter.</span>
-              </p>
-            </div>
-
-            <div className="grid lg:grid-cols-3 gap-6">
-              {llmModels.map((m) => (
-                <article
-                  key={m.name}
-                  className="group relative overflow-hidden rounded-2xl border border-gold bg-card hover:-translate-y-1 transition-transform flex flex-col"
-                >
-                  <div className="relative aspect-[3/4] overflow-hidden border-b border-gold/40 bg-background">
-                    <img
-                      src={m.image}
-                      alt={`${m.name} — ${m.tagline}`}
-                      loading="lazy"
-                      className="absolute inset-0 h-full w-full object-cover group-hover:scale-[1.02] transition-transform duration-700"
-                    />
-                  </div>
-                  <div className="p-6 flex-1 flex flex-col">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-[10px] uppercase tracking-widest text-gold border border-gold rounded-full px-2.5 py-0.5">
-                        LLM Model
-                      </span>
-                      <span className="font-mono text-xs text-muted-foreground">2026</span>
-                    </div>
-                    <h3 className="font-display text-2xl mb-1">{m.name}</h3>
-                    <p className="text-sm text-gold mb-5">{m.tagline}</p>
-                    <div className="space-y-4 text-sm leading-relaxed">
-                      <div>
-                        <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">The Pain</div>
-                        <p className="text-foreground/80">{m.painPoint}</p>
-                      </div>
-                      <div>
-                        <div className="text-[10px] uppercase tracking-widest text-gold mb-1">The Fix</div>
-                        <p className="text-foreground/80">{m.solution}</p>
-                      </div>
-                    </div>
-                  </div>
-                </article>
-              ))}
-
-              <article className="group relative overflow-hidden rounded-2xl border border-dashed border-gold/60 bg-gradient-to-br from-gold/5 to-transparent p-8 flex flex-col items-center justify-center text-center min-h-[280px] lg:col-span-3">
-                <div className="text-5xl mb-4 animate-ai-pulse">✦</div>
-                <h3 className="font-display text-2xl md:text-3xl mb-2">More AI Models Coming Soon</h3>
-                <p className="text-muted-foreground max-w-md">
-                  We&apos;re shipping new business-ready LLM models every quarter. Have a workflow you want automated?{" "}
-                  <a href="/contact" className="text-gold hover:underline">
-                    Tell us about it →
-                  </a>
-                </p>
-              </article>
-            </div>
+function AIModelsSection() {
+  return (
+    <section className="py-20 border-b border-gold/20 relative overflow-hidden">
+      <div className="absolute inset-0 grid-noise opacity-20" />
+      <div className="relative mx-auto max-w-7xl px-6">
+        <div className="flex items-end justify-between flex-wrap gap-4 mb-12">
+          <div className="section-title">
+            <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">AI · LLM Products</div>
+            <h2 className="font-display text-4xl md:text-5xl leading-tight">
+              Production-ready <span className="text-gold italic gradient-text-clamp">AI products.</span>
+            </h2>
           </div>
-        </section>
-      )}
+          <p className="text-sm text-muted-foreground max-w-xs">
+            A growing family of business-ready LLM tools we build in-house. <span className="text-gold">More coming every quarter.</span>
+          </p>
+        </div>
 
-      {(filter === "All" || filter === "Automation") && (
-        <section className="py-20 border-b border-gold/40 relative overflow-hidden">
-          <div className="absolute inset-0 grid-noise opacity-20 pointer-events-none" />
-          <div className="relative mx-auto max-w-7xl px-6">
-            <div className="flex items-end justify-between flex-wrap gap-4 mb-12">
-              <div>
-                <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">Automation</div>
-                <h2 className="font-display text-4xl md:text-5xl leading-tight">
-                  Workflows that <span className="text-gold italic">run themselves.</span>
-                </h2>
+        <div className="grid lg:grid-cols-3 gap-6">
+          {llmModels.map((m) => (
+            <article
+              key={m.name}
+              className="ai-model-card group relative overflow-hidden rounded-2xl border border-gold/20 bg-card/50 backdrop-blur-sm hover:shadow-card-hover transition-all duration-500 flex flex-col"
+            >
+              <div className="relative aspect-[3/4] overflow-hidden border-b border-gold/20 bg-background">
+                <img
+                  src={m.image}
+                  alt={`${m.name} — ${m.tagline}`}
+                  loading="lazy"
+                  className="absolute inset-0 h-full w-full object-cover transition-all duration-1000 group-hover:scale-[1.05]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               </div>
-              <p className="text-sm text-muted-foreground max-w-xs">
-                Production automations we deploy for clients. <span className="text-gold">More agents shipping every month.</span>
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {automations.map((a) => (
-                <article
-                  key={a.name}
-                  className="group relative overflow-hidden rounded-2xl border border-gold bg-card hover:-translate-y-1 transition-transform flex flex-col"
-                >
-                  <div className="relative aspect-[4/3] overflow-hidden border-b border-gold/40 bg-background">
-                    <img
-                      src={a.image}
-                      alt={`${a.name} — ${a.tagline}`}
-                      loading="lazy"
-                      width={1024}
-                      height={1024}
-                      className="absolute inset-0 h-full w-full object-cover group-hover:scale-[1.02] transition-transform duration-700"
-                    />
+              <div className="p-6 flex-1 flex flex-col">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-[10px] uppercase tracking-widest text-gold border border-gold/30 rounded-full px-2.5 py-0.5">
+                    LLM Model
+                  </span>
+                  <span className="font-mono text-xs text-muted-foreground">2026</span>
+                </div>
+                <h3 className="font-display text-2xl mb-1 group-hover:text-gold transition-colors duration-300">{m.name}</h3>
+                <p className="text-sm text-gold mb-5">{m.tagline}</p>
+                <div className="space-y-4 text-sm leading-relaxed flex-1">
+                  <div>
+                    <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">The Pain</div>
+                    <p className="text-foreground/80">{m.painPoint}</p>
                   </div>
-                  <div className="p-6 flex-1 flex flex-col">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-[10px] uppercase tracking-widest text-gold border border-gold rounded-full px-2.5 py-0.5">
-                        Automation
-                      </span>
-                      <span className="font-mono text-xs text-muted-foreground">2026</span>
-                    </div>
-                    <h3 className="font-display text-2xl mb-1">{a.name}</h3>
-                    <p className="text-sm text-gold mb-5">{a.tagline}</p>
-                    <div className="space-y-4 text-sm leading-relaxed">
-                      <div>
-                        <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">The Pain</div>
-                        <p className="text-foreground/80">{a.painPoint}</p>
-                      </div>
-                      <div>
-                        <div className="text-[10px] uppercase tracking-widest text-gold mb-1">The Fix</div>
-                        <p className="text-foreground/80">{a.solution}</p>
-                      </div>
-                    </div>
+                  <div>
+                    <div className="text-[10px] uppercase tracking-widest text-gold mb-1">The Fix</div>
+                    <p className="text-foreground/80">{m.solution}</p>
                   </div>
-                </article>
-              ))}
-
-              <article className="group relative overflow-hidden rounded-2xl border border-dashed border-gold/60 bg-gradient-to-br from-gold/5 to-transparent p-8 flex flex-col items-center justify-center text-center min-h-[240px] md:col-span-2 lg:col-span-3">
-                <div className="text-5xl mb-4 animate-ai-pulse">⚙</div>
-                <h3 className="font-display text-2xl md:text-3xl mb-2">More Automations Coming Soon</h3>
-                <p className="text-muted-foreground max-w-md">
-                  Have a repetitive workflow eating your week?{" "}
-                  <a href="/contact" className="text-gold hover:underline">
-                    Let&apos;s automate it →
-                  </a>
-                </p>
-              </article>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {(filter === "All" || filter === "Full Stack" || filter === "Shopify" || filter === "WordPress") && (
-        <section className="py-20 border-b border-gold/40 relative overflow-hidden">
-          <div className="absolute inset-0 grid-noise opacity-20 pointer-events-none" />
-          <div className="relative mx-auto max-w-7xl px-6">
-            <div className="flex items-end justify-between flex-wrap gap-4 mb-12">
-              <div>
-                <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">Web · Shopify · WordPress</div>
-                <h2 className="font-display text-4xl md:text-5xl leading-tight">
-                  Pixels become <span className="text-gold italic">businesses.</span>
-                  <br />
-                  Designs become <span className="text-gold italic">revenue.</span>
-                </h2>
+                </div>
               </div>
-              <p className="text-sm text-muted-foreground max-w-sm">
-                Every brand below trusted us to ship the website their customers actually buy from. Click any card to see it live.
-              </p>
-            </div>
+            </article>
+          ))}
 
-            <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {visibleWebsiteShowcases.map((site) => (
-                <article
-                  key={site.name}
-                  className="group overflow-hidden rounded-2xl border border-gold bg-card transition-transform hover:-translate-y-1"
-                >
-                  <div className="relative aspect-[16/10] overflow-hidden border-b border-gold/40 bg-background">
-                    <img
-                      src={site.image}
-                      alt={`${site.name} homepage screenshot`}
-                      loading="lazy"
-                      className="absolute inset-0 h-full w-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-700"
-                    />
-                  </div>
+          <article className="coming-soon-card group relative overflow-hidden rounded-2xl border border-dashed border-gold/30 bg-gradient-to-br from-gold/5 to-transparent p-8 flex flex-col items-center justify-center text-center min-h-[280px] lg:col-span-3">
+            <div className="text-5xl mb-4 animate-float-gentle">✦</div>
+            <h3 className="font-display text-2xl md:text-3xl mb-2">More AI Models Coming Soon</h3>
+            <p className="text-muted-foreground max-w-md">
+              We&apos;re shipping new business-ready LLM models every quarter. Have a workflow you want automated?{" "}
+              <Link to="/contact" className="text-gold hover:underline font-medium">
+                Tell us about it →
+              </Link>
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+  );
+}
 
-                  <div className="p-6 flex flex-col gap-4">
-                    <div className="flex items-center justify-between gap-3 flex-wrap">
-                      <span className="text-[10px] uppercase tracking-widest text-gold border border-gold rounded-full px-2.5 py-0.5">
-                        {showcaseCardLabel(site.category)}
-                      </span>
-                      <span className="font-mono text-xs text-muted-foreground">{site.type}</span>
-                    </div>
-
-                    <div>
-                      <h3 className="font-display text-2xl mb-2">{site.name}</h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">{site.description}</p>
-                    </div>
-
-                    <a
-                      href={site.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center justify-center rounded-xl border border-gold bg-gold/10 px-4 py-3 text-sm font-semibold text-gold transition-colors hover:bg-gold hover:text-primary-foreground"
-                    >
-                      Visit Website ↗
-                    </a>
-                  </div>
-                </article>
-              ))}
-            </div>
+function AutomationSection() {
+  return (
+    <section className="py-20 border-b border-gold/20 relative overflow-hidden">
+      <div className="absolute inset-0 grid-noise opacity-20" />
+      <div className="relative mx-auto max-w-7xl px-6">
+        <div className="flex items-end justify-between flex-wrap gap-4 mb-12">
+          <div className="section-title">
+            <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">Automation</div>
+            <h2 className="font-display text-4xl md:text-5xl leading-tight">
+              Workflows that <span className="text-gold italic gradient-text-clamp">run themselves.</span>
+            </h2>
           </div>
-        </section>
-      )}
-    </>
+          <p className="text-sm text-muted-foreground max-w-xs">
+            Production automations we deploy for clients. <span className="text-gold">More agents shipping every month.</span>
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {automations.map((a) => (
+            <article
+              key={a.name}
+              className="automation-card group relative overflow-hidden rounded-2xl border border-gold/20 bg-card/50 backdrop-blur-sm hover:shadow-card-hover transition-all duration-500 flex flex-col"
+            >
+              <div className="relative aspect-[4/3] overflow-hidden border-b border-gold/20 bg-background">
+                <img
+                  src={a.image}
+                  alt={`${a.name} — ${a.tagline}`}
+                  loading="lazy"
+                  width={1024}
+                  height={1024}
+                  className="absolute inset-0 h-full w-full object-cover transition-all duration-1000 group-hover:scale-[1.05]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              </div>
+              <div className="p-6 flex-1 flex flex-col">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-[10px] uppercase tracking-widest text-gold border border-gold/30 rounded-full px-2.5 py-0.5">
+                    Automation
+                  </span>
+                  <span className="font-mono text-xs text-muted-foreground">2026</span>
+                </div>
+                <h3 className="font-display text-2xl mb-1 group-hover:text-gold transition-colors duration-300">{a.name}</h3>
+                <p className="text-sm text-gold mb-5">{a.tagline}</p>
+                <div className="space-y-4 text-sm leading-relaxed flex-1">
+                  <div>
+                    <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">The Pain</div>
+                    <p className="text-foreground/80">{a.painPoint}</p>
+                  </div>
+                  <div>
+                    <div className="text-[10px] uppercase tracking-widest text-gold mb-1">The Fix</div>
+                    <p className="text-foreground/80">{a.solution}</p>
+                  </div>
+                </div>
+              </div>
+            </article>
+          ))}
+
+          <article className="coming-soon-card group relative overflow-hidden rounded-2xl border border-dashed border-gold/30 bg-gradient-to-br from-gold/5 to-transparent p-8 flex flex-col items-center justify-center text-center min-h-[240px] md:col-span-2 lg:col-span-3">
+            <div className="text-5xl mb-4 animate-float-gentle">⚙</div>
+            <h3 className="font-display text-2xl md:text-3xl mb-2">More Automations Coming Soon</h3>
+            <p className="text-muted-foreground max-w-md">
+              Have a repetitive workflow eating your week?{" "}
+              <Link to="/contact" className="text-gold hover:underline font-medium">
+                Let&apos;s automate it →
+              </Link>
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function WebsitesSection({ sites }: { sites: WebsiteShowcase[] }) {
+  return (
+    <section className="py-20 relative overflow-hidden">
+      <div className="absolute inset-0 grid-noise opacity-20" />
+      <div className="relative mx-auto max-w-7xl px-6">
+        <div className="flex items-end justify-between flex-wrap gap-4 mb-12">
+          <div className="section-title">
+            <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">Web · Shopify · WordPress</div>
+            <h2 className="font-display text-4xl md:text-5xl leading-tight">
+              Pixels become <span className="text-gold italic gradient-text-clamp">businesses.</span>
+              <br />
+              Designs become <span className="text-gold italic gradient-text-clamp">revenue.</span>
+            </h2>
+          </div>
+          <p className="text-sm text-muted-foreground max-w-sm">
+            Every brand below trusted us to ship the website their customers actually buy from. Click any card to see it live.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+          {sites.map((site) => (
+            <article
+              key={site.name}
+              className="website-card group relative overflow-hidden rounded-2xl border border-gold/20 bg-card/50 backdrop-blur-sm hover:shadow-card-hover transition-all duration-500"
+            >
+              <div className="relative aspect-[16/10] overflow-hidden border-b border-gold/20 bg-background">
+                <img
+                  src={site.image}
+                  alt={`${site.name} homepage screenshot`}
+                  loading="lazy"
+                  className="absolute inset-0 h-full w-full object-cover object-top transition-all duration-1000 group-hover:scale-[1.05]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute top-4 left-4 text-[10px] uppercase tracking-widest text-gold border border-gold/30 bg-background/80 backdrop-blur px-2.5 py-1 rounded-full">
+                  {showcaseCardLabel(site.category)}
+                </div>
+              </div>
+
+              <div className="p-6 flex flex-col gap-4">
+                <span className="font-mono text-xs text-muted-foreground">{site.type}</span>
+
+                <div>
+                  <h3 className="font-display text-2xl mb-2 group-hover:text-gold transition-colors duration-300">{site.name}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{site.description}</p>
+                </div>
+
+                <a
+                  href={site.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-gold/30 bg-gold/5 px-4 py-3 text-sm font-semibold text-gold transition-all duration-300 hover:bg-gold hover:text-primary-foreground hover:border-gold group-hover:translate-x-1 magnetic"
+                >
+                  Visit Website
+                  <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
