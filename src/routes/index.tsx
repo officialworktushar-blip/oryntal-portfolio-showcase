@@ -570,7 +570,7 @@ const serviceCards = [
   {
     title: "AI Engineering",
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-6 h-6">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-8 h-8">
         <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M9 11l1 3" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M15 11l-1 3" strokeLinecap="round" strokeLinejoin="round"/>
@@ -580,7 +580,7 @@ const serviceCards = [
   {
     title: "Automation",
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-6 h-6">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-8 h-8">
         <rect x="2" y="9" width="20" height="7" rx="2" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M6 9V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v5" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M12 12v6" strokeLinecap="round" strokeLinejoin="round"/>
@@ -591,7 +591,7 @@ const serviceCards = [
   {
     title: "Full-Stack Web",
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-6 h-6">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-8 h-8">
         <rect x="2" y="3" width="20" height="14" rx="2" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M8 21h8" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M12 17v4" strokeLinecap="round" strokeLinejoin="round"/>
@@ -603,7 +603,7 @@ const serviceCards = [
   {
     title: "Shopify",
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-6 h-6">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-8 h-8">
         <path d="M21 8V6a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 6v2" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M3 8v10a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 18v-2" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M3 8l7 4" strokeLinecap="round" strokeLinejoin="round"/>
@@ -614,7 +614,7 @@ const serviceCards = [
   {
     title: "WordPress & WooCommerce",
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-6 h-6">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-8 h-8">
         <circle cx="12" cy="12" r="10" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M12 6v12" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M12 6a6 6 0 0 1 0 12" strokeLinecap="round" strokeLinejoin="round"/>
@@ -625,7 +625,7 @@ const serviceCards = [
   {
     title: "Mobile Apps",
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-6 h-6">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-8 h-8">
         <rect x="5" y="2" width="14" height="20" rx="2" ry="2" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M12 18h.01" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
@@ -633,29 +633,46 @@ const serviceCards = [
   },
 ];
 
-function GlassCard({ index, service, prefersReduced, isMobile, centerX, centerY, radius, initialAngle, rotationRef, floatOffset }) {
-  const angle = initialAngle + (rotationRef.current || 0);
-  const x = centerX + radius * Math.cos(angle * Math.PI / 180);
-  const y = centerY + radius * Math.sin(angle * Math.PI / 180);
+// Phone-frame card dimensions
+const CARD_WIDTH = 100;
+const CARD_HEIGHT = 180;
+const CARD_RADIUS = 24;
+
+// Orbit radius - large enough to clear center text block
+const ORBIT_RADIUS_DESKTOP = 380;
+const ORBIT_RADIUS_TABLET = 320;
+
+function GlassCard({ index, service, prefersReduced, isMobile, centerX, centerY, radius, initialAngle, rotationRef, floatOffset, orbitRotation }) {
+  const currentOrbitAngle = rotationRef.current || 0;
+  const cardAngle = initialAngle + currentOrbitAngle;
+  const x = centerX + radius * Math.cos(cardAngle * Math.PI / 180);
+  const y = centerY + radius * Math.sin(cardAngle * Math.PI / 180);
   
-  const floatY = prefersReduced ? 0 : Math.sin((Date.now() * 0.001 + floatOffset) * 2) * 8;
+  // Float animation - independent per card
+  const floatY = prefersReduced ? 0 : Math.sin((Date.now() * 0.001 + floatOffset) * 1.8) * 8;
 
   if (isMobile) {
     return (
       <motion.div
-        className="relative flex flex-col items-center p-5 md:p-6 min-w-[160px] max-w-[180px] bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all duration-300 hover:scale-105 hover:border-gold/30 hover:shadow-[0_12px_40px_rgba(201,162,75,0.15)]"
+        className="relative flex flex-col items-center p-4 min-w-[120px] max-w-[140px] bg-white/5 backdrop-blur-xl border border-white/10 rounded-[28px] shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all duration-300 hover:scale-105 hover:border-gold/30 hover:shadow-[0_12px_40px_rgba(201,162,75,0.15)]"
         initial={{ opacity: 0, y: 30, scale: 0.9 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.6, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
         whileHover={{ scale: 1.05, y: -4 }}
+        style={{ width: CARD_WIDTH, height: CARD_HEIGHT }}
       >
-        <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center mb-3 text-gold">
-          {service.icon}
+        <div className="flex flex-col items-center h-full justify-start pt-6">
+          <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center mb-3 text-gold">
+            {service.icon}
+          </div>
+          <span className="font-display text-xs text-center text-foreground leading-snug px-2">{service.title}</span>
         </div>
-        <span className="font-display text-sm md:text-base text-center text-foreground">{service.title}</span>
       </motion.div>
     );
   }
+
+  // Counter-rotate: card rotation = -orbitRotation so card stays upright
+  const counterRotation = -currentOrbitAngle;
 
   return (
     <motion.div
@@ -663,18 +680,23 @@ function GlassCard({ index, service, prefersReduced, isMobile, centerX, centerY,
         position: 'absolute',
         left: `${x}px`,
         top: `${y + floatY}px`,
-        transform: `translate(-50%, -50%) rotate(${-angle}deg)`,
+        transform: `translate(-50%, -50%) rotate(${counterRotation}deg)`,
+        willChange: 'transform',
+        width: CARD_WIDTH,
+        height: CARD_HEIGHT,
       }}
-      initial={{ opacity: 0, scale: 0.8, rotate: -angle - 180 }}
-      animate={{ opacity: 1, scale: 1, rotate: -angle }}
+      initial={{ opacity: 0, scale: 0.8, x: (Math.cos(initialAngle * Math.PI / 180) * 100), y: (Math.sin(initialAngle * Math.PI / 180) * 100) }}
+      animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
       transition={{ duration: 0.8, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
-      className="relative flex flex-col items-center p-5 md:p-6 min-w-[160px] max-w-[180px] bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all duration-300 hover:scale-105 hover:border-gold/30 hover:shadow-[0_12px_40px_rgba(201,162,75,0.15)]"
-      whileHover={{ scale: 1.1 }}
+      className="relative flex flex-col items-center p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-[28px] shadow-[0_8px_32px_rgba(0,0,0,0.4)] pointer-events-auto"
+      whileHover={{ scale: 1.08 }}
     >
-      <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center mb-3 text-gold">
-        {service.icon}
+      <div className="flex flex-col items-center h-full justify-start pt-6">
+        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center mb-3 text-gold">
+          {service.icon}
+        </div>
+        <span className="font-display text-xs text-center text-foreground leading-snug px-2">{service.title}</span>
       </div>
-      <span className="font-display text-sm md:text-base text-center text-foreground whitespace-nowrap">{service.title}</span>
     </motion.div>
   );
 }
@@ -686,12 +708,16 @@ function Hero({ capabilityIndex, prefersReduced }: { capabilityIndex: number; pr
   const orbitRef = useRef<HTMLDivElement>(null);
   const rotationRef = useRef(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    const checkScreen = () => {
+      setIsMobile(window.innerWidth < 768);
+      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
+    };
+    checkScreen();
+    window.addEventListener('resize', checkScreen);
+    return () => window.removeEventListener('resize', checkScreen);
   }, []);
 
   // GSAP entrance animation for center text
@@ -746,9 +772,9 @@ function Hero({ capabilityIndex, prefersReduced }: { capabilityIndex: number; pr
     return () => cancelAnimationFrame(animationId);
   }, [prefersReduced, isMobile]);
 
-  const centerX = isMobile ? 0 : 0;
-  const centerY = isMobile ? 0 : 0;
-  const radius = isMobile ? 0 : 320; // Desktop radius
+  const radius = isMobile ? 0 : (isTablet ? ORBIT_RADIUS_TABLET : ORBIT_RADIUS_DESKTOP);
+  const centerX = 0;
+  const centerY = 0;
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{ background: '#0A0A0A' }}>
@@ -798,7 +824,7 @@ function Hero({ capabilityIndex, prefersReduced }: { capabilityIndex: number; pr
         {/* Orbital cards */}
         <div ref={orbitRef} className="relative w-full h-[640px] md:h-[700px] lg:h-[750px] -mt-20 md:-mt-24 lg:-mt-28 flex items-center justify-center pointer-events-none" style={{ position: 'relative' }}>
           {!isMobile && serviceCards.map((service, i) => {
-            const initialAngle = (i * 60) - 90; // Start at 12 o'clock, offset by -90deg
+            const initialAngle = (i * 60) - 90; // Start at 12 o'clock
             const floatOffset = i * 0.5;
             return (
               <GlassCard
@@ -813,11 +839,12 @@ function Hero({ capabilityIndex, prefersReduced }: { capabilityIndex: number; pr
                 initialAngle={initialAngle}
                 rotationRef={rotationRef}
                 floatOffset={floatOffset}
+                orbitRotation={rotationRef.current}
               />
             );
           })}
           {isMobile && (
-            <div className="flex flex-wrap justify-center gap-4 p-4 md:gap-6 pointer-events-auto" style={{ perspective: '1000px' }}>
+            <div className="flex flex-wrap justify-center gap-4 p-4 md:gap-6 pointer-events-auto max-w-5xl overflow-x-auto pb-4" style={{ scrollbarWidth: 'none' }}>
               {serviceCards.map((service, i) => (
                 <GlassCard
                   key={i}
@@ -831,6 +858,7 @@ function Hero({ capabilityIndex, prefersReduced }: { capabilityIndex: number; pr
                   initialAngle={0}
                   rotationRef={rotationRef}
                   floatOffset={0}
+                  orbitRotation={0}
                 />
               ))}
             </div>
