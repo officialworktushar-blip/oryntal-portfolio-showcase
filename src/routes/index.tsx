@@ -975,7 +975,7 @@ function InfinityLoopCarousel({ prefersReduced }) {
               {/* Phone frame */}
               <div 
                 className="relative flex flex-col items-center pointer-events-auto w-full"
-                style={{ aspectRatio: '5/6', transform: isMobile ? 'scale(0.7)' : 'none', transformOrigin: 'center top' }}
+                style={{ aspectRatio: '5/7', transform: isMobile ? 'scale(0.7)' : 'none', transformOrigin: 'center top' }}
               >
                 {/* Phone frame */}
                 <div
