@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
+import ContactHeroAnimation from "@/components/animation/ContactHeroAnimation";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -230,6 +231,7 @@ function Hero() {
     <section className="relative border-b border-gold/20 overflow-hidden">
       <div className="absolute inset-0 grid-noise opacity-20" />
       <div className="absolute inset-0 bg-gradient-to-br from-gold/5 via-transparent to-transparent" />
+      <ContactHeroAnimation />
       <div className="relative mx-auto max-w-4xl px-6 py-24 md:py-32">
         <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">Contact</div>
         <h1 className="font-display text-5xl md:text-7xl leading-[1.05] contact-hero-title">
