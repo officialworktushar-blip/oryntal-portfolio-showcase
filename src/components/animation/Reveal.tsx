@@ -15,7 +15,19 @@ interface RevealProps {
 }
 
 export const Reveal = forwardRef<HTMLDivElement, RevealProps>(
-  ({ children, className = "", direction = "up", delay = 0, duration = 0.8, once = true, threshold = 0.1, rootMargin = "50px" }, ref) => {
+  (
+    {
+      children,
+      className = "",
+      direction = "up",
+      delay = 0,
+      duration = 0.8,
+      once = true,
+      threshold = 0.1,
+      rootMargin = "50px",
+    },
+    ref,
+  ) => {
     const prefersReduced = useReducedMotion();
     const [isVisible, setIsVisible] = useState(false);
     const elementRef = useRef<HTMLDivElement>(null);
@@ -40,7 +52,7 @@ export const Reveal = forwardRef<HTMLDivElement, RevealProps>(
             }
           });
         },
-        { threshold, rootMargin }
+        { threshold, rootMargin },
       );
 
       observer.observe(element);
@@ -49,22 +61,31 @@ export const Reveal = forwardRef<HTMLDivElement, RevealProps>(
 
     const getTransform = () => {
       if (isVisible || prefersReduced) return "translate(0, 0) scale(1)";
-      
+
       switch (direction) {
-        case "up": return "translate(0, 40px) scale(0.98)";
-        case "down": return "translate(0, -40px) scale(0.98)";
-        case "left": return "translate(40px, 0) scale(0.98)";
-        case "right": return "translate(-40px, 0) scale(0.98)";
-        case "scale": return "scale(0.9)";
-        default: return "translate(0, 0) scale(1)";
+        case "up":
+          return "translate(0, 40px) scale(0.98)";
+        case "down":
+          return "translate(0, -40px) scale(0.98)";
+        case "left":
+          return "translate(40px, 0) scale(0.98)";
+        case "right":
+          return "translate(-40px, 0) scale(0.98)";
+        case "scale":
+          return "scale(0.9)";
+        default:
+          return "translate(0, 0) scale(1)";
       }
     };
 
-    const getOpacity = () => (isVisible || prefersReduced) ? 1 : 0;
+    const getOpacity = () => (isVisible || prefersReduced ? 1 : 0);
 
     return (
       <div
-        ref={(el) => { elementRef.current = el; if (ref) ref.current = el; }}
+        ref={(el) => {
+          elementRef.current = el;
+          if (ref) ref.current = el;
+        }}
         className={className}
         style={{
           opacity: getOpacity(),
@@ -76,7 +97,7 @@ export const Reveal = forwardRef<HTMLDivElement, RevealProps>(
         {children}
       </div>
     );
-  }
+  },
 );
 
 Reveal.displayName = "Reveal";
@@ -112,15 +133,18 @@ export const StaggerContainer = forwardRef<HTMLDivElement, StaggerContainerProps
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
               itemsRef.current.forEach((_, index) => {
-                setTimeout(() => {
-                  setVisibleItems((prev) => new Set([...prev, index]));
-                }, index * staggerDelay * 1000);
+                setTimeout(
+                  () => {
+                    setVisibleItems((prev) => new Set([...prev, index]));
+                  },
+                  index * staggerDelay * 1000,
+                );
               });
               observer.unobserve(container);
             }
           });
         },
-        { threshold: 0.1, rootMargin: "50px" }
+        { threshold: 0.1, rootMargin: "50px" },
       );
 
       observer.observe(container);
@@ -128,36 +152,54 @@ export const StaggerContainer = forwardRef<HTMLDivElement, StaggerContainerProps
     }, [staggerDelay, prefersReduced]);
 
     return (
-      <div ref={(el) => { containerRef.current = el; if (ref) ref.current = el; }} className={className}>
-        {typeof children === "function" ? children({ visibleItems, registerItem: (el: HTMLDivElement, index: number) => { itemsRef.current[index] = el; } }) : 
-          React.Children.map(children, (child, index) => {
-            if (!React.isValidElement(child)) return child;
-            const isVisible = visibleItems.has(index) || prefersReduced;
-            const getTransform = () => {
-              if (isVisible) return "translate(0, 0) scale(1)";
-              switch (direction) {
-                case "up": return "translate(0, 30px)";
-                case "down": return "translate(0, -30px)";
-                case "left": return "translate(30px, 0)";
-                case "right": return "translate(-30px, 0)";
-                case "scale": return "scale(0.9)";
-                default: return "translate(0, 0)";
-              }
-            };
-            return React.cloneElement(child as React.ReactElement, {
-              style: {
-                ...(child.props.style || {}),
-                opacity: isVisible ? 1 : 0,
-                transform: getTransform(),
-                transition: `opacity ${duration}s cubic-bezier(0.16, 1, 0.3, 1), transform ${duration}s cubic-bezier(0.16, 1, 0.3, 1)`,
-                transitionDelay: `${index * staggerDelay}s`,
-                willChange: "opacity, transform",
+      <div
+        ref={(el) => {
+          containerRef.current = el;
+          if (ref) ref.current = el;
+        }}
+        className={className}
+      >
+        {typeof children === "function"
+          ? children({
+              visibleItems,
+              registerItem: (el: HTMLDivElement, index: number) => {
+                itemsRef.current[index] = el;
               },
-            });
-          })}
+            })
+          : React.Children.map(children, (child, index) => {
+              if (!React.isValidElement(child)) return child;
+              const isVisible = visibleItems.has(index) || prefersReduced;
+              const getTransform = () => {
+                if (isVisible) return "translate(0, 0) scale(1)";
+                switch (direction) {
+                  case "up":
+                    return "translate(0, 30px)";
+                  case "down":
+                    return "translate(0, -30px)";
+                  case "left":
+                    return "translate(30px, 0)";
+                  case "right":
+                    return "translate(-30px, 0)";
+                  case "scale":
+                    return "scale(0.9)";
+                  default:
+                    return "translate(0, 0)";
+                }
+              };
+              return React.cloneElement(child as React.ReactElement, {
+                style: {
+                  ...(child.props.style || {}),
+                  opacity: isVisible ? 1 : 0,
+                  transform: getTransform(),
+                  transition: `opacity ${duration}s cubic-bezier(0.16, 1, 0.3, 1), transform ${duration}s cubic-bezier(0.16, 1, 0.3, 1)`,
+                  transitionDelay: `${index * staggerDelay}s`,
+                  willChange: "opacity, transform",
+                },
+              });
+            })}
       </div>
     );
-  }
+  },
 );
 
 StaggerContainer.displayName = "StaggerContainer";
@@ -196,7 +238,7 @@ export const TextReveal = forwardRef<HTMLDivElement, TextRevealProps>(
             }
           });
         },
-        { threshold: 0.3, rootMargin: "50px" }
+        { threshold: 0.3, rootMargin: "50px" },
       );
 
       observer.observe(element);
@@ -204,12 +246,16 @@ export const TextReveal = forwardRef<HTMLDivElement, TextRevealProps>(
     }, [delay, prefersReduced]);
 
     const text = typeof children === "string" ? children : String(children);
-    const splitText = splitBy === "chars" ? text.split("") : splitBy === "words" ? text.split(" ") : [text];
+    const splitText =
+      splitBy === "chars" ? text.split("") : splitBy === "words" ? text.split(" ") : [text];
     const joiner = splitBy === "chars" ? "" : splitBy === "words" ? " " : "";
 
     return (
       <div
-        ref={(el) => { elementRef.current = el; if (ref) ref.current = el; }}
+        ref={(el) => {
+          elementRef.current = el;
+          if (ref) ref.current = el;
+        }}
         className={className}
         style={{ display: "inline-block", overflow: "hidden" }}
       >
@@ -225,12 +271,13 @@ export const TextReveal = forwardRef<HTMLDivElement, TextRevealProps>(
               willChange: "opacity, transform",
             }}
           >
-            {part}{index < splitText.length - 1 ? joiner : ""}
+            {part}
+            {index < splitText.length - 1 ? joiner : ""}
           </span>
         ))}
       </div>
     );
-  }
+  },
 );
 
 TextReveal.displayName = "TextReveal";
@@ -309,8 +356,12 @@ export const Shimmer = ({ children, className = "", speed = 2, angle = 90 }: Shi
       {children}
       <style jsx global>{`
         @keyframes shimmer {
-          0% { background-position: -200% 0; }
-          100% { background-position: 200% 0; }
+          0% {
+            background-position: -200% 0;
+          }
+          100% {
+            background-position: 200% 0;
+          }
         }
       `}</style>
     </div>
@@ -328,7 +379,16 @@ interface CounterProps {
   onComplete?: () => void;
 }
 
-export const Counter = ({ end, start = 0, duration = 2000, decimals = 0, prefix = "", suffix = "", className = "", onComplete }: CounterProps) => {
+export const Counter = ({
+  end,
+  start = 0,
+  duration = 2000,
+  decimals = 0,
+  prefix = "",
+  suffix = "",
+  className = "",
+  onComplete,
+}: CounterProps) => {
   const [count, setCount] = useState(start);
   const elementRef = useRef<HTMLDivElement>(null);
   const hasStarted = useRef(false);
@@ -347,7 +407,7 @@ export const Counter = ({ end, start = 0, duration = 2000, decimals = 0, prefix 
           }
         });
       },
-      { threshold: 0.5 }
+      { threshold: 0.5 },
     );
 
     observer.observe(element);
@@ -372,7 +432,13 @@ export const Counter = ({ end, start = 0, duration = 2000, decimals = 0, prefix 
     animate();
   };
 
-  return <div ref={elementRef} className={className}>{prefix}{count}{suffix}</div>;
+  return (
+    <div ref={elementRef} className={className}>
+      {prefix}
+      {count}
+      {suffix}
+    </div>
+  );
 };
 
 interface ParallaxProps {
@@ -413,7 +479,12 @@ interface FloatingProps {
   className?: string;
 }
 
-export const Floating = ({ children, amplitude = 10, period = 6, className = "" }: FloatingProps) => {
+export const Floating = ({
+  children,
+  amplitude = 10,
+  period = 6,
+  className = "",
+}: FloatingProps) => {
   const prefersReduced = useReducedMotion();
   const [time, setTime] = useState(0);
 
@@ -428,8 +499,8 @@ export const Floating = ({ children, amplitude = 10, period = 6, className = "" 
     return () => cancelAnimationFrame(frame);
   }, [prefersReduced]);
 
-  const y = Math.sin(time * (2 * Math.PI / period)) * amplitude;
-  const rotation = Math.sin(time * (2 * Math.PI / (period * 2))) * 1;
+  const y = Math.sin(time * ((2 * Math.PI) / period)) * amplitude;
+  const rotation = Math.sin(time * ((2 * Math.PI) / (period * 2))) * 1;
 
   return (
     <div

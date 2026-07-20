@@ -83,12 +83,24 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Oryntal — AI, automation, and full-stack systems for teams done wasting time" },
-      { name: "description", content: "Oryntal ships AI agents, automations, and full-stack web and Shopify systems in weeks, not quarters." },
+      {
+        name: "description",
+        content:
+          "Oryntal ships AI agents, automations, and full-stack web and Shopify systems in weeks, not quarters.",
+      },
       { name: "author", content: "Oryntal" },
       { property: "og:title", content: "Oryntal — AI, automation, and full-stack systems" },
-      { property: "og:description", content: "From LLM agents to Shopify storefronts, Oryntal ships production systems in weeks." },
+      {
+        property: "og:description",
+        content:
+          "From LLM agents to Shopify storefronts, Oryntal ships production systems in weeks.",
+      },
       { name: "twitter:title", content: "Oryntal — AI, automation, and full-stack systems" },
-      { name: "twitter:description", content: "From LLM agents to Shopify storefronts, Oryntal ships production systems in weeks." },
+      {
+        name: "twitter:description",
+        content:
+          "From LLM agents to Shopify storefronts, Oryntal ships production systems in weeks.",
+      },
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:type", content: "website" },
     ],
@@ -96,7 +108,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap",
+      },
       { rel: "icon", type: "image/png", href: assetUrl(logoMark) },
       { rel: "apple-touch-icon", href: assetUrl(logoMark) },
     ],

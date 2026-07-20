@@ -17,28 +17,56 @@ export function Footer() {
       <div className="relative mx-auto max-w-7xl px-6 py-16 grid gap-12 md:grid-cols-4">
         <div className="md:col-span-2 animate-fade-in-up" style={{ animationDelay: "100ms" }}>
           <div className="flex items-center gap-3">
-            <img src={assetUrl(logoMark)} alt="Oryntal" className="h-10 w-10 rounded-full ring-1 ring-gold/50" />
-            <span className="font-display text-xl tracking-[0.25em] text-gold gradient-text-clamp">ORYNTAL</span>
+            <img
+              src={assetUrl(logoMark)}
+              alt="Oryntal"
+              className="h-10 w-10 rounded-full ring-1 ring-gold/50"
+            />
+            <span className="font-display text-xl tracking-[0.25em] text-gold gradient-text-clamp">
+              ORYNTAL
+            </span>
           </div>
           <p className="mt-6 max-w-sm text-sm text-muted-foreground leading-relaxed">
-            We build AI, automation, and full-stack systems for teams who are done wasting time on manual work. India-based, remote-first, GST registered.
+            We build AI, automation, and full-stack systems for teams who are done wasting time on
+            manual work. India-based, remote-first, GST registered.
           </p>
-<div className="mt-8 flex flex-wrap gap-4">
-            <a href="mailto:support.oryntal@agency.org.in" className="text-sm text-muted-foreground hover:text-gold transition-colors">support.oryntal@agency.org.in</a>
+          <div className="mt-8 flex flex-wrap gap-4">
+            <a
+              href="mailto:support.oryntal@agency.org.in"
+              className="text-sm text-muted-foreground hover:text-gold transition-colors"
+            >
+              support.oryntal@agency.org.in
+            </a>
             <span className="text-sm text-muted-foreground">India \u2014 Remote-first</span>
             <span className="text-sm text-muted-foreground">GST Registered</span>
           </div>
         </div>
         <div className="animate-fade-in-up" style={{ animationDelay: "200ms" }}>
-          <h4 className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">Navigate</h4>
+          <h4 className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">
+            Navigate
+          </h4>
           <ul className="space-y-2 text-sm">
-            <li><Link to="/" className="hover:text-gold transition-colors">Home</Link></li>
-            <li><Link to="/projects" className="hover:text-gold transition-colors">Projects</Link></li>
-            <li><Link to="/contact" className="hover:text-gold transition-colors">Contact</Link></li>
+            <li>
+              <Link to="/" className="hover:text-gold transition-colors">
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link to="/projects" className="hover:text-gold transition-colors">
+                Projects
+              </Link>
+            </li>
+            <li>
+              <Link to="/contact" className="hover:text-gold transition-colors">
+                Contact
+              </Link>
+            </li>
           </ul>
         </div>
         <div className="animate-fade-in-up" style={{ animationDelay: "300ms" }}>
-          <h4 className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">Capabilities</h4>
+          <h4 className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">
+            Capabilities
+          </h4>
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li>AI Engineering & LLM Agents</li>
             <li>Automation & n8n Workflows</li>
@@ -56,4 +84,3 @@ export function Footer() {
     </footer>
   );
 }
-

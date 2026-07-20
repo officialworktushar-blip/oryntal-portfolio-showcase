@@ -45,7 +45,7 @@ export function ContactHeroAnimation({ prefersReduced = false }: ContactHeroAnim
     if (!ctx) return;
 
     let time = 0;
-    
+
     // 3D rotation state
     const rotation = {
       x: 0,
@@ -98,27 +98,27 @@ export function ContactHeroAnimation({ prefersReduced = false }: ContactHeroAnim
       const centerX = dimensions.width / 2;
       const centerY = dimensions.height / 2;
       const logoSize = Math.min(dimensions.width, dimensions.height) * 0.35;
-      
+
       if (!logoImgRef.current) return;
 
       ctx.save();
       ctx.translate(centerX, centerY);
-      
+
       // Apply 3D rotation using canvas transforms
       // Rotate around Y axis (horizontal rotation)
       const scaleX = Math.cos(rotation.y);
       ctx.scale(scaleX, 1);
-      
+
       // Rotate around X axis (vertical tilt) - simulate with vertical scaling
       const scaleY = Math.cos(rotation.x * 0.5);
-      
+
       // Draw logo with glow
       const glowRadius = logoSize * 0.7;
       const glowGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, glowRadius);
       glowGradient.addColorStop(0, "rgba(201, 162, 75, 0.35)");
       glowGradient.addColorStop(0.5, "rgba(217, 184, 122, 0.15)");
       glowGradient.addColorStop(1, "rgba(201, 162, 75, 0)");
-      
+
       ctx.fillStyle = glowGradient;
       ctx.beginPath();
       ctx.ellipse(0, 0, glowRadius, glowRadius * 0.8, 0, 0, Math.PI * 2);
@@ -142,9 +142,9 @@ export function ContactHeroAnimation({ prefersReduced = false }: ContactHeroAnim
       ctx.drawImage(
         logoImgRef.current,
         -logoSize / 2,
-        -logoSize / 2 * 0.9,
+        (-logoSize / 2) * 0.9,
         logoSize,
-        logoSize * 0.9
+        logoSize * 0.9,
       );
 
       // Center core glow
@@ -186,12 +186,12 @@ export function ContactHeroAnimation({ prefersReduced = false }: ContactHeroAnim
     }
 
     function update() {
-      time += 1/60;
+      time += 1 / 60;
 
       // Smooth rotation animation - slow continuous rotation
-      rotation.y += 0.003;  // Horizontal rotation
-      rotation.x = Math.sin(time * 0.4) * 0.15;  // Gentle nod
-      rotation.z = Math.sin(time * 0.3) * 0.08;  // Slight tilt
+      rotation.y += 0.003; // Horizontal rotation
+      rotation.x = Math.sin(time * 0.4) * 0.15; // Gentle nod
+      rotation.z = Math.sin(time * 0.3) * 0.08; // Slight tilt
 
       // Subtle float
       const floatY = Math.sin(time * 0.6) * 8;
@@ -200,20 +200,20 @@ export function ContactHeroAnimation({ prefersReduced = false }: ContactHeroAnim
       createParticles();
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i];
-        
+
         // Orbit around center
-        p.angle += 0.002 + (p.radius / 1000);
+        p.angle += 0.002 + p.radius / 1000;
         const targetX = Math.cos(p.angle) * p.radius;
         const targetY = Math.sin(p.angle) * p.radius * 0.6;
-        
+
         p.x += (targetX - p.x) * 0.02 + p.vx;
         p.y += (targetY - p.y) * 0.02 + p.vy;
         p.z += p.vz;
-        
+
         // Keep particles in orbit
         if (p.z > 150) p.z = -150;
         if (p.z < -150) p.z = 150;
-        
+
         p.life -= 0.0008;
         if (p.life <= 0) {
           particles.splice(i, 1);
@@ -223,17 +223,17 @@ export function ContactHeroAnimation({ prefersReduced = false }: ContactHeroAnim
 
     function render() {
       if (!ctx) return;
-      
+
       // Clear canvas
       ctx.clearRect(0, 0, dimensions.width, dimensions.height);
-      
+
       // Draw subtle background grid/noise
       ctx.fillStyle = "rgba(10, 10, 10, 0.02)";
       ctx.fillRect(0, 0, dimensions.width, dimensions.height);
-      
+
       // Draw particles first (behind logo)
       drawParticles();
-      
+
       // Draw logo
       drawLogo();
     }
@@ -261,7 +261,7 @@ export function ContactHeroAnimation({ prefersReduced = false }: ContactHeroAnim
         width={dimensions.width}
         height={dimensions.height}
         className="w-full h-full"
-        style={{ 
+        style={{
           filter: "drop-shadow(0 0 100px rgba(201, 162, 75, 0.15))",
           transformStyle: "preserve-3d",
         }}

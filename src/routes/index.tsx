@@ -2,7 +2,7 @@
 
 import { assetUrl } from "@/lib/asset-url";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo, createRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
@@ -23,42 +23,105 @@ import shopifyImg from "@/assets/site-shots/eshopweb-store.asset.json";
 import wordpressImg from "@/assets/site-shots/clou.asset.json";
 import mobileImg from "@/assets/rag-voice.jpg.asset.json";
 
-
 gsap.registerPlugin(ScrollTrigger);
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Oryntal — AI, automation & full-stack systems for teams done wasting time" },
-      { name: "description", content: "From LLM agents to Shopify storefronts, Oryntal ships production systems in weeks, not quarters." },
+      {
+        name: "description",
+        content:
+          "From LLM agents to Shopify storefronts, Oryntal ships production systems in weeks, not quarters.",
+      },
       { property: "og:title", content: "Oryntal — Production systems in weeks, not quarters" },
-      { property: "og:description", content: "AI, automation, and full-stack systems for founders and operators who are done wasting time on manual work." },
+      {
+        property: "og:description",
+        content:
+          "AI, automation, and full-stack systems for founders and operators who are done wasting time on manual work.",
+      },
     ],
   }),
   component: HomePage,
 });
 
-const rotatingCapabilities = ["LLM agents.", "Automated workflows.", "Full-stack apps.", "Shopify storefronts."];
+const rotatingCapabilities = [
+  "LLM agents.",
+  "Automated workflows.",
+  "Full-stack apps.",
+  "Shopify storefronts.",
+];
 const trustedBrands = [
-  "Rahman Textiles", "Indigo Mart", "Bengal Foods", "Padma Logistics",
-  "Nexus Pharma", "Aarong Crafts", "Helix Networks", "Northwind Goods",
-  "Atlas Energy", "Lumen Co.", "Crest Finance", "Sentinel B2B",
+  "Rahman Textiles",
+  "Indigo Mart",
+  "Bengal Foods",
+  "Padma Logistics",
+  "Nexus Pharma",
+  "Aarong Crafts",
+  "Helix Networks",
+  "Northwind Goods",
+  "Atlas Energy",
+  "Lumen Co.",
+  "Crest Finance",
+  "Sentinel B2B",
 ];
 
 const services = [
-  { n: "01", t: "AI Engineering", d: "LLM agents, RAG systems, and fine-tuned models that answer questions, draft work, and take actions inside your existing tools.", icon: "🧠" },
-  { n: "02", t: "Automation", d: "n8n and custom pipelines that move data between the apps your team already uses, so nobody copy-pastes anything again.", icon: "⚡" },
-  { n: "03", t: "Full-Stack Web", d: "Production React, Node, and edge-ready web apps — built to scale, easy to maintain, and handed over cleanly.", icon: "🌐" },
-  { n: "04", t: "Shopify", d: "Custom Shopify 2.0 storefronts, theme development, and headless builds tuned for real conversion, not vanity metrics.", icon: "🛍️" },
-  { n: "05", t: "WordPress & WooCommerce", d: "Fast, secure builds with a clean editing experience — websites your marketing team can actually run.", icon: "📝" },
-  { n: "06", t: "Mobile Apps", d: "React Native apps for iOS and Android from a single codebase, so you ship to both stores in one project.", icon: "📱" },
+  {
+    n: "01",
+    t: "AI Engineering",
+    d: "LLM agents, RAG systems, and fine-tuned models that answer questions, draft work, and take actions inside your existing tools.",
+    icon: "🧠",
+  },
+  {
+    n: "02",
+    t: "Automation",
+    d: "n8n and custom pipelines that move data between the apps your team already uses, so nobody copy-pastes anything again.",
+    icon: "⚡",
+  },
+  {
+    n: "03",
+    t: "Full-Stack Web",
+    d: "Production React, Node, and edge-ready web apps — built to scale, easy to maintain, and handed over cleanly.",
+    icon: "🌐",
+  },
+  {
+    n: "04",
+    t: "Shopify",
+    d: "Custom Shopify 2.0 storefronts, theme development, and headless builds tuned for real conversion, not vanity metrics.",
+    icon: "🛍️",
+  },
+  {
+    n: "05",
+    t: "WordPress & WooCommerce",
+    d: "Fast, secure builds with a clean editing experience — websites your marketing team can actually run.",
+    icon: "📝",
+  },
+  {
+    n: "06",
+    t: "Mobile Apps",
+    d: "React Native apps for iOS and Android from a single codebase, so you ship to both stores in one project.",
+    icon: "📱",
+  },
 ];
 
 const differentiators = [
-  { t: "Ship in weeks, not quarters", d: "Most projects go live in 3–8 weeks. We scope tight, cut waste, and get you into production while other agencies are still writing SOWs." },
-  { t: "Founder-led on every project", d: "You talk to the people writing the code and shipping the models. No account managers, no discovery deck theatre, no ticket-forwarding." },
-  { t: "One team, six disciplines", d: "AI, automation, full-stack, Shopify, WordPress, mobile — under one roof. You stop paying three agencies to argue in your Slack." },
-  { t: "Systems you can actually own", d: "Clean code, real docs, boring stack choices where they matter. When we hand off, your team can extend the work without calling us back." },
+  {
+    t: "Ship in weeks, not quarters",
+    d: "Most projects go live in 3–8 weeks. We scope tight, cut waste, and get you into production while other agencies are still writing SOWs.",
+  },
+  {
+    t: "Founder-led on every project",
+    d: "You talk to the people writing the code and shipping the models. No account managers, no discovery deck theatre, no ticket-forwarding.",
+  },
+  {
+    t: "One team, six disciplines",
+    d: "AI, automation, full-stack, Shopify, WordPress, mobile — under one roof. You stop paying three agencies to argue in your Slack.",
+  },
+  {
+    t: "Systems you can actually own",
+    d: "Clean code, real docs, boring stack choices where they matter. When we hand off, your team can extend the work without calling us back.",
+  },
 ];
 
 const works = [
@@ -119,19 +182,53 @@ const works = [
 ];
 
 const processSteps = [
-  { n: "01", t: "Discovery call", d: "A 30-minute conversation. We ask the specific questions that surface what's actually slow, broken, or expensive in your operation." },
-  { n: "02", t: "Written scope & estimate", d: "You get a fixed scope, a fixed price, and a real timeline within 3 working days — no proposal decks, no sales games." },
-  { n: "03", t: "Build in the open", d: "Weekly demos, a shared Notion, and access to staging from day one. You see the work take shape, not just the invoice." },
-  { n: "04", t: "Ship & hand over", d: "We deploy to production, hand over clean code and documentation, and stay on call for two weeks while your team gets comfortable." },
+  {
+    n: "01",
+    t: "Discovery call",
+    d: "A 30-minute conversation. We ask the specific questions that surface what's actually slow, broken, or expensive in your operation.",
+  },
+  {
+    n: "02",
+    t: "Written scope & estimate",
+    d: "You get a fixed scope, a fixed price, and a real timeline within 3 working days — no proposal decks, no sales games.",
+  },
+  {
+    n: "03",
+    t: "Build in the open",
+    d: "Weekly demos, a shared Notion, and access to staging from day one. You see the work take shape, not just the invoice.",
+  },
+  {
+    n: "04",
+    t: "Ship & hand over",
+    d: "We deploy to production, hand over clean code and documentation, and stay on call for two weeks while your team gets comfortable.",
+  },
 ];
 
 const faqs = [
-  { q: "How fast can you actually ship?", a: "Most projects go live in 3–8 weeks. Complex AI or full-stack builds run 8–14 weeks. We give you a real timeline before you sign anything." },
-  { q: "What does a project cost?", a: "Fixed-scope projects start around $6k. Retainers from $3k/month. Every quote is written down, itemised, and fixed — no surprise invoices." },
-  { q: "We already have engineers. Why bring you in?", a: "Most engagements augment an in-house team with senior AI, automation, or e-commerce specialists for a fixed window. Extra capacity, no headcount." },
-  { q: "Do you sign NDAs?", a: "Yes, before any commercial conversation. We can also work under your MSA." },
-  { q: "Where are you based?", a: "India, remote-first, GST registered. We work with clients across Asia, Europe, and North America." },
-  { q: "What happens after launch?", a: "Two weeks of included support while your team settles in, then an optional retainer for maintenance, monitoring, and new features." },
+  {
+    q: "How fast can you actually ship?",
+    a: "Most projects go live in 3–8 weeks. Complex AI or full-stack builds run 8–14 weeks. We give you a real timeline before you sign anything.",
+  },
+  {
+    q: "What does a project cost?",
+    a: "Fixed-scope projects start around $6k. Retainers from $3k/month. Every quote is written down, itemised, and fixed — no surprise invoices.",
+  },
+  {
+    q: "We already have engineers. Why bring you in?",
+    a: "Most engagements augment an in-house team with senior AI, automation, or e-commerce specialists for a fixed window. Extra capacity, no headcount.",
+  },
+  {
+    q: "Do you sign NDAs?",
+    a: "Yes, before any commercial conversation. We can also work under your MSA.",
+  },
+  {
+    q: "Where are you based?",
+    a: "India, remote-first, GST registered. We work with clients across Asia, Europe, and North America.",
+  },
+  {
+    q: "What happens after launch?",
+    a: "Two weeks of included support while your team settles in, then an optional retainer for maintenance, monitoring, and new features.",
+  },
 ];
 
 const stats = [
@@ -227,18 +324,21 @@ function HomePage() {
     }
     requestAnimationFrame(raf);
 
-    const interval = setInterval(() => setCapabilityIndex((p) => (p + 1) % rotatingCapabilities.length), 3000);
+    const interval = setInterval(
+      () => setCapabilityIndex((p) => (p + 1) % rotatingCapabilities.length),
+      3000,
+    );
 
     return () => {
       lenisRef.current?.destroy();
       clearInterval(interval);
-      ScrollTrigger.getAll().forEach(t => t.kill());
+      ScrollTrigger.getAll().forEach((t) => t.kill());
     };
   }, []);
 
   useEffect(() => {
     if (prefersReduced) return;
-    
+
     const ctx = gsap.context(() => {
       // Hero logo
       gsap.set(".hero-logo", { scale: 0.8, opacity: 0 });
@@ -253,11 +353,23 @@ function HomePage() {
 
       const tl = gsap.timeline({ defaults: { ease: "power3.out", duration: 0.8 } });
       tl.to(".hero-logo", { scale: 1, opacity: 1, duration: 1, ease: "expo.out" })
-        .to(".hero-title .word", { y: 0, opacity: 1, stagger: 0.1, duration: 0.8, ease: "power3.out" }, "-=0.5")
+        .to(
+          ".hero-title .word",
+          { y: 0, opacity: 1, stagger: 0.1, duration: 0.8, ease: "power3.out" },
+          "-=0.5",
+        )
         .to(".hero-subtitle", { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" }, "-=0.3")
         .to(".hero-capability", { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, "-=0.4")
-        .to(".hero-cta", { scale: 1, opacity: 1, stagger: 0.08, duration: 0.8, ease: "expo.out" }, "-=0.2")
-        .to(".hero-stats", { y: 0, opacity: 1, stagger: 0.1, duration: 0.8, ease: "power3.out" }, "-=0.2");
+        .to(
+          ".hero-cta",
+          { scale: 1, opacity: 1, stagger: 0.08, duration: 0.8, ease: "expo.out" },
+          "-=0.2",
+        )
+        .to(
+          ".hero-stats",
+          { y: 0, opacity: 1, stagger: 0.1, duration: 0.8, ease: "power3.out" },
+          "-=0.2",
+        );
     }, scrollRef);
 
     return () => ctx.revert();
@@ -268,159 +380,198 @@ function HomePage() {
 
     const ctx = gsap.context(() => {
       // Reveal animations for sections
-      gsap.utils.toArray(".reveal-up").forEach((el: any) => {
-        gsap.fromTo(el, { y: 60, opacity: 0 }, {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: el,
-            start: "top 85%",
-            toggleActions: "play none none reverse",
+      gsap.utils.toArray(".reveal-up").forEach((el: HTMLElement) => {
+        gsap.fromTo(
+          el,
+          { y: 60, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: el,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
           },
-        });
+        );
       });
 
-      gsap.utils.toArray(".reveal-left").forEach((el: any) => {
-        gsap.fromTo(el, { x: -60, opacity: 0 }, {
-          x: 0,
-          opacity: 1,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: el,
-            start: "top 85%",
-            toggleActions: "play none none reverse",
+      gsap.utils.toArray(".reveal-left").forEach((el: HTMLElement) => {
+        gsap.fromTo(
+          el,
+          { x: -60, opacity: 0 },
+          {
+            x: 0,
+            opacity: 1,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: el,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
           },
-        });
+        );
       });
 
-      gsap.utils.toArray(".reveal-right").forEach((el: any) => {
-        gsap.fromTo(el, { x: 60, opacity: 0 }, {
-          x: 0,
-          opacity: 1,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: el,
-            start: "top 85%",
-            toggleActions: "play none none reverse",
+      gsap.utils.toArray(".reveal-right").forEach((el: HTMLElement) => {
+        gsap.fromTo(
+          el,
+          { x: 60, opacity: 0 },
+          {
+            x: 0,
+            opacity: 1,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: el,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
           },
-        });
+        );
       });
 
-      gsap.utils.toArray(".reveal-scale").forEach((el: any) => {
-        gsap.fromTo(el, { scale: 0.9, opacity: 0 }, {
-          scale: 1,
-          opacity: 1,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: el,
-            start: "top 85%",
-            toggleActions: "play none none reverse",
+      gsap.utils.toArray(".reveal-scale").forEach((el: HTMLElement) => {
+        gsap.fromTo(
+          el,
+          { scale: 0.9, opacity: 0 },
+          {
+            scale: 1,
+            opacity: 1,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: el,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
           },
-        });
+        );
       });
 
       // Stat counters - count up on scroll
-      gsap.utils.toArray(".stat-counter").forEach((el: any) => {
+      gsap.utils.toArray(".stat-counter").forEach((el: HTMLElement) => {
         const target = parseInt(el.dataset.value || "0");
         const suffix = el.dataset.suffix || "";
-        gsap.to({ val: 0 }, {
-          val: target,
-          duration: 2.5,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: el,
-            start: "top 85%",
-            toggleActions: "play none none reverse",
+        gsap.to(
+          { val: 0 },
+          {
+            val: target,
+            duration: 2.5,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: el,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+            onUpdate: function () {
+              el.textContent = Math.round(this.targets()[0].val).toLocaleString() + suffix;
+            },
           },
-          onUpdate: function() {
-            el.textContent = Math.round(this.targets()[0].val).toLocaleString() + suffix;
-          },
-        });
+        );
       });
 
       // Service cards staggered
-      gsap.utils.toArray(".service-card").forEach((card: any, i) => {
-        gsap.fromTo(card, { y: 40, opacity: 0 }, {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          delay: i * 0.1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: card,
-            start: "top 90%",
-            toggleActions: "play none none reverse",
+      gsap.utils.toArray(".service-card").forEach((card: HTMLElement, i) => {
+        gsap.fromTo(
+          card,
+          { y: 40, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            delay: i * 0.1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 90%",
+              toggleActions: "play none none reverse",
+            },
           },
-        });
+        );
       });
 
       // Differentiator cards
-      gsap.utils.toArray(".differentiator-card").forEach((card: any, i) => {
-        gsap.fromTo(card, { y: 40, opacity: 0 }, {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          delay: i * 0.1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: card,
-            start: "top 90%",
-            toggleActions: "play none none reverse",
+      gsap.utils.toArray(".differentiator-card").forEach((card: HTMLElement, i) => {
+        gsap.fromTo(
+          card,
+          { y: 40, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            delay: i * 0.1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 90%",
+              toggleActions: "play none none reverse",
+            },
           },
-        });
+        );
       });
 
       // Work cards
-      gsap.utils.toArray(".work-card").forEach((card: any, i) => {
-        gsap.fromTo(card, { y: 50, opacity: 0 }, {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          delay: i * 0.1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: card,
-            start: "top 90%",
-            toggleActions: "play none none reverse",
+      gsap.utils.toArray(".work-card").forEach((card: HTMLElement, i) => {
+        gsap.fromTo(
+          card,
+          { y: 50, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 1,
+            delay: i * 0.1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 90%",
+              toggleActions: "play none none reverse",
+            },
           },
-        });
+        );
       });
 
       // Process steps
-      gsap.utils.toArray(".process-step").forEach((step: any, i) => {
-        gsap.fromTo(step, { y: 40, opacity: 0 }, {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          delay: i * 0.1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: step,
-            start: "top 90%",
-            toggleActions: "play none none reverse",
+      gsap.utils.toArray(".process-step").forEach((step: HTMLElement, i) => {
+        gsap.fromTo(
+          step,
+          { y: 40, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            delay: i * 0.1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: step,
+              start: "top 90%",
+              toggleActions: "play none none reverse",
+            },
           },
-        });
+        );
       });
 
       // FAQ items
-      gsap.utils.toArray(".faq-item").forEach((item: any, i) => {
-        gsap.fromTo(item, { y: 30, opacity: 0 }, {
-          y: 0,
-          opacity: 1,
-          duration: 0.6,
-          delay: i * 0.05,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: item,
-            start: "top 90%",
-            toggleActions: "play none none reverse",
+      gsap.utils.toArray(".faq-item").forEach((item: HTMLElement, i) => {
+        gsap.fromTo(
+          item,
+          { y: 30, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.6,
+            delay: i * 0.05,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: item,
+              start: "top 90%",
+              toggleActions: "play none none reverse",
+            },
           },
-        });
+        );
       });
 
       // Marquee infinite scroll
@@ -432,7 +583,7 @@ function HomePage() {
       });
 
       // Parallax backgrounds
-      gsap.utils.toArray(".parallax-bg").forEach((el: any) => {
+      gsap.utils.toArray(".parallax-bg").forEach((el: HTMLElement) => {
         gsap.to(el, {
           yPercent: 30,
           ease: "none",
@@ -446,7 +597,8 @@ function HomePage() {
       });
 
       // Trusted by marquee - subtle parallax/fade on scroll
-      gsap.fromTo(".trusted-marquee", 
+      gsap.fromTo(
+        ".trusted-marquee",
         { opacity: 0.6, y: 20 },
         {
           opacity: 1,
@@ -458,9 +610,8 @@ function HomePage() {
             start: "top 90%",
             toggleActions: "play none none reverse",
           },
-        }
+        },
       );
-
     }, scrollRef);
 
     return () => ctx.revert();
@@ -499,8 +650,16 @@ function AIHeroVisual({ prefersReduced }: { prefersReduced: boolean }) {
 
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
       tl.to(center, { scale: 1, opacity: 1, duration: 1.2, ease: "expo.out" })
-        .to(rings, { scale: 1, opacity: 0.4, duration: 1, stagger: 0.15, ease: "power3.out" }, "-=0.6")
-        .to(particles, { scale: 1, opacity: 0.6, duration: 0.8, stagger: 0.05, ease: "expo.out" }, "-=0.4");
+        .to(
+          rings,
+          { scale: 1, opacity: 0.4, duration: 1, stagger: 0.15, ease: "power3.out" },
+          "-=0.6",
+        )
+        .to(
+          particles,
+          { scale: 1, opacity: 0.6, duration: 0.8, stagger: 0.05, ease: "expo.out" },
+          "-=0.4",
+        );
 
       // Continuous animation
       rings.forEach((ring, i) => {
@@ -515,7 +674,7 @@ function AIHeroVisual({ prefersReduced }: { prefersReduced: boolean }) {
       particles.forEach((particle, i) => {
         gsap.to(particle, {
           y: `+=${15 + i * 5}`,
-          x: `+=${(i % 2 === 0 ? 10 : -10)}`,
+          x: `+=${i % 2 === 0 ? 10 : -10}`,
           opacity: 0.2,
           duration: 3 + i * 0.5,
           ease: "sine.inOut",
@@ -579,62 +738,123 @@ const serviceCards = [
   {
     title: "AI Engineering",
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-8 h-8">
-        <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M9 11l1 3" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M15 11l-1 3" strokeLinecap="round" strokeLinejoin="round"/>
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.5}
+        className="w-8 h-8"
+      >
+        <path
+          d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path d="M9 11l1 3" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M15 11l-1 3" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     ),
   },
   {
     title: "Automation",
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-8 h-8">
-        <rect x="2" y="9" width="20" height="7" rx="2" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M6 9V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M12 12v6" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M9 15h6" strokeLinecap="round" strokeLinejoin="round"/>
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.5}
+        className="w-8 h-8"
+      >
+        <rect
+          x="2"
+          y="9"
+          width="20"
+          height="7"
+          rx="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M6 9V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path d="M12 12v6" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M9 15h6" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     ),
   },
   {
     title: "Full-Stack Web",
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-8 h-8">
-        <rect x="2" y="3" width="20" height="14" rx="2" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M8 21h8" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M12 17v4" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M6 9h12" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M6 13h8" strokeLinecap="round" strokeLinejoin="round"/>
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.5}
+        className="w-8 h-8"
+      >
+        <rect
+          x="2"
+          y="3"
+          width="20"
+          height="14"
+          rx="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path d="M8 21h8" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M12 17v4" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M6 9h12" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M6 13h8" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     ),
   },
   {
     title: "Shopify",
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-8 h-8">
-        <path d="M21 8V6a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 6v2" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M3 8v10a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 18v-2" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M3 8l7 4" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M14 12l7 4" strokeLinecap="round" strokeLinejoin="round"/>
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.5}
+        className="w-8 h-8"
+      >
+        <path
+          d="M21 8V6a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 6v2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M3 8v10a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 18v-2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path d="M3 8l7 4" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M14 12l7 4" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     ),
   },
   {
     title: "WordPress & WooCommerce",
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-8 h-8">
-        <circle cx="12" cy="12" r="10" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M12 6v12" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M12 6a6 6 0 0 1 0 12" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M12 6a6 6 0 0 0 0 12" strokeLinecap="round" strokeLinejoin="round"/>
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.5}
+        className="w-8 h-8"
+      >
+        <circle cx="12" cy="12" r="10" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M12 6v12" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M12 6a6 6 0 0 1 0 12" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M12 6a6 6 0 0 0 0 12" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     ),
   },
 ];
 
-function PhoneNotch({ className = '' }) {
-}
+function PhoneNotch({ className = "" }) {}
 
 // Phone-frame marquee — auto-scrolling infinite horizontal loop with coverflow effect
 function InfinityLoopCarousel({ prefersReduced }) {
@@ -654,33 +874,33 @@ function InfinityLoopCarousel({ prefersReduced }) {
   // Services data - 6 distinct frames for the marquee
   const marqueeFrames = [
     {
-      id: 'ai',
-      title: 'AI Engineering',
+      id: "ai",
+      title: "AI Engineering",
       image: assetUrl(aiEngineeringImg),
     },
     {
-      id: 'automation',
-      title: 'Automation',
+      id: "automation",
+      title: "Automation",
       image: assetUrl(automationImg),
     },
     {
-      id: 'fullstack',
-      title: 'Full-Stack Web',
+      id: "fullstack",
+      title: "Full-Stack Web",
       image: assetUrl(fullstackImg),
     },
     {
-      id: 'shopify',
-      title: 'Shopify',
+      id: "shopify",
+      title: "Shopify",
       image: assetUrl(shopifyImg),
     },
     {
-      id: 'wordpress',
-      title: 'WordPress & WooCommerce',
+      id: "wordpress",
+      title: "WordPress & WooCommerce",
       image: assetUrl(wordpressImg),
     },
     {
-      id: 'mobile',
-      title: 'Mobile Apps',
+      id: "mobile",
+      title: "Mobile Apps",
       image: assetUrl(mobileImg),
     },
   ];
@@ -691,8 +911,8 @@ function InfinityLoopCarousel({ prefersReduced }) {
       setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
     };
     checkScreen();
-    window.addEventListener('resize', checkScreen);
-    return () => window.removeEventListener('resize', checkScreen);
+    window.addEventListener("resize", checkScreen);
+    return () => window.removeEventListener("resize", checkScreen);
   }, []);
 
   // Entrance animation
@@ -700,20 +920,21 @@ function InfinityLoopCarousel({ prefersReduced }) {
     if (prefersReduced) return;
 
     const ctx = gsap.context(() => {
-      gsap.fromTo('.marquee-frame',
+      gsap.fromTo(
+        ".marquee-frame",
         { y: 40, opacity: 0 },
         {
           y: 0,
           opacity: 1,
           duration: 0.7,
           stagger: 0.08,
-          ease: 'power3.out',
+          ease: "power3.out",
           scrollTrigger: {
             trigger: carouselRef.current,
-            start: 'top 85%',
-            toggleActions: 'play none none reverse',
+            start: "top 85%",
+            toggleActions: "play none none reverse",
           },
-        }
+        },
       );
     });
 
@@ -724,8 +945,8 @@ function InfinityLoopCarousel({ prefersReduced }) {
   useEffect(() => {
     if (prefersReduced) return;
 
-    const trackEl = carouselRef.current?.querySelector('.marquee-track');
-    const firstFrame = trackEl?.querySelector('.marquee-frame');
+    const trackEl = carouselRef.current?.querySelector(".marquee-track");
+    const firstFrame = trackEl?.querySelector(".marquee-frame");
     if (!trackEl || !firstFrame) return;
 
     const frameRect = firstFrame.getBoundingClientRect();
@@ -747,7 +968,7 @@ function InfinityLoopCarousel({ prefersReduced }) {
       const elapsed = currentTime - startTime;
       const progress = (elapsed % loopDuration) / loopDuration;
       const translateX = -(progress * singleSetWidth);
-      
+
       trackEl.style.transform = `translateX(${translateX}px)`;
       animationId = requestAnimationFrame(animate);
     };
@@ -756,15 +977,19 @@ function InfinityLoopCarousel({ prefersReduced }) {
     animationId = requestAnimationFrame(animate);
 
     return () => cancelAnimationFrame(animationId);
-  }, [prefersReduced]);
+  }, [prefersReduced, marqueeFrames.length]);
 
   // Render 2x the items for infinite loop
   const items = [...marqueeFrames, ...marqueeFrames];
 
   return (
-    <section className="relative py-12 w-full overflow-hidden" aria-label="Service showcase marquee" style={{ background: 'transparent' }}>
+    <section
+      className="relative py-12 w-full overflow-hidden"
+      aria-label="Service showcase marquee"
+      style={{ background: "transparent" }}
+    >
       {/* No container max-width - full viewport width */}
-      <div 
+      <div
         ref={carouselRef}
         className="relative w-full overflow-hidden"
         onMouseEnter={() => setIsPaused(true)}
@@ -772,32 +997,43 @@ function InfinityLoopCarousel({ prefersReduced }) {
         role="region"
         aria-label="Service showcase marquee"
       >
-        <div 
-          className="marquee-track flex gap-6 pb-8" 
-          style={{ 
-            minWidth: 'max-content',
-            willChange: 'transform',
+        <div
+          className="marquee-track flex gap-6 pb-8"
+          style={{
+            minWidth: "max-content",
+            willChange: "transform",
           }}
         >
           {items.map((frame, i) => (
             <div
               key={frame.id}
               className="marquee-frame flex-shrink-0 flex flex-col items-center"
-              style={{ width: isMobile ? '50vw' : '21vw', minWidth: isMobile ? 157 : 224, maxWidth: isMobile ? '56vw' : 294 }}
+              style={{
+                width: isMobile ? "50vw" : "21vw",
+                minWidth: isMobile ? 157 : 224,
+                maxWidth: isMobile ? "56vw" : 294,
+              }}
             >
               {/* Phone frame */}
-              <div 
+              <div
                 className="relative flex flex-col items-center pointer-events-auto w-full"
-                style={{ aspectRatio: '5/7', transform: isMobile ? 'scale(0.7)' : 'none', transformOrigin: 'center top' }}
+                style={{
+                  aspectRatio: "5/7",
+                  transform: isMobile ? "scale(0.7)" : "none",
+                  transformOrigin: "center top",
+                }}
               >
                 {/* Phone frame */}
                 <div
                   className="relative w-full h-full overflow-hidden rounded-[32px] bg-black border-4 border-gray-800 shadow-[0_20px_60px_rgba(0,0,0,0.6),0_0_0_2px_rgba(201,162,75,0.3),inset_0_0_0_10px_rgba(0,0,0,0.5)]"
-                  style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.6), 0 0 0 2px rgba(201,162,75,0.3), inset 0 0 0 10px rgba(0,0,0,0.5)' }}
+                  style={{
+                    boxShadow:
+                      "0 20px 60px rgba(0,0,0,0.6), 0 0 0 2px rgba(201,162,75,0.3), inset 0 0 0 10px rgba(0,0,0,0.5)",
+                  }}
                 >
                   {/* Notch */}
                   <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-4 md:w-32 md:h-5 bg-black/80 rounded-b-[20px]" />
-                  
+
                   {/* Screen content */}
                   <div className="absolute inset-[14px] overflow-hidden rounded-[26px]">
                     <img
@@ -809,8 +1045,10 @@ function InfinityLoopCarousel({ prefersReduced }) {
                   </div>
                 </div>
               </div>
-              
-              <span className="mt-3 font-display text-sm text-center text-foreground">{frame.title}</span>
+
+              <span className="mt-3 font-display text-sm text-center text-foreground">
+                {frame.title}
+              </span>
             </div>
           ))}
         </div>
@@ -821,13 +1059,13 @@ function InfinityLoopCarousel({ prefersReduced }) {
 // Animated stats section for hero
 function AnimatedStats({ prefersReduced }: { prefersReduced: boolean }) {
   const stats = [
-    { value: 157, suffix: '+', label: 'Projects Delivered' },
-    { value: 100, suffix: '+', label: 'Work With Customer Trust' },
-    { value: 8, suffix: '+', label: 'Across Countries Customers' },
-    { value: 50, suffix: '+', label: 'Brand Trust' },
+    { value: 157, suffix: "+", label: "Projects Delivered" },
+    { value: 100, suffix: "+", label: "Work With Customer Trust" },
+    { value: 8, suffix: "+", label: "Across Countries Customers" },
+    { value: 50, suffix: "+", label: "Brand Trust" },
   ];
 
-  const refs = stats.map(() => useRef<HTMLDivElement>(null));
+  const refs = useMemo(() => stats.map(() => createRef<HTMLDivElement>()), []);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -845,10 +1083,10 @@ function AnimatedStats({ prefersReduced }: { prefersReduced: boolean }) {
           }
         });
       },
-      { threshold: 0.3, rootMargin: '0px 0px -100px 0px' }
+      { threshold: 0.3, rootMargin: "0px 0px -100px 0px" },
     );
 
-    const container = document.querySelector('.animated-stats-container');
+    const container = document.querySelector(".animated-stats-container");
     if (container) observer.observe(container);
 
     return () => observer.disconnect();
@@ -862,44 +1100,54 @@ function AnimatedStats({ prefersReduced }: { prefersReduced: boolean }) {
         const el = refs[i].current;
         if (!el) return;
 
-        gsap.fromTo(el, 
+        gsap.fromTo(
+          el,
           { y: 30, opacity: 0 },
           {
             y: 0,
             opacity: 1,
             duration: 0.8,
             delay: i * 0.12,
-            ease: 'power3.out',
-          }
+            ease: "power3.out",
+          },
         );
 
-        const counterEl = el.querySelector('.stat-counter');
+        const counterEl = el.querySelector(".stat-counter");
         if (counterEl) {
-          gsap.to({ val: 0 }, {
-            val: stat.value,
-            duration: 2,
-            delay: i * 0.12 + 0.3,
-            ease: 'power3.out',
-            onUpdate: function() {
-              counterEl.textContent = Math.round(this.targets()[0].val).toLocaleString() + stat.suffix;
+          gsap.to(
+            { val: 0 },
+            {
+              val: stat.value,
+              duration: 2,
+              delay: i * 0.12 + 0.3,
+              ease: "power3.out",
+              onUpdate: function () {
+                counterEl.textContent =
+                  Math.round(this.targets()[0].val).toLocaleString() + stat.suffix;
+              },
             },
-          });
+          );
         }
       });
     }, refs[0]);
 
     return () => ctx.revert();
-  }, [visible, prefersReduced]);
+  }, [visible, prefersReduced, refs, stats]);
 
   return (
     <div className="animated-stats-container w-full px-6 mt-10 mb-4" aria-label="Key statistics">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-5xl mx-auto">
         {stats.map((stat, i) => (
           <div key={stat.label} ref={refs[i]} className="text-center">
-            <div className="font-display text-3xl md:text-4xl lg:text-5xl text-gold gradient-text-clamp stat-counter" style={{ opacity: 0 }}>
+            <div
+              className="font-display text-3xl md:text-4xl lg:text-5xl text-gold gradient-text-clamp stat-counter"
+              style={{ opacity: 0 }}
+            >
               0{stat.suffix}
             </div>
-            <div className="mt-2 text-sm md:text-base text-muted-foreground font-medium leading-snug">{stat.label}</div>
+            <div className="mt-2 text-sm md:text-base text-muted-foreground font-medium leading-snug">
+              {stat.label}
+            </div>
           </div>
         ))}
       </div>
@@ -907,7 +1155,13 @@ function AnimatedStats({ prefersReduced }: { prefersReduced: boolean }) {
   );
 }
 // Hero function - properly wrapped
-  function Hero({ capabilityIndex, prefersReduced }: { capabilityIndex: number; prefersReduced: boolean }) {
+function Hero({
+  capabilityIndex,
+  prefersReduced,
+}: {
+  capabilityIndex: number;
+  prefersReduced: boolean;
+}) {
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
   const heroSubtitleRef = useRef<HTMLParagraphElement>(null);
   const heroCtaRef = useRef<HTMLDivElement>(null);
@@ -918,8 +1172,8 @@ function AnimatedStats({ prefersReduced }: { prefersReduced: boolean }) {
       setIsMobile(window.innerWidth < 768);
     };
     checkScreen();
-    window.addEventListener('resize', checkScreen);
-    return () => window.removeEventListener('resize', checkScreen);
+    window.addEventListener("resize", checkScreen);
+    return () => window.removeEventListener("resize", checkScreen);
   }, []);
 
   // GSAP entrance animation for center text
@@ -935,9 +1189,12 @@ function AnimatedStats({ prefersReduced }: { prefersReduced: boolean }) {
 
       // Split headline into words - "Powered by AI." should be gold
       const words = ["Your team,", "minus the", "busywork.", "Powered by AI."];
-      title.innerHTML = words.map((word, i) => 
-        `<span class="hero-word" style="display:inline-block; overflow:hidden;"><span style="display:inline-block;">${word}</span><span style="display:inline-block;">${i < words.length - 1 ? "\u00A0" : ""}</span></span>`
-      ).join("");
+      title.innerHTML = words
+        .map(
+          (word, i) =>
+            `<span class="hero-word" style="display:inline-block; overflow:hidden;"><span style="display:inline-block;">${word}</span><span style="display:inline-block;">${i < words.length - 1 ? "\u00A0" : ""}</span></span>`,
+        )
+        .join("");
 
       const wordSpans = title.querySelectorAll(".hero-word > span:first-child");
       const ctaButtons = cta.querySelectorAll("a");
@@ -956,35 +1213,54 @@ function AnimatedStats({ prefersReduced }: { prefersReduced: boolean }) {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
       tl.to(wordSpans, { y: 0, opacity: 1, duration: 0.8, stagger: 0.1 }, 0)
         .to(subtitle, { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" }, "-=0.3")
-        .to(ctaButtons, { scale: 1, opacity: 1, duration: 0.7, stagger: 0.08, ease: "expo.out" }, "-=0.2");
+        .to(
+          ctaButtons,
+          { scale: 1, opacity: 1, duration: 0.7, stagger: 0.08, ease: "expo.out" },
+          "-=0.2",
+        );
     }, heroTitleRef);
 
     return () => ctx.revert();
   }, [prefersReduced]);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{ background: '#0A0A0A' }}>
+    <section
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      style={{ background: "#0A0A0A" }}
+    >
       {/* Rich gradient background */}
-      <div className="absolute inset-0" style={{
-        background: `
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `
           radial-gradient(ellipse 80% 80% at 50% 50%, rgba(201, 162, 75, 0.12) 0%, transparent 60%),
           radial-gradient(ellipse 60% 60% at 20% 30%, rgba(201, 162, 75, 0.08) 0%, transparent 50%),
           radial-gradient(ellipse 60% 60% at 80% 70%, rgba(201, 162, 75, 0.08) 0%, transparent 50%),
           radial-gradient(circle at 50% 50%, rgba(201, 162, 75, 0.04) 0%, transparent 70%),
           #0A0A0A
-        `
-      }} />
+        `,
+        }}
+      />
       <div className="absolute inset-0 grid-noise opacity-20" />
 
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen w-full px-6">
         {/* Center text block */}
         <div className="text-center z-20 max-w-3xl">
           <div className="flex items-center justify-center gap-3 mb-8 hero-logo">
-            <img src={assetUrl(logoMark)} alt="Oryntal" className="h-10 w-10 rounded-full ring-1 ring-gold/50" />
-            <span className="text-[11px] uppercase tracking-[0.35em] text-muted-foreground">ORYNTAL — Est. 2025</span>
+            <img
+              src={assetUrl(logoMark)}
+              alt="Oryntal"
+              className="h-10 w-10 rounded-full ring-1 ring-gold/50"
+            />
+            <span className="text-[11px] uppercase tracking-[0.35em] text-muted-foreground">
+              ORYNTAL — Est. 2025
+            </span>
           </div>
 
-          <h1 ref={heroTitleRef} className="font-display text-3xl md:text-5xl lg:text-[4.75rem] leading-[1.02] tracking-tight hero-title">
+          <h1
+            ref={heroTitleRef}
+            className="font-display text-3xl md:text-5xl lg:text-[4.75rem] leading-[1.02] tracking-tight hero-title"
+          >
             Your team, minus the busywork. Powered by AI.
           </h1>
 
@@ -993,13 +1269,18 @@ function AnimatedStats({ prefersReduced }: { prefersReduced: boolean }) {
             <InfinityLoopCarousel prefersReduced={prefersReduced} />
           </div>
 
-          <p ref={heroSubtitleRef} className="mt-6 text-base md:text-lg text-muted-foreground leading-relaxed hero-subtitle max-w-xl mx-auto">
+          <p
+            ref={heroSubtitleRef}
+            className="mt-6 text-base md:text-lg text-muted-foreground leading-relaxed hero-subtitle max-w-xl mx-auto"
+          >
             AI agents, automation, and full-stack systems — from Oryntal, in weeks not quarters.
           </p>
 
           <div className="mt-6 flex items-center justify-center gap-3 text-sm text-muted-foreground hero-capability">
             <span>We ship</span>
-            <span className="font-display italic text-gold text-lg min-w-[220px] transition-all duration-500">{rotatingCapabilities[capabilityIndex]}</span>
+            <span className="font-display italic text-gold text-lg min-w-[220px] transition-all duration-500">
+              {rotatingCapabilities[capabilityIndex]}
+            </span>
           </div>
 
           <div ref={heroCtaRef} className="mt-10 flex flex-wrap justify-center gap-4 hero-cta">
@@ -1015,7 +1296,19 @@ function AnimatedStats({ prefersReduced }: { prefersReduced: boolean }) {
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-float-gentle z-20">
           <div className="flex flex-col items-center gap-2 text-xs text-muted-foreground">
             <span className="uppercase tracking-widest">Scroll</span>
-            <svg className="w-5 h-5 text-gold/50 animate-float-gentle" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
+            <svg
+              className="w-5 h-5 text-gold/50 animate-float-gentle"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M19 14l-7 7m0 0l-7-7m7 7V3"
+              />
+            </svg>
           </div>
         </div>
       </div>
@@ -1031,14 +1324,23 @@ function TrustedBy() {
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="flex flex-col md:flex-row md:items-center gap-8">
           <div className="shrink-0 md:pr-10 md:border-r md:border-gold/20 reveal-left">
-            <div className="text-[11px] uppercase tracking-[0.3em] text-muted-foreground mb-2">Trusted by</div>
-            <div className="font-display text-3xl md:text-4xl text-gold gradient-text-clamp">50+ organisations</div>
-            <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground mt-1">GST registered — India & global</div>
+            <div className="text-[11px] uppercase tracking-[0.3em] text-muted-foreground mb-2">
+              Trusted by
+            </div>
+            <div className="font-display text-3xl md:text-4xl text-gold gradient-text-clamp">
+              50+ organisations
+            </div>
+            <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground mt-1">
+              GST registered — India & global
+            </div>
           </div>
           <div className="relative flex-1 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] reveal-right trusted-marquee">
             <div className="marquee-inner flex gap-10 whitespace-nowrap">
               {loop.map((b, idx) => (
-                <span key={idx} className="text-sm md:text-base uppercase tracking-[0.15em] text-muted-foreground/80 hover:text-gold transition-colors duration-300 whitespace-nowrap px-2">
+                <span
+                  key={idx}
+                  className="text-sm md:text-base uppercase tracking-[0.15em] text-muted-foreground/80 hover:text-gold transition-colors duration-300 whitespace-nowrap px-2"
+                >
                   {b}
                 </span>
               ))}
@@ -1056,12 +1358,15 @@ function Services() {
       <div className="absolute inset-0 grid-noise opacity-20" />
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="max-w-3xl mb-16 reveal-up">
-          <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">What we do</div>
+          <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">
+            What we do
+          </div>
           <h2 className="font-display text-4xl md:text-6xl leading-tight">
             Six disciplines. <span className="text-gold italic gradient-text-clamp">One team.</span>
           </h2>
           <p className="mt-6 text-lg text-muted-foreground max-w-2xl">
-            Instead of stitching together three agencies, you get strategy, engineering, and delivery from a single team that owns the outcome end-to-end.
+            Instead of stitching together three agencies, you get strategy, engineering, and
+            delivery from a single team that owns the outcome end-to-end.
           </p>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-14">
@@ -1072,9 +1377,13 @@ function Services() {
             >
               <div className="flex items-baseline justify-between mb-6">
                 <span className="font-mono text-xs text-gold">{s.n}</span>
-                <div className="text-4xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform group-hover:-translate-y-1 group-hover:rotate-3">{s.icon}</div>
+                <div className="text-4xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform group-hover:-translate-y-1 group-hover:rotate-3">
+                  {s.icon}
+                </div>
               </div>
-              <h3 className="font-display text-2xl mb-3 group-hover:text-gold transition-colors duration-300">{s.t}</h3>
+              <h3 className="font-display text-2xl mb-3 group-hover:text-gold transition-colors duration-300">
+                {s.t}
+              </h3>
               <p className="text-sm text-muted-foreground leading-relaxed">{s.d}</p>
               <div className="absolute bottom-0 left-0 w-0 h-px bg-gold transition-all duration-500 group-hover:w-full" />
             </div>
@@ -1091,15 +1400,20 @@ function Differentiators() {
       <div className="absolute inset-0 grid-noise opacity-20" />
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="max-w-3xl mb-16 reveal-up">
-          <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">Why Oryntal</div>
+          <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">
+            Why Oryntal
+          </div>
           <h2 className="font-display text-4xl md:text-6xl leading-tight">
-            The difference is <span className="text-gold italic gradient-text-clamp">how we ship.</span>
+            The difference is{" "}
+            <span className="text-gold italic gradient-text-clamp">how we ship.</span>
           </h2>
         </div>
         <div className="grid md:grid-cols-2 gap-x-12 gap-y-14">
           {differentiators.map((d, idx) => (
             <div key={d.t} className="differentiator-card relative p-8">
-              <div className="absolute -left-8 top-4 font-mono text-6xl text-gold/10 font-display">{String(idx + 1).padStart(2, '0')}</div>
+              <div className="absolute -left-8 top-4 font-mono text-6xl text-gold/10 font-display">
+                {String(idx + 1).padStart(2, "0")}
+              </div>
               <div className="font-mono text-xs text-gold mb-4 relative z-10">0{idx + 1}</div>
               <h3 className="font-display text-2xl md:text-3xl mb-4 relative z-10">{d.t}</h3>
               <p className="text-muted-foreground leading-relaxed relative z-10">{d.d}</p>
@@ -1118,14 +1432,28 @@ function SelectedWorks() {
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="flex items-end justify-between flex-wrap gap-6 mb-16 reveal-up">
           <div className="max-w-3xl">
-            <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">Selected work</div>
+            <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">
+              Selected work
+            </div>
             <h2 className="font-display text-4xl md:text-6xl leading-tight">
               A few we're <span className="text-gold italic gradient-text-clamp">proud of.</span>
             </h2>
           </div>
           <Link to="/projects" className="btn-ghost self-end magnetic shrink-0">
             See all work
-            <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+            <svg
+              className="w-4 h-4 transition-transform group-hover:translate-x-1"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 8l4 4m0 0l-4 4m4-4H3"
+              />
+            </svg>
           </Link>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-14">
@@ -1146,26 +1474,39 @@ function SelectedWorks() {
                   <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </div>
                 <div className="p-6 pt-8">
-                  <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-2">{w.c}</div>
-                  <h3 className="font-display text-2xl mb-4 group-hover:text-gold transition-colors duration-300">{w.t}</h3>
+                  <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-2">
+                    {w.c}
+                  </div>
+                  <h3 className="font-display text-2xl mb-4 group-hover:text-gold transition-colors duration-300">
+                    {w.t}
+                  </h3>
                   <div className="space-y-4">
                     <div>
-                      <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-1">The problem</div>
+                      <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-1">
+                        The problem
+                      </div>
                       <p className="text-sm text-foreground/85 leading-relaxed">{w.pain}</p>
                     </div>
                     <div>
-                      <div className="text-[10px] uppercase tracking-[0.2em] text-gold mb-1">What we built</div>
+                      <div className="text-[10px] uppercase tracking-[0.2em] text-gold mb-1">
+                        What we built
+                      </div>
                       <p className="text-sm text-foreground/85 leading-relaxed">{w.fix}</p>
                     </div>
                   </div>
                 </div>
               </>
             );
-            const cls = "work-card group block card-hover bg-card/30 backdrop-blur-sm rounded-xl overflow-hidden border border-gold/20";
+            const cls =
+              "work-card group block card-hover bg-card/30 backdrop-blur-sm rounded-xl overflow-hidden border border-gold/20";
             return isExternal ? (
-              <a key={w.t} href={w.href} target="_blank" rel="noopener noreferrer" className={cls}>{Inner}</a>
+              <a key={w.t} href={w.href} target="_blank" rel="noopener noreferrer" className={cls}>
+                {Inner}
+              </a>
             ) : (
-              <Link key={w.t} to={w.href} className={cls}>{Inner}</Link>
+              <Link key={w.t} to={w.href} className={cls}>
+                {Inner}
+              </Link>
             );
           })}
         </div>
@@ -1180,9 +1521,12 @@ function Process() {
       <div className="absolute inset-0 grid-noise opacity-20" />
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="max-w-3xl mb-16 reveal-up">
-          <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">How we work</div>
+          <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">
+            How we work
+          </div>
           <h2 className="font-display text-4xl md:text-6xl leading-tight">
-            Four steps from <span className="text-gold italic gradient-text-clamp">hello</span> to <span className="text-gold italic gradient-text-clamp">shipped.</span>
+            Four steps from <span className="text-gold italic gradient-text-clamp">hello</span> to{" "}
+            <span className="text-gold italic gradient-text-clamp">shipped.</span>
           </h2>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-14">
@@ -1192,7 +1536,9 @@ function Process() {
               className="process-step relative bg-card/30 backdrop-blur-sm rounded-xl overflow-hidden border border-gold/20 p-8 group"
             >
               <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-              <div className="font-mono text-4xl text-gold/30 mb-6 group-hover:text-gold transition-colors duration-300">{s.n}</div>
+              <div className="font-mono text-4xl text-gold/30 mb-6 group-hover:text-gold transition-colors duration-300">
+                {s.n}
+              </div>
               <h3 className="font-display text-xl mb-3">{s.t}</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">{s.d}</p>
               <div className="absolute bottom-0 left-0 w-0 h-px bg-gold transition-all duration-500 group-hover:w-full" />
@@ -1225,7 +1571,9 @@ function FAQGrid() {
                 className="grid md:grid-cols-[80px_1fr] gap-6 py-8 w-full text-left"
                 aria-expanded={openIndex === i}
               >
-                <div className="font-mono text-xs text-gold pt-1">Q.{String(i + 1).padStart(2, "0")}</div>
+                <div className="font-mono text-xs text-gold pt-1">
+                  Q.{String(i + 1).padStart(2, "0")}
+                </div>
                 <div className="flex items-start justify-between gap-4">
                   <h3 className="font-display text-xl md:text-2xl mb-3 pr-8">{f.q}</h3>
                   <svg
@@ -1234,7 +1582,12 @@ function FAQGrid() {
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </div>
               </button>
@@ -1262,12 +1615,14 @@ function CTA() {
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="text-center reveal-up">
           <h2 className="font-display text-5xl md:text-7xl leading-tight max-w-3xl mx-auto">
-            Have a project? <span className="text-gold italic gradient-text-clamp">Let's talk.</span>
+            Have a project?{" "}
+            <span className="text-gold italic gradient-text-clamp">Let's talk.</span>
           </h2>
           <p className="mt-8 max-w-xl text-lg text-muted-foreground mx-auto">
-            Tell us what you're trying to build or fix. We reply within one working day with a real opinion — never a sales deck.
+            Tell us what you're trying to build or fix. We reply within one working day with a real
+            opinion — never a sales deck.
           </p>
-<div className="mt-12 flex flex-wrap gap-4 justify-center">
+          <div className="mt-12 flex flex-wrap gap-4 justify-center">
             <Link to="/contact" className="btn-primary magnetic">
               Get a Free Project Estimate
             </Link>

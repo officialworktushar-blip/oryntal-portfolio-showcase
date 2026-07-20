@@ -47,7 +47,7 @@ export function useScrollTrigger(options: ScrollTriggerOptions = {}) {
       (entries) => {
         entries.forEach((entry) => {
           const ratio = entry.intersectionRatio;
-          
+
           if (entry.isIntersecting) {
             if (!hasTriggered.current || !once) {
               hasTriggered.current = true;
@@ -69,7 +69,7 @@ export function useScrollTrigger(options: ScrollTriggerOptions = {}) {
       {
         rootMargin: "0px",
         threshold: Array.from({ length: 101 }, (_, i) => i / 100),
-      }
+      },
     );
 
     observer.observe(target as Element);
@@ -94,15 +94,18 @@ export function useStaggeredReveal(itemCount: number, baseDelay = 0.1) {
           if (entry.isIntersecting) {
             const items = Array.from(container.children) as HTMLElement[];
             items.forEach((item, index) => {
-              setTimeout(() => {
-                setVisibleItems((prev) => new Set([...prev, index]));
-              }, index * baseDelay * 1000);
+              setTimeout(
+                () => {
+                  setVisibleItems((prev) => new Set([...prev, index]));
+                },
+                index * baseDelay * 1000,
+              );
             });
             observer.unobserve(container);
           }
         });
       },
-      { threshold: 0.1, rootMargin: "50px" }
+      { threshold: 0.1, rootMargin: "50px" },
     );
 
     observer.observe(container);
@@ -172,7 +175,7 @@ export function useTextReveal() {
           }
         });
       },
-      { threshold: 0.3, rootMargin: "50px" }
+      { threshold: 0.3, rootMargin: "50px" },
     );
 
     observer.observe(element);
@@ -206,7 +209,7 @@ export function useCounter(end: number, duration = 2000, startOnVisible = true) 
           }
         });
       },
-      { threshold: 0.5 }
+      { threshold: 0.5 },
     );
 
     observer.observe(element);

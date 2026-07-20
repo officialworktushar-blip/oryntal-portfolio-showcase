@@ -18,7 +18,7 @@ function generateWirePath(
   total: number,
   width: number,
   height: number,
-  time: number = 0
+  time: number = 0,
 ): string {
   const startX = 0;
   const endX = width * 0.82; // Stop before the head frame
@@ -49,31 +49,25 @@ function generateWirePath(
 
 function generateWirePaths(width: number, height: number, time: number): string[] {
   return Array.from({ length: NUM_WIRES }, (_, i) =>
-    generateWirePath(i, NUM_WIRES, width, height, time)
+    generateWirePath(i, NUM_WIRES, width, height, time),
   );
 }
 
-function generatePulsePositions(
-  paths: string[],
-  progress: number
-): { x: number; y: number }[] {
+function generatePulsePositions(paths: string[], progress: number): { x: number; y: number }[] {
   const positions: { x: number; y: number }[] = [];
 
   for (let i = 0; i < NUM_PULSES; i++) {
     const wireIndex = Math.floor((i / NUM_PULSES) * paths.length);
     const path = paths[wireIndex];
 
-    const points = path
-      .replace(/[MC]/g, "")
-      .trim()
-      .split(/\s+/)
-      .map(Number);
+    const points = path.replace(/[MC]/g, "").trim().split(/\s+/).map(Number);
 
     if (points.length >= 8) {
       const t = (progress + i / NUM_PULSES) % 1;
       const x = points[0] + (points[points.length - 2] - points[0]) * t;
       const y =
-        points[1] + (points[points.length - 1] - points[1]) * t * 0.5 +
+        points[1] +
+        (points[points.length - 1] - points[1]) * t * 0.5 +
         Math.sin(t * Math.PI * 2) * 4;
 
       positions.push({ x, y });
@@ -101,7 +95,7 @@ export function HeroNeuralAnimation({ logoSrc }: HeroNeuralAnimationProps) {
   useEffect(() => {
     if (prefersReduced) return;
 
-    let startTime = performance.now();
+    const startTime = performance.now();
 
     const animate = (currentTime: number) => {
       const elapsed = currentTime - startTime;
@@ -228,7 +222,10 @@ export function HeroNeuralAnimation({ logoSrc }: HeroNeuralAnimationProps) {
         ))}
 
         {/* Oryntal logo at convergence point */}
-        <g className="logo-frame" transform={`translate(${dimensions.width * 0.60}, ${dimensions.height / 2 - dimensions.height * 0.25})`}>
+        <g
+          className="logo-frame"
+          transform={`translate(${dimensions.width * 0.6}, ${dimensions.height / 2 - dimensions.height * 0.25})`}
+        >
           {/* Outer glow ring */}
           <circle
             className="logo-glow-ring"
@@ -243,7 +240,7 @@ export function HeroNeuralAnimation({ logoSrc }: HeroNeuralAnimationProps) {
               animation: prefersReduced ? "none" : "head-ring-pulse 4s ease-in-out infinite",
             }}
           />
-          
+
           {/* Oryntal Logo */}
           <image
             href={logoSrc}
@@ -253,7 +250,8 @@ export function HeroNeuralAnimation({ logoSrc }: HeroNeuralAnimationProps) {
             height={dimensions.height * 0.4}
             preserveAspectRatio="xMidYMid meet"
             style={{
-              filter: "drop-shadow(0 0 12px rgba(201, 162, 75, 0.6)) drop-shadow(0 0 24px rgba(201, 162, 75, 0.3))",
+              filter:
+                "drop-shadow(0 0 12px rgba(201, 162, 75, 0.6)) drop-shadow(0 0 24px rgba(201, 162, 75, 0.3))",
               animation: prefersReduced ? "none" : "logo-float 6s ease-in-out infinite",
             }}
           />
@@ -280,7 +278,8 @@ export function HeroNeuralAnimation({ logoSrc }: HeroNeuralAnimationProps) {
 
       <style jsx>{`
         @keyframes head-ring-pulse {
-          0%, 100% {
+          0%,
+          100% {
             stroke-width: 1.5;
             opacity: 0.4;
             transform: scale(1);
@@ -293,7 +292,8 @@ export function HeroNeuralAnimation({ logoSrc }: HeroNeuralAnimationProps) {
         }
 
         @keyframes neural-pulse {
-          0%, 100% {
+          0%,
+          100% {
             opacity: 0.4;
             stroke-width: 0.8;
           }
@@ -304,15 +304,16 @@ export function HeroNeuralAnimation({ logoSrc }: HeroNeuralAnimationProps) {
         }
 
         @keyframes core-pulse {
-          0%, 100% {
+          0%,
+          100% {
             r: 3;
             opacity: 0.8;
-            filter: drop-shadow(0 0 4px #C9A24B) drop-shadow(0 0 8px #C9A24B);
+            filter: drop-shadow(0 0 4px #c9a24b) drop-shadow(0 0 8px #c9a24b);
           }
           50% {
             r: 5;
             opacity: 1;
-            filter: drop-shadow(0 0 10px #C9A24B) drop-shadow(0 0 20px #C9A24B);
+            filter: drop-shadow(0 0 10px #c9a24b) drop-shadow(0 0 20px #c9a24b);
           }
         }
 
@@ -320,22 +321,23 @@ export function HeroNeuralAnimation({ logoSrc }: HeroNeuralAnimationProps) {
           0% {
             r: 1.5;
             opacity: 0;
-            filter: drop-shadow(0 0 2px #C9A24B);
+            filter: drop-shadow(0 0 2px #c9a24b);
           }
           15% {
             r: 3;
             opacity: 1;
-            filter: drop-shadow(0 0 8px #C9A24B) drop-shadow(0 0 16px #C9A24B);
+            filter: drop-shadow(0 0 8px #c9a24b) drop-shadow(0 0 16px #c9a24b);
           }
           100% {
             r: 1.5;
             opacity: 0;
-            filter: drop-shadow(0 0 2px #C9A24B);
+            filter: drop-shadow(0 0 2px #c9a24b);
           }
         }
 
         @keyframes logo-float {
-          0%, 100% {
+          0%,
+          100% {
             transform: translateY(0) scale(1);
           }
           50% {

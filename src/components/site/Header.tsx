@@ -46,16 +46,24 @@ export function Header() {
             />
             <div className="absolute -inset-1 rounded-full border border-gold/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse-glow" />
           </div>
-          <span className="font-display text-xl tracking-widest text-gold gradient-text-clamp">ORYNTAL</span>
+          <span className="font-display text-xl tracking-widest text-gold gradient-text-clamp">
+            ORYNTAL
+          </span>
         </Link>
-        <nav className="hidden md:flex items-center gap-10" role="navigation" aria-label="Main navigation">
+        <nav
+          className="hidden md:flex items-center gap-10"
+          role="navigation"
+          aria-label="Main navigation"
+        >
           {links.map((l, idx) => (
             <Link
               key={l.to}
               to={l.to}
               activeOptions={{ exact: true }}
               activeProps={{ className: "text-gold relative" }}
-              inactiveProps={{ className: "text-muted-foreground hover:text-gold transition-colors duration-300" }}
+              inactiveProps={{
+                className: "text-muted-foreground hover:text-gold transition-colors duration-300",
+              }}
               className="relative text-sm tracking-wider uppercase transition-colors duration-300 animate-fade-in-down"
               style={{ animationDelay: `${100 + idx * 50}ms` }}
             >

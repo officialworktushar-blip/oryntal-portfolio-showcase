@@ -43,15 +43,13 @@ export function LenisProvider({ children, options = {} }: LenisProviderProps) {
   }, [options]);
 
   return (
-    <LenisContext.Provider value={{ lenis: lenisRef.current }}>
-      {children}
-    </LenisContext.Provider>
+    <LenisContext.Provider value={{ lenis: lenisRef.current }}>{children}</LenisContext.Provider>
   );
 }
 
 export function useScrollTo() {
   const { lenis } = useLenisContext();
-  
+
   return (target: string | number | HTMLElement, options?: Lenis.ScrollOptions) => {
     lenis?.scrollTo(target, options);
   };

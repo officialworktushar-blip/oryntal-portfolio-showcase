@@ -19,7 +19,7 @@ export function useScrollReveal(
     ease?: string;
     onEnter?: () => void;
     onLeave?: () => void;
-  } = {}
+  } = {},
 ) {
   const {
     start = "top 85%",
@@ -60,7 +60,7 @@ export function useScrollReveal(
               onEnterBack: () => onEnter?.(),
               onLeaveBack: () => onLeave?.(),
             },
-          }
+          },
         );
       });
     });
@@ -76,7 +76,7 @@ export function useTextReveal(
     stagger?: number;
     duration?: number;
     ease?: string;
-  } = {}
+  } = {},
 ) {
   const { start = "top 85%", stagger = 0.05, duration = 1, ease = "power3.out" } = options;
 
@@ -114,7 +114,7 @@ export function usePinSection(
     pinSpacing?: boolean;
     onEnter?: () => void;
     onLeave?: () => void;
-  } = {}
+  } = {},
 ) {
   const { start = "top top", end = "bottom bottom", pinSpacing = true, onEnter, onLeave } = options;
 
@@ -146,7 +146,7 @@ export function useHorizontalScroll(
     start?: string;
     end?: string;
     ease?: string;
-  } = {}
+  } = {},
 ) {
   const { start = "top top", end = "bottom bottom", ease = "none" } = options;
 
@@ -185,7 +185,7 @@ export function useCounter(
     decimals?: number;
     prefix?: string;
     suffix?: string;
-  } = {}
+  } = {},
 ) {
   const { start = 0, end = 100, duration = 2, decimals = 0, prefix = "", suffix = "" } = options;
 
@@ -222,7 +222,7 @@ export function useParallax(
     speed?: number;
     start?: string;
     end?: string;
-  } = {}
+  } = {},
 ) {
   const { speed = 0.3, start = "top bottom", end = "bottom top" } = options;
 
@@ -256,7 +256,7 @@ export function useScaleReveal(
     scale?: number;
     duration?: number;
     stagger?: number;
-  } = {}
+  } = {},
 ) {
   const { start = "top 85%", scale = 0.8, duration = 1, stagger = 0.1 } = options;
 
@@ -279,7 +279,7 @@ export function useScaleReveal(
             start,
             toggleActions: "play none none reverse",
           },
-        }
+        },
       );
     });
 
@@ -294,7 +294,7 @@ export function useClipPathReveal(
     direction?: "vertical" | "horizontal";
     duration?: number;
     stagger?: number;
-  } = {}
+  } = {},
 ) {
   const { start = "top 85%", direction = "vertical", duration = 1.2, stagger = 0.1 } = options;
 
@@ -320,7 +320,7 @@ export function useClipPathReveal(
               start,
               toggleActions: "play none none reverse",
             },
-          }
+          },
         );
       });
     });

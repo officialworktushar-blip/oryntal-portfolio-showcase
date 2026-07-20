@@ -54,14 +54,23 @@ export const Route = createFileRoute("/projects")({
       { property: "og:title", content: "Our Work | Oryntal" },
       {
         property: "og:description",
-        content: "Selected client work across AI, automation, full-stack, Shopify, WordPress, and mobile.",
+        content:
+          "Selected client work across AI, automation, full-stack, Shopify, WordPress, and mobile.",
       },
     ],
   }),
   component: ProjectsPage,
 });
 
-const categories = ["All", "AI", "Automation", "Full Stack", "Shopify", "WordPress", "App"] as const;
+const categories = [
+  "All",
+  "AI",
+  "Automation",
+  "Full Stack",
+  "Shopify",
+  "WordPress",
+  "App",
+] as const;
 type Cat = (typeof categories)[number];
 
 interface LLMModel {
@@ -426,7 +435,7 @@ function ProjectsPage() {
 
     return () => {
       lenisRef.current?.destroy();
-      ScrollTrigger.getAll().forEach(t => t.kill());
+      ScrollTrigger.getAll().forEach((t) => t.kill());
     };
   }, []);
 
@@ -437,7 +446,7 @@ function ProjectsPage() {
 
   const handleFilterChange = (newFilter: Cat) => {
     if (newFilter === filter || isFiltering) return;
-    
+
     if (!prefersReduced) {
       setIsFiltering(true);
       const cards = cardsContainerRef.current?.children;
@@ -453,15 +462,23 @@ function ProjectsPage() {
             requestAnimationFrame(() => {
               const newCards = cardsContainerRef.current?.children;
               if (newCards && newCards.length > 0) {
-                gsap.fromTo(newCards, 
+                gsap.fromTo(
+                  newCards,
                   { opacity: 0, y: -20 },
-                  { opacity: 1, y: 0, duration: 0.5, ease: "power3.out", stagger: 0.05, onComplete: () => setIsFiltering(false) }
+                  {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.5,
+                    ease: "power3.out",
+                    stagger: 0.05,
+                    onComplete: () => setIsFiltering(false),
+                  },
                 );
               } else {
                 setIsFiltering(false);
               }
             });
-          }
+          },
         });
       } else {
         setFilter(newFilter);
@@ -475,7 +492,7 @@ function ProjectsPage() {
   // Hero and section animations
   useEffect(() => {
     if (prefersReduced) return;
-    
+
     const ctx = gsap.context(() => {
       gsap.set(".projects-hero-title .line", { y: "100%", opacity: 0 });
       gsap.set(".projects-hero-subtitle", { y: 30, opacity: 0 });
@@ -483,14 +500,33 @@ function ProjectsPage() {
 
       const tl = gsap.timeline({ defaults: { ease: "expo.out", duration: 1.2 } });
       tl.to(".projects-hero-title .line", { y: 0, opacity: 1, stagger: 0.1, duration: 1.2 }, 0)
-        .to(".projects-hero-subtitle", { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.8")
-        .to(".filter-btn", { y: 0, opacity: 1, stagger: 0.05, duration: 0.8, ease: "expo.out" }, "-=0.5");
+        .to(
+          ".projects-hero-subtitle",
+          { y: 0, opacity: 1, duration: 1, ease: "power3.out" },
+          "-=0.8",
+        )
+        .to(
+          ".filter-btn",
+          { y: 0, opacity: 1, stagger: 0.05, duration: 0.8, ease: "expo.out" },
+          "-=0.5",
+        );
 
-      gsap.utils.toArray(".section-title").forEach((title: any) => {
-        gsap.fromTo(title, { y: 40, opacity: 0 }, {
-          y: 0, opacity: 1, duration: 1, ease: "power3.out",
-          scrollTrigger: { trigger: title, start: "top 85%", toggleActions: "play none none reverse" }
-        });
+      gsap.utils.toArray(".section-title").forEach((title: HTMLElement) => {
+        gsap.fromTo(
+          title,
+          { y: 40, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: title,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          },
+        );
       });
     }, scrollRef);
 
@@ -503,35 +539,84 @@ function ProjectsPage() {
 
     const ctx = gsap.context(() => {
       // AI Model cards
-      gsap.utils.toArray(".ai-model-card").forEach((card: any, i) => {
-        gsap.fromTo(card, { y: 50, opacity: 0, rotateX: -5 }, {
-          y: 0, opacity: 1, rotateX: 0, duration: 1, delay: i * 0.1, ease: "power3.out",
-          scrollTrigger: { trigger: card, start: "top 90%", toggleActions: "play none none reverse" }
-        });
+      gsap.utils.toArray(".ai-model-card").forEach((card: HTMLElement, i) => {
+        gsap.fromTo(
+          card,
+          { y: 50, opacity: 0, rotateX: -5 },
+          {
+            y: 0,
+            opacity: 1,
+            rotateX: 0,
+            duration: 1,
+            delay: i * 0.1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 90%",
+              toggleActions: "play none none reverse",
+            },
+          },
+        );
       });
 
       // Automation cards
-      gsap.utils.toArray(".automation-card").forEach((card: any, i) => {
-        gsap.fromTo(card, { y: 50, opacity: 0, scale: 0.95 }, {
-          y: 0, opacity: 1, scale: 1, duration: 1, delay: i * 0.1, ease: "power3.out",
-          scrollTrigger: { trigger: card, start: "top 90%", toggleActions: "play none none reverse" }
-        });
+      gsap.utils.toArray(".automation-card").forEach((card: HTMLElement, i) => {
+        gsap.fromTo(
+          card,
+          { y: 50, opacity: 0, scale: 0.95 },
+          {
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            duration: 1,
+            delay: i * 0.1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 90%",
+              toggleActions: "play none none reverse",
+            },
+          },
+        );
       });
 
       // Website cards - staggered reveal
-      gsap.utils.toArray(".website-card").forEach((card: any, i) => {
-        gsap.fromTo(card, { y: 60, opacity: 0 }, {
-          y: 0, opacity: 1, duration: 1, delay: i * 0.08, ease: "power3.out",
-          scrollTrigger: { trigger: card, start: "top 90%", toggleActions: "play none none reverse" }
-        });
+      gsap.utils.toArray(".website-card").forEach((card: HTMLElement, i) => {
+        gsap.fromTo(
+          card,
+          { y: 60, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 1,
+            delay: i * 0.08,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 90%",
+              toggleActions: "play none none reverse",
+            },
+          },
+        );
       });
 
       // Coming soon cards
-      gsap.utils.toArray(".coming-soon-card").forEach((card: any) => {
-        gsap.fromTo(card, { y: 40, opacity: 0 }, {
-          y: 0, opacity: 1, duration: 1, ease: "power3.out",
-          scrollTrigger: { trigger: card, start: "top 90%", toggleActions: "play none none reverse" }
-        });
+      gsap.utils.toArray(".coming-soon-card").forEach((card: HTMLElement) => {
+        gsap.fromTo(
+          card,
+          { y: 40, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 90%",
+              toggleActions: "play none none reverse",
+            },
+          },
+        );
       });
     }, scrollRef);
 
@@ -541,9 +626,9 @@ function ProjectsPage() {
   // Hover animations for cards - subtle scale/zoom
   useEffect(() => {
     if (prefersReduced) return;
-    
+
     const cards = document.querySelectorAll(".website-card, .ai-model-card, .automation-card");
-    cards.forEach((card) => {
+    cards.forEach((card: HTMLElement) => {
       const img = card.querySelector("img");
       const handleEnter = () => {
         gsap.to(card, { y: -8, scale: 1.01, duration: 0.4, ease: "power3.out" });
@@ -568,7 +653,10 @@ function ProjectsPage() {
       <FilterBar filter={filter} setFilter={handleFilterChange} isFiltering={isFiltering} />
       {(filter === "All" || filter === "AI") && <AIModelsSection />}
       {(filter === "All" || filter === "Automation") && <AutomationSection />}
-      {(filter === "All" || filter === "Full Stack" || filter === "Shopify" || filter === "WordPress") && (
+      {(filter === "All" ||
+        filter === "Full Stack" ||
+        filter === "Shopify" ||
+        filter === "WordPress") && (
         <WebsitesSection sites={visibleWebsiteShowcases} cardsContainerRef={cardsContainerRef} />
       )}
     </div>
@@ -581,24 +669,44 @@ function Hero() {
       <div className="absolute inset-0 grid-noise opacity-20" />
       <HeroNeuralAnimation logoSrc={assetUrl(logoMark)} />
       <div className="relative mx-auto max-w-7xl px-6 py-24 md:py-32">
-        <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">Our work · 2024 – 2026</div>
+        <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">
+          Our work · 2024 – 2026
+        </div>
         <h1 className="font-display text-5xl md:text-7xl max-w-4xl leading-[1.05] projects-hero-title">
           <span className="line block">Real projects.</span>
-          <span className="line block"><span className="text-gold italic gradient-text-clamp">Real live sites.</span></span>
+          <span className="line block">
+            <span className="text-gold italic gradient-text-clamp">Real live sites.</span>
+          </span>
         </h1>
         <p className="mt-6 max-w-2xl text-lg text-muted-foreground projects-hero-subtitle">
-          Browse client work by discipline. Every card links directly to the production site with a real screenshot — no mockups, no stock imagery.
+          Browse client work by discipline. Every card links directly to the production site with a
+          real screenshot — no mockups, no stock imagery.
         </p>
       </div>
     </section>
   );
 }
 
-function FilterBar({ filter, setFilter, isFiltering }: { filter: Cat; setFilter: (f: Cat) => void; isFiltering: boolean }) {
+function FilterBar({
+  filter,
+  setFilter,
+  isFiltering,
+}: {
+  filter: Cat;
+  setFilter: (f: Cat) => void;
+  isFiltering: boolean;
+}) {
   return (
-    <section className="py-10 border-b border-gold/20 sticky top-0 bg-background/95 backdrop-blur-xl z-40 transition-opacity duration-300" style={{ opacity: isFiltering ? 0.6 : 1 }}>
+    <section
+      className="py-10 border-b border-gold/20 sticky top-0 bg-background/95 backdrop-blur-xl z-40 transition-opacity duration-300"
+      style={{ opacity: isFiltering ? 0.6 : 1 }}
+    >
       <div className="mx-auto max-w-7xl px-6">
-        <div className="flex flex-wrap gap-3 justify-center" role="group" aria-label="Filter projects by category">
+        <div
+          className="flex flex-wrap gap-3 justify-center"
+          role="group"
+          aria-label="Filter projects by category"
+        >
           {categories.map((c, i) => (
             <button
               key={c}
@@ -628,13 +736,17 @@ function AIModelsSection() {
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="flex items-end justify-between flex-wrap gap-4 mb-12">
           <div className="section-title">
-            <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">AI · LLM Products</div>
+            <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">
+              AI · LLM Products
+            </div>
             <h2 className="font-display text-4xl md:text-5xl leading-tight">
-              Production-ready <span className="text-gold italic gradient-text-clamp">AI products.</span>
+              Production-ready{" "}
+              <span className="text-gold italic gradient-text-clamp">AI products.</span>
             </h2>
           </div>
           <p className="text-sm text-muted-foreground max-w-xs">
-            A growing family of business-ready LLM tools we build in-house. <span className="text-gold">More coming every quarter.</span>
+            A growing family of business-ready LLM tools we build in-house.{" "}
+            <span className="text-gold">More coming every quarter.</span>
           </p>
         </div>
 
@@ -660,15 +772,21 @@ function AIModelsSection() {
                   </span>
                   <span className="font-mono text-xs text-muted-foreground">2026</span>
                 </div>
-                <h3 className="font-display text-2xl mb-1 group-hover:text-gold transition-colors duration-300">{m.name}</h3>
+                <h3 className="font-display text-2xl mb-1 group-hover:text-gold transition-colors duration-300">
+                  {m.name}
+                </h3>
                 <p className="text-sm text-gold mb-5">{m.tagline}</p>
                 <div className="space-y-4 text-sm leading-relaxed flex-1">
                   <div>
-                    <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">The Pain</div>
+                    <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
+                      The Pain
+                    </div>
                     <p className="text-foreground/80">{m.painPoint}</p>
                   </div>
                   <div>
-                    <div className="text-[10px] uppercase tracking-widest text-gold mb-1">The Fix</div>
+                    <div className="text-[10px] uppercase tracking-widest text-gold mb-1">
+                      The Fix
+                    </div>
                     <p className="text-foreground/80">{m.solution}</p>
                   </div>
                 </div>
@@ -680,7 +798,8 @@ function AIModelsSection() {
             <div className="text-5xl mb-4 animate-float-gentle">✦</div>
             <h3 className="font-display text-2xl md:text-3xl mb-2">More AI Models Coming Soon</h3>
             <p className="text-muted-foreground max-w-md">
-              We&apos;re shipping new business-ready LLM models every quarter. Have a workflow you want automated?{" "}
+              We&apos;re shipping new business-ready LLM models every quarter. Have a workflow you
+              want automated?{" "}
               <Link to="/contact" className="text-gold hover:underline font-medium">
                 Tell us about it →
               </Link>
@@ -699,13 +818,17 @@ function AutomationSection() {
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="flex items-end justify-between flex-wrap gap-4 mb-12">
           <div className="section-title">
-            <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">Automation</div>
+            <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">
+              Automation
+            </div>
             <h2 className="font-display text-4xl md:text-5xl leading-tight">
-              Workflows that <span className="text-gold italic gradient-text-clamp">run themselves.</span>
+              Workflows that{" "}
+              <span className="text-gold italic gradient-text-clamp">run themselves.</span>
             </h2>
           </div>
           <p className="text-sm text-muted-foreground max-w-xs">
-            Production automations we deploy for clients. <span className="text-gold">More agents shipping every month.</span>
+            Production automations we deploy for clients.{" "}
+            <span className="text-gold">More agents shipping every month.</span>
           </p>
         </div>
 
@@ -733,15 +856,21 @@ function AutomationSection() {
                   </span>
                   <span className="font-mono text-xs text-muted-foreground">2026</span>
                 </div>
-                <h3 className="font-display text-2xl mb-1 group-hover:text-gold transition-colors duration-300">{a.name}</h3>
+                <h3 className="font-display text-2xl mb-1 group-hover:text-gold transition-colors duration-300">
+                  {a.name}
+                </h3>
                 <p className="text-sm text-gold mb-5">{a.tagline}</p>
                 <div className="space-y-4 text-sm leading-relaxed flex-1">
                   <div>
-                    <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">The Pain</div>
+                    <div className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
+                      The Pain
+                    </div>
                     <p className="text-foreground/80">{a.painPoint}</p>
                   </div>
                   <div>
-                    <div className="text-[10px] uppercase tracking-widest text-gold mb-1">The Fix</div>
+                    <div className="text-[10px] uppercase tracking-widest text-gold mb-1">
+                      The Fix
+                    </div>
                     <p className="text-foreground/80">{a.solution}</p>
                   </div>
                 </div>
@@ -765,22 +894,32 @@ function AutomationSection() {
   );
 }
 
-function WebsitesSection({ sites, cardsContainerRef }: { sites: WebsiteShowcase[]; cardsContainerRef: React.RefObject<HTMLDivElement> }) {
+function WebsitesSection({
+  sites,
+  cardsContainerRef,
+}: {
+  sites: WebsiteShowcase[];
+  cardsContainerRef: React.RefObject<HTMLDivElement>;
+}) {
   return (
     <section className="py-20 relative overflow-hidden">
       <div className="absolute inset-0 grid-noise opacity-20" />
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="flex items-end justify-between flex-wrap gap-4 mb-12">
           <div className="section-title">
-            <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">Web · Shopify · WordPress</div>
+            <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-3">
+              Web · Shopify · WordPress
+            </div>
             <h2 className="font-display text-4xl md:text-5xl leading-tight">
-              Pixels become <span className="text-gold italic gradient-text-clamp">businesses.</span>
+              Pixels become{" "}
+              <span className="text-gold italic gradient-text-clamp">businesses.</span>
               <br />
               Designs become <span className="text-gold italic gradient-text-clamp">revenue.</span>
             </h2>
           </div>
           <p className="text-sm text-muted-foreground max-w-sm">
-            Every brand below trusted us to ship the website their customers actually buy from. Click any card to see it live.
+            Every brand below trusted us to ship the website their customers actually buy from.
+            Click any card to see it live.
           </p>
         </div>
 
@@ -807,8 +946,12 @@ function WebsitesSection({ sites, cardsContainerRef }: { sites: WebsiteShowcase[
                 <span className="font-mono text-xs text-muted-foreground">{site.type}</span>
 
                 <div>
-                  <h3 className="font-display text-2xl mb-2 group-hover:text-gold transition-colors duration-300">{site.name}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{site.description}</p>
+                  <h3 className="font-display text-2xl mb-2 group-hover:text-gold transition-colors duration-300">
+                    {site.name}
+                  </h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {site.description}
+                  </p>
                 </div>
 
                 <a
@@ -818,7 +961,19 @@ function WebsitesSection({ sites, cardsContainerRef }: { sites: WebsiteShowcase[
                   className="inline-flex items-center justify-center gap-2 rounded-xl border border-gold/30 bg-gold/5 px-4 py-3 text-sm font-semibold text-gold transition-all duration-300 hover:bg-gold hover:text-primary-foreground hover:border-gold group-hover:translate-x-1 magnetic"
                 >
                   Visit Website
-                  <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                  <svg
+                    className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                    />
+                  </svg>
                 </a>
               </div>
             </article>
