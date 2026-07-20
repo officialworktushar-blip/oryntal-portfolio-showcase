@@ -1158,7 +1158,7 @@ function AnimatedStats({ prefersReduced }: { prefersReduced: boolean }) {
       }} />
       <div className="absolute inset-0 grid-noise opacity-20" />
 
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6">
+<div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6">
         {/* Center text block */}
         <div className="text-center z-20 max-w-3xl">
           <div className="flex items-center justify-center gap-3 mb-8 hero-logo">
@@ -1171,10 +1171,9 @@ function AnimatedStats({ prefersReduced }: { prefersReduced: boolean }) {
           </h1>
 
           {/* Phone-frame marquee — full-width auto-scrolling strip */}
-          <InfinityLoopCarousel prefersReduced={prefersReduced} />
-
-          {/* Animated number stats */}
-          <AnimatedStats prefersReduced={prefersReduced} />
+          <div className="relative w-full -mx-6 mt-8 mb-10">
+            <InfinityLoopCarousel prefersReduced={prefersReduced} />
+          </div>
 
           <p ref={heroSubtitleRef} className="mt-6 text-base md:text-lg text-muted-foreground leading-relaxed hero-subtitle max-w-xl mx-auto">
             AI agents, automation, and full-stack systems — from Oryntal, in weeks not quarters.
