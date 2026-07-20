@@ -825,9 +825,17 @@ function InfinityLoopCarousel({ prefersReduced }) {
     const track = carousel.querySelector('.marquee-track');
     if (!track) return;
 
-    // Calculate total width of one set of frames
-    const frameWidth = isMobile ? 180 : 200;
-    const gap = 24; // gap-6 = 24px
+    // Calculate total width of one set of frames dynamically based on viewport
+    const getFrameWidth = () => {
+      if (isMobile) return 180;
+      if (isTablet) return 220;
+      return 200;
+    };
+    
+    const getGap = () => 24;
+    
+    const frameWidth = getFrameWidth();
+    const gap = getGap();
     const frameCount = marqueeFrames.length;
     const singleSetWidth = frameCount * (frameWidth + gap);
     
@@ -858,7 +866,7 @@ function InfinityLoopCarousel({ prefersReduced }) {
     animationRef.current = requestAnimationFrame(animate);
 
     return () => cancelAnimationFrame(animationRef.current);
-  }, [prefersReduced, isMobile]);
+  }, [prefersReduced, isMobile, isTablet]);
 
   useEffect(() => {
     const checkScreen = () => {
@@ -961,6 +969,94 @@ function InfinityLoopCarousel({ prefersReduced }) {
         </div>
       </div>
     </section>
+  );
+}
+// Animated stats section for hero
+function AnimatedStats({ prefersReduced }: { prefersReduced: boolean }) {
+  const stats = [
+    { value: 157, suffix: '+', label: 'Projects Delivered' },
+    { value: 100, suffix: '+', label: 'Work With Customer Trust' },
+    { value: 8, suffix: '+', label: 'Across Countries Customers' },
+    { value: 50, suffix: '+', label: 'Brand Trust' },
+  ];
+
+  const refs = stats.map(() => useRef<HTMLDivElement>(null));
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (prefersReduced) {
+      setVisible(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisible(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.3, rootMargin: '0px 0px -100px 0px' }
+    );
+
+    const container = document.querySelector('.animated-stats-container');
+    if (container) observer.observe(container);
+
+    return () => observer.disconnect();
+  }, [prefersReduced]);
+
+  useEffect(() => {
+    if (!visible || prefersReduced) return;
+
+    const ctx = gsap.context(() => {
+      stats.forEach((stat, i) => {
+        const el = refs[i].current;
+        if (!el) return;
+
+        gsap.fromTo(el, 
+          { y: 30, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            delay: i * 0.12,
+            ease: 'power3.out',
+          }
+        );
+
+        const counterEl = el.querySelector('.stat-counter');
+        if (counterEl) {
+          gsap.to({ val: 0 }, {
+            val: stat.value,
+            duration: 2,
+            delay: i * 0.12 + 0.3,
+            ease: 'power3.out',
+            onUpdate: function() {
+              counterEl.textContent = Math.round(this.targets()[0].val).toLocaleString() + stat.suffix;
+            },
+          });
+        }
+      });
+    }, refs[0]);
+
+    return () => ctx.revert();
+  }, [visible, prefersReduced]);
+
+  return (
+    <div className="animated-stats-container w-full px-6 mt-10 mb-4" aria-label="Key statistics">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-5xl mx-auto">
+        {stats.map((stat, i) => (
+          <div key={stat.label} ref={refs[i]} className="text-center">
+            <div className="font-display text-3xl md:text-4xl lg:text-5xl text-gold gradient-text-clamp stat-counter" style={{ opacity: 0 }}>
+              0{stat.suffix}
+            </div>
+            <div className="mt-2 text-sm md:text-base text-muted-foreground font-medium leading-snug">{stat.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
   // Hero function - properly wrapped
@@ -1074,8 +1170,11 @@ function InfinityLoopCarousel({ prefersReduced }) {
             Your team, minus the busywork. Powered by AI.
           </h1>
 
-          {/* Infinity Loop Carousel — horizontal scroll with cursor effect */}
+          {/* Phone-frame marquee — full-width auto-scrolling strip */}
           <InfinityLoopCarousel prefersReduced={prefersReduced} />
+
+          {/* Animated number stats */}
+          <AnimatedStats prefersReduced={prefersReduced} />
 
           <p ref={heroSubtitleRef} className="mt-6 text-base md:text-lg text-muted-foreground leading-relaxed hero-subtitle max-w-xl mx-auto">
             AI agents, automation, and full-stack systems — from Oryntal, in weeks not quarters.
