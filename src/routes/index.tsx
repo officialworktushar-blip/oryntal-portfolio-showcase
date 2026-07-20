@@ -768,8 +768,14 @@ function InfinityLoopCarousel({ prefersReduced }) {
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const isPausedRef = useRef(false);
   const animationRef = useRef(null);
   const startTimeRef = useRef(0);
+
+  // Sync isPaused state to ref for animation loop
+  useEffect(() => {
+    isPausedRef.current = isPaused;
+  }, [isPaused]);
 
   // Services data - 6 distinct frames for the marquee
   const marqueeFrames = [
@@ -839,6 +845,45 @@ function InfinityLoopCarousel({ prefersReduced }) {
 
     return () => ctx.revert();
   }, [prefersReduced]);
+
+  // Infinite marquee animation loop
+  useEffect(() => {
+    if (prefersReduced) return;
+
+    const trackEl = carouselRef.current?.querySelector('.marquee-track');
+    const firstFrame = trackEl?.querySelector('.marquee-frame');
+    if (!trackEl || !firstFrame) return;
+
+    const frameRect = firstFrame.getBoundingClientRect();
+    const frameWidth = frameRect.width + 24; // width + gap
+    const framesPerSet = marqueeFrames.length; // 6
+    const singleSetWidth = frameWidth * framesPerSet;
+    const loopDuration = 35000; // 35 seconds per full set
+
+    let startTime = performance.now();
+    let animationId;
+    let isPausedRef = false;
+
+    const animate = (currentTime) => {
+      if (isPaused) {
+        startTime = currentTime;
+        animationId = requestAnimationFrame(animate);
+        return;
+      }
+
+      const elapsed = currentTime - startTime;
+      const progress = (elapsed % loopDuration) / loopDuration;
+      const translateX = -(progress * singleSetWidth);
+      
+      trackEl.style.transform = `translateX(${translateX}px)`;
+      animationId = requestAnimationFrame(animate);
+    };
+
+    startTime = performance.now();
+    animationId = requestAnimationFrame(animate);
+
+    return () => cancelAnimationFrame(animationId);
+  }, [prefersReduced, isMobile, isTablet]);
 
   // Render 2x the items for infinite loop
   const items = [...marqueeFrames, ...marqueeFrames];
