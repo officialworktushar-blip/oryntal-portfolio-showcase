@@ -959,10 +959,6 @@ function InfinityLoopCarousel({ prefersReduced }) {
         role="region"
         aria-label="Service showcase marquee"
       >
-        {/* Gradient fade edges */}
-        <div className="absolute left-0 top-0 bottom-0 w-48 bg-gradient-to-r from-background via-background/80 to-transparent pointer-events-none z-10" />
-        <div className="absolute right-0 top-0 bottom-0 w-48 bg-gradient-to-l from-background via-background/80 to-transparent pointer-events-none z-10" />
-        
         <div 
           className="marquee-track flex gap-6 pb-8" 
           style={{ 
@@ -974,12 +970,12 @@ function InfinityLoopCarousel({ prefersReduced }) {
             <div
               key={frame.id}
               className="marquee-frame flex-shrink-0 flex flex-col items-center"
-              style={{ width: isMobile ? 180 : 220 }}
+              style={{ width: isMobile ? '90vw' : '30vw', minWidth: isMobile ? 280 : 320, maxWidth: isMobile ? '95vw' : 420 }}
             >
               {/* Phone frame */}
               <div 
-                className="relative flex flex-col items-center pointer-events-auto"
-                style={{ width: isMobile ? 180 : 220, height: isMobile ? 300 : 340 }}
+                className="relative flex flex-col items-center pointer-events-auto w-full"
+                style={{ aspectRatio: '9/16' }}
               >
                 {/* Phone frame */}
                 <div
@@ -1006,10 +1002,6 @@ function InfinityLoopCarousel({ prefersReduced }) {
           ))}
         </div>
       </div>
-      
-      {/* Gradient fade edges */}
-      <div className="absolute left-0 top-0 bottom-0 w-48 bg-gradient-to-r from-background via-background/80 to-transparent pointer-events-none z-10" />
-      <div className="absolute right-0 top-0 bottom-0 w-48 bg-gradient-to-l from-background via-background/80 to-transparent pointer-events-none z-10" />
     </section>
   );
 }
