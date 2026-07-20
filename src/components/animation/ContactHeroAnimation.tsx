@@ -10,6 +10,8 @@ export function ContactHeroAnimation({ prefersReduced = false }: ContactHeroAnim
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number>();
   const [dimensions, setDimensions] = useState({ width: 400, height: 500 });
+  const logoImgRef = useRef<HTMLImageElement>(null);
+  const [logoLoaded, setLogoLoaded] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -23,218 +25,194 @@ export function ContactHeroAnimation({ prefersReduced = false }: ContactHeroAnim
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Preload logo image
   useEffect(() => {
-    if (prefersReduced || !canvasRef.current) return;
+    const img = new Image();
+    img.src = "/__l5e/assets-v1/68a87d50-8df6-4001-bda0-21e644173ce3/oryntal-mark.jpg";
+    img.onload = () => {
+      logoImgRef.current = img;
+      setLogoLoaded(true);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (prefersReduced || !canvasRef.current || !logoLoaded) return;
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     let time = 0;
-    const envelope = {
-      x: dimensions.width / 2,
-      y: dimensions.height / 2,
-      width: Math.min(dimensions.width * 0.6, 280),
-      height: Math.min(dimensions.height * 0.45, 200),
-      flapHeight: 0,
-      sealGlow: 0,
-      floatOffset: 0,
-      rotationY: 0,
-      rotationX: 0,
+    
+    // 3D rotation state
+    const rotation = {
+      x: 0,
+      y: 0,
+      z: 0,
+      targetX: 0,
+      targetY: 0,
+      targetZ: 0,
     };
 
-    // Particle system for data particles
+    // Floating particles around logo
     const particles: {
       x: number;
       y: number;
+      z: number;
       vx: number;
       vy: number;
+      vz: number;
       life: number;
       maxLife: number;
       size: number;
       color: string;
-      delay: number;
+      angle: number;
+      radius: number;
     }[] = [];
 
     function createParticles() {
-      if (Math.random() < 0.15) {
-        const side = Math.random() < 0.5 ? -1 : 1;
+      if (particles.length < 80 && Math.random() < 0.4) {
+        const angle = Math.random() * Math.PI * 2;
+        const radius = 120 + Math.random() * 80;
+        const z = (Math.random() - 0.5) * 100;
         particles.push({
-          x: envelope.x + side * (envelope.width / 2 + 20),
-          y: envelope.y + (Math.random() - 0.5) * envelope.height * 0.6,
-          vx: -side * (0.5 + Math.random() * 1.5),
-          vy: (Math.random() - 0.5) * 0.5,
+          x: Math.cos(angle) * radius,
+          y: Math.sin(angle) * radius * 0.6,
+          z: z,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: (Math.random() - 0.5) * 0.3,
+          vz: (Math.random() - 0.5) * 0.2,
           life: 1,
           maxLife: 1,
-          size: 2 + Math.random() * 3,
-          color: Math.random() < 0.5 ? "#C9A24B" : "#D9B87A",
-          delay: 0,
+          size: 1.5 + Math.random() * 2.5,
+          color: Math.random() < 0.6 ? "#C9A24B" : "#D9B87A",
+          angle: angle,
+          radius: radius,
         });
       }
     }
 
-    function drawEnvelope() {
-      const { x, y, width, height, flapHeight, sealGlow, floatOffset, rotationY, rotationX } = envelope;
-      const halfW = width / 2;
-      const halfH = height / 2;
+    function drawLogo() {
+      const centerX = dimensions.width / 2;
+      const centerY = dimensions.height / 2;
+      const logoSize = Math.min(dimensions.width, dimensions.height) * 0.35;
+      
+      if (!logoImgRef.current) return;
 
       ctx.save();
-      ctx.translate(x, y + floatOffset);
+      ctx.translate(centerX, centerY);
       
-      // Apply 3D rotation transforms
-      ctx.scale(1 - Math.abs(rotationY) * 0.3, 1);
+      // Apply 3D rotation using canvas transforms
+      // Rotate around Y axis (horizontal rotation)
+      const scaleX = Math.cos(rotation.y);
+      ctx.scale(scaleX, 1);
       
-      // Envelope body shadow
-      ctx.shadowColor = "rgba(0, 0, 0, 0.3)";
-      ctx.shadowBlur = 30;
-      ctx.shadowOffsetY = 15;
-      ctx.shadowOffsetX = rotationY * 10;
-
-      // Envelope body
-      const gradient = ctx.createLinearGradient(-halfW, -halfH, halfW, halfH);
-      gradient.addColorStop(0, "#1a1a1a");
-      gradient.addColorStop(0.5, "#141414");
-      gradient.addColorStop(1, "#0d0d0d");
+      // Rotate around X axis (vertical tilt) - simulate with vertical scaling
+      const scaleY = Math.cos(rotation.x * 0.5);
       
-      ctx.fillStyle = gradient;
-      ctx.strokeStyle = "#C9A24B";
-      ctx.lineWidth = 1.5;
+      // Draw logo with glow
+      const glowRadius = logoSize * 0.7;
+      const glowGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, glowRadius);
+      glowGradient.addColorStop(0, "rgba(201, 162, 75, 0.35)");
+      glowGradient.addColorStop(0.5, "rgba(217, 184, 122, 0.15)");
+      glowGradient.addColorStop(1, "rgba(201, 162, 75, 0)");
       
-      // Body path with rounded corners
-      const radius = 8;
+      ctx.fillStyle = glowGradient;
       ctx.beginPath();
-      ctx.moveTo(-halfW + radius, -halfH);
-      ctx.lineTo(halfW - radius, -halfH);
-      ctx.quadraticCurveTo(halfW, -halfH, halfW, -halfH + radius);
-      ctx.lineTo(halfW, halfH - radius);
-      ctx.quadraticCurveTo(halfW, halfH, halfW - radius, halfH);
-      ctx.lineTo(-halfW + radius, halfH);
-      ctx.quadraticCurveTo(-halfW, halfH, -halfW, halfH - radius);
-      ctx.lineTo(-halfW, -halfH + radius);
-      ctx.quadraticCurveTo(-halfW, -halfH, -halfW + radius, -halfH);
-      ctx.closePath();
+      ctx.ellipse(0, 0, glowRadius, glowRadius * 0.8, 0, 0, Math.PI * 2);
       ctx.fill();
-      ctx.stroke();
 
-      // Gold accent lines on envelope
-      ctx.strokeStyle = "rgba(201, 162, 75, 0.3)";
-      ctx.lineWidth = 1;
-      ctx.setLineDash([8, 8]);
-      ctx.beginPath();
-      ctx.moveTo(-halfW + 15, -halfH + 15);
-      ctx.lineTo(halfW - 15, -halfH + 15);
-      ctx.moveTo(-halfW + 15, halfH - 15);
-      ctx.lineTo(halfW - 15, halfH - 15);
-      ctx.stroke();
-      ctx.setLineDash([]);
-
-      // Flap
-      const flapGradient = ctx.createLinearGradient(-halfW, -halfH - flapHeight, halfW, -halfH);
-      flapGradient.addColorStop(0, "#1f1f1f");
-      flapGradient.addColorStop(0.5, "#161616");
-      flapGradient.addColorStop(1, "#111111");
-
-      ctx.fillStyle = flapGradient;
-      ctx.strokeStyle = "#C9A24B";
-      ctx.lineWidth = 1.5;
-      
-      ctx.beginPath();
-      ctx.moveTo(-halfW + radius, -halfH);
-      ctx.lineTo(halfW - radius, -halfH);
-      ctx.lineTo(halfW - radius * 0.5, -halfH - flapHeight);
-      ctx.lineTo(-halfW + radius * 0.5, -halfH - flapHeight);
-      ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
-
-      // Flap fold line
+      // Outer rotating ring
       ctx.strokeStyle = "rgba(201, 162, 75, 0.4)";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, logoSize * 0.75, logoSize * 0.5, rotation.z, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Second ring opposite direction
+      ctx.strokeStyle = "rgba(217, 184, 122, 0.3)";
       ctx.lineWidth = 1;
       ctx.beginPath();
-      ctx.moveTo(-halfW + 20, -halfH - flapHeight * 0.6);
-      ctx.lineTo(halfW - 20, -halfH - flapHeight * 0.6);
+      ctx.ellipse(0, 0, logoSize * 0.65, logoSize * 0.45, -rotation.z, 0, Math.PI * 2);
       ctx.stroke();
 
-      // Seal / Wax stamp
-      const sealX = 0;
-      const sealY = -halfH - flapHeight * 0.3;
-      const sealR = 18;
+      // Logo image
+      ctx.drawImage(
+        logoImgRef.current,
+        -logoSize / 2,
+        -logoSize / 2 * 0.9,
+        logoSize,
+        logoSize * 0.9
+      );
 
-      // Seal glow
-      if (sealGlow > 0) {
-        const glowGradient = ctx.createRadialGradient(sealX, sealY, 0, sealX, sealY, sealR + 15);
-        glowGradient.addColorStop(0, `rgba(201, 162, 75, ${0.4 * sealGlow})`);
-        glowGradient.addColorStop(1, "rgba(201, 162, 75, 0)");
-        ctx.fillStyle = glowGradient;
-        ctx.beginPath();
-        ctx.arc(sealX, sealY, sealR + 15, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      // Seal base
-      const sealGradient = ctx.createRadialGradient(sealX - 4, sealY - 4, 0, sealX, sealY, sealR);
-      sealGradient.addColorStop(0, "#E5C07A");
-      sealGradient.addColorStop(0.5, "#C9A24B");
-      sealGradient.addColorStop(1, "#8B6B2A");
-
-      ctx.fillStyle = sealGradient;
+      // Center core glow
+      const coreGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, logoSize * 0.3);
+      coreGradient.addColorStop(0, "rgba(255, 255, 255, 0.4)");
+      coreGradient.addColorStop(0.5, "rgba(217, 184, 122, 0.2)");
+      coreGradient.addColorStop(1, "rgba(201, 162, 75, 0)");
+      ctx.fillStyle = coreGradient;
       ctx.beginPath();
-      ctx.arc(sealX, sealY, sealR, 0, Math.PI * 2);
+      ctx.arc(0, 0, logoSize * 0.3, 0, Math.PI * 2);
       ctx.fill();
 
-      // Seal ring
-      ctx.strokeStyle = "#D9B87A";
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.arc(sealX, sealY, sealR - 2, 0, Math.PI * 2);
-      ctx.stroke();
-
-      // Oryntal mark in seal (simplified)
-      ctx.fillStyle = "#0A0A0A";
-      ctx.font = "bold 14px 'Fraunces', serif";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText("O", sealX, sealY + 1);
-
-      ctx.shadowColor = "transparent";
-      ctx.shadowBlur = 0;
-      ctx.shadowOffsetY = 0;
-      ctx.shadowOffsetX = 0;
-      
       ctx.restore();
     }
 
     function drawParticles() {
-      particles.forEach((p, i) => {
-        ctx.save();
-        ctx.globalAlpha = p.life;
-        ctx.fillStyle = p.color;
-        ctx.shadowColor = p.color;
-        ctx.shadowBlur = 8;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
+      const centerX = dimensions.width / 2;
+      const centerY = dimensions.height / 2;
+
+      particles.forEach((p) => {
+        // Project 3D to 2D with perspective
+        const perspective = 400 / (400 + p.z);
+        const screenX = centerX + p.x * perspective;
+        const screenY = centerY + p.y * perspective;
+        const alpha = p.life * perspective * 0.8;
+
+        if (alpha > 0.05) {
+          ctx.save();
+          ctx.globalAlpha = alpha;
+          ctx.fillStyle = p.color;
+          ctx.shadowColor = p.color;
+          ctx.shadowBlur = 8 * perspective;
+          ctx.beginPath();
+          ctx.arc(screenX, screenY, p.size * perspective, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
       });
     }
 
     function update() {
       time += 1/60;
-      
-      // Envelope idle animation
-      envelope.floatOffset = Math.sin(time * 0.8) * 4;
-      envelope.rotationY = Math.sin(time * 0.5) * 0.08;
-      envelope.rotationX = Math.sin(time * 0.7) * 0.04;
-      envelope.flapHeight = envelope.height * 0.35 + Math.sin(time * 1.2) * 3;
-      envelope.sealGlow = 0.5 + Math.sin(time * 2) * 0.3;
+
+      // Smooth rotation animation - slow continuous rotation
+      rotation.y += 0.003;  // Horizontal rotation
+      rotation.x = Math.sin(time * 0.4) * 0.15;  // Gentle nod
+      rotation.z = Math.sin(time * 0.3) * 0.08;  // Slight tilt
+
+      // Subtle float
+      const floatY = Math.sin(time * 0.6) * 8;
 
       // Update particles
       createParticles();
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        p.life -= 0.015;
+        
+        // Orbit around center
+        p.angle += 0.002 + (p.radius / 1000);
+        const targetX = Math.cos(p.angle) * p.radius;
+        const targetY = Math.sin(p.angle) * p.radius * 0.6;
+        
+        p.x += (targetX - p.x) * 0.02 + p.vx;
+        p.y += (targetY - p.y) * 0.02 + p.vy;
+        p.z += p.vz;
+        
+        // Keep particles in orbit
+        if (p.z > 150) p.z = -150;
+        if (p.z < -150) p.z = 150;
+        
+        p.life -= 0.0008;
         if (p.life <= 0) {
           particles.splice(i, 1);
         }
@@ -247,11 +225,15 @@ export function ContactHeroAnimation({ prefersReduced = false }: ContactHeroAnim
       // Clear canvas
       ctx.clearRect(0, 0, dimensions.width, dimensions.height);
       
-      // Draw particles first (behind envelope)
+      // Draw subtle background grid/noise
+      ctx.fillStyle = "rgba(10, 10, 10, 0.02)";
+      ctx.fillRect(0, 0, dimensions.width, dimensions.height);
+      
+      // Draw particles first (behind logo)
       drawParticles();
       
-      // Draw envelope
-      drawEnvelope();
+      // Draw logo
+      drawLogo();
     }
 
     function animate() {
@@ -265,12 +247,12 @@ export function ContactHeroAnimation({ prefersReduced = false }: ContactHeroAnim
     return () => {
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
     };
-  }, [prefersReduced, dimensions]);
+  }, [prefersReduced, dimensions, logoLoaded]);
 
   return (
     <div
       className="hidden lg:block absolute right-4 top-1/2 -translate-y-1/2 w-[45%] max-w-[420px] h-[70vh] max-h-[550px] pointer-events-none"
-      style={{ opacity: 0.9 }}
+      style={{ opacity: 0.95 }}
     >
       <canvas
         ref={canvasRef}
@@ -278,7 +260,7 @@ export function ContactHeroAnimation({ prefersReduced = false }: ContactHeroAnim
         height={dimensions.height}
         className="w-full h-full"
         style={{ 
-          filter: "drop-shadow(0 0 80px rgba(201, 162, 75, 0.120))",
+          filter: "drop-shadow(0 0 100px rgba(201, 162, 75, 0.15))",
           transformStyle: "preserve-3d",
         }}
         aria-hidden="true"
