@@ -1172,10 +1172,7 @@ function AnimatedStats({ prefersReduced }: { prefersReduced: boolean }) {
           {!isMobile && serviceCards.map((service, i) => {
             const initialAngle = i * ANGLE_STEP; // 0, 60, 120, 180, 240, 300
             const floatOffset = i * 0.5;
-// Render 2x the items for infinite seamless loop
-  const items = [...marqueeFrames, ...marqueeFrames];
-
-  return (
+            return (
               <GlassCard
                 key={i}
                 index={i}
