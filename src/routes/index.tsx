@@ -762,7 +762,7 @@ function PhoneNotch({ className = '' }) {
   );
 }
 
-// Phone-frame marquee — auto-scrolling infinite horizontal loop
+// Phone-frame marquee — auto-scrolling infinite horizontal loop with coverflow effect
 function InfinityLoopCarousel({ prefersReduced }) {
   const carouselRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
@@ -815,7 +815,7 @@ function InfinityLoopCarousel({ prefersReduced }) {
     return () => window.removeEventListener('resize', checkScreen);
   }, []);
 
-  // Auto-scroll animation using CSS transform
+  // Coverflow effect: calculate transform for each frame based on distance from viewport center
   useEffect(() => {
     if (prefersReduced) return;
 
@@ -825,7 +825,7 @@ function InfinityLoopCarousel({ prefersReduced }) {
     const track = carousel.querySelector('.marquee-track');
     if (!track) return;
 
-    // Calculate total width of one set of frames dynamically based on viewport
+    // Calculate frame dimensions
     const getFrameWidth = () => {
       if (isMobile) return 180;
       if (isTablet) return 220;
@@ -833,17 +833,19 @@ function InfinityLoopCarousel({ prefersReduced }) {
     };
     
     const getGap = () => 24;
-    
-    const frameWidth = getFrameWidth();
-    const gap = getGap();
+    const frameWidth = isMobile ? 180 : (isTablet ? 220 : 200);
+    const gap = 24;
     const frameCount = marqueeFrames.length;
-    const singleSetWidth = frameCount * (frameWidth + gap);
+    const singleSetWidth = frameCount * (frameWidth + 24);
     
-    // Duration for one full loop of duplicated set (30-40 seconds)
-    const loopDuration = 35000; // 35 seconds
+    // Duration for one full loop of duplicated set (35 seconds)
+    const loopDuration = 35000;
 
     let startTime = performance.now();
     let animationId;
+    let isPausedRef = false;
+
+    const carouselEl = carouselRef.current;
 
     const animate = (currentTime) => {
       if (isPaused) {
@@ -857,8 +859,44 @@ function InfinityLoopCarousel({ prefersReduced }) {
       const totalWidth = marqueeFrames.length * (isMobile ? 200 : 220) + marqueeFrames.length * 24; // width of one set
       const translateX = -(progress * totalWidth); // move from 0 to -totalWidth
       
-      track.style.transform = `translateX(${translateX}px)`;
-      
+      const trackEl = carouselRef.current?.querySelector('.marquee-track');
+      if (trackEl) {
+        trackEl.style.transform = `translateX(${translateX}px)`;
+      }
+
+      // Coverflow effect: calculate each frame's distance from viewport center
+      const frames = trackEl?.querySelectorAll('.marquee-frame');
+      if (frames) {
+        const viewportCenter = carouselRef.current?.getBoundingClientRect().left + (carouselRef.current?.offsetWidth || 0) / 2;
+        
+        frames.forEach((frame, index) => {
+          const frameRect = frame.getBoundingClientRect();
+          const frameCenter = frameRect.left + frameRect.width / 2;
+          const distanceFromCenter = (frameCenter - viewportCenter) / (window.innerWidth / 2); // -1 to 1
+          const absDistance = Math.abs(distanceFromCenter);
+          
+          // Only apply effect to frames within reasonable range
+          if (absDistance < 1.5) {
+            // Scale: 1.0 at center, down to 0.7 at edges
+            const scale = Math.max(0.7, 1 - absDistance * 0.25);
+            
+            // Rotation: 0 at center, up to ±20deg at edges
+            const rotationY = distanceFromCenter * 20; // -20 to +20 degrees
+            
+            // Opacity: 1.0 at center, down to 0.5 at edges
+            const opacity = Math.max(0.5, 1 - absDistance * 0.3);
+            
+            // Z-index: higher at center
+            const zIndex = Math.round(100 * (1 - absDistance));
+            
+            frame.style.transform = `translateZ(${200 * (1 - absDistance)}px) scale(${scale}) rotateY(${rotationY}deg)`;
+            frame.style.opacity = opacity;
+            frame.style.zIndex = zIndex;
+            frame.style.filter = `brightness(${0.7 + 0.3 * (1 - absDistance)})`;
+          }
+        });
+      }
+
       animationRef.current = requestAnimationFrame(animate);
     };
 
@@ -968,6 +1006,10 @@ function InfinityLoopCarousel({ prefersReduced }) {
           ))}
         </div>
       </div>
+      
+      {/* Gradient fade edges */}
+      <div className="absolute left-0 top-0 bottom-0 w-48 bg-gradient-to-r from-background via-background/80 to-transparent pointer-events-none z-10" />
+      <div className="absolute right-0 top-0 bottom-0 w-48 bg-gradient-to-l from-background via-background/80 to-transparent pointer-events-none z-10" />
     </section>
   );
 }
