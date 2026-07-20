@@ -37,6 +37,7 @@ import antoineLours from "@/assets/site-shots/antoine-lours.asset.json";
 import nightfallGroup from "@/assets/site-shots/nightfall-group.asset.json";
 import hiltonHyland from "@/assets/site-shots/hilton-hyland.asset.json";
 import blueMarineFoundation from "@/assets/site-shots/blue-marine-foundation.asset.json";
+import logoMark from "@/assets/oryntal-mark.asset.json";
 import HeroNeuralAnimation from "@/components/animation/HeroNeuralAnimation";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -578,7 +579,7 @@ function Hero() {
   return (
     <section className="relative border-b border-gold/20 overflow-hidden">
       <div className="absolute inset-0 grid-noise opacity-20" />
-      <HeroNeuralAnimation />
+      <HeroNeuralAnimation logoSrc={assetUrl(logoMark)} />
       <div className="relative mx-auto max-w-7xl px-6 py-24 md:py-32">
         <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">Our work · 2024 – 2026</div>
         <h1 className="font-display text-5xl md:text-7xl max-w-4xl leading-[1.05] projects-hero-title">

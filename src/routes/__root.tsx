@@ -11,9 +11,11 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { assetUrl } from "../lib/asset-url";
 import { Header } from "../components/site/Header";
 import { Footer } from "../components/site/Footer";
 import { LenisProvider } from "../components/animation/LenisProvider";
+import logoMark from "../assets/oryntal-mark.asset.json";
 
 function NotFoundComponent() {
   return (
@@ -95,6 +97,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" },
+      { rel: "icon", type: "image/png", href: assetUrl(logoMark) },
+      { rel: "apple-touch-icon", href: assetUrl(logoMark) },
     ],
   }),
   shellComponent: RootShell,
