@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { assetUrl } from "@/lib/asset-url";
+import logoMark from "@/assets/oryntal-mark.asset.json";
 
 interface ContactHeroAnimationProps {
   prefersReduced?: boolean;
@@ -28,7 +30,7 @@ export function ContactHeroAnimation({ prefersReduced = false }: ContactHeroAnim
   // Preload logo image
   useEffect(() => {
     const img = new Image();
-    img.src = "/__l5e/assets-v1/68a87d50-8df6-4001-bda0-21e644173ce3/oryntal-mark.jpg";
+    img.src = assetUrl(logoMark);
     img.onload = () => {
       logoImgRef.current = img;
       setLogoLoaded(true);
