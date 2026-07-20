@@ -22,7 +22,7 @@ import fullstackImg from "@/assets/telegram-agent.jpg.asset.json";
 import shopifyImg from "@/assets/site-shots/eshopweb-store.asset.json";
 import wordpressImg from "@/assets/site-shots/clou.asset.json";
 import mobileImg from "@/assets/rag-voice.jpg.asset.json";
-import { motion } from "framer-motion";
+
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -116,13 +116,6 @@ const works = [
     tag: "WordPress",
     href: "https://clou.nl/",
   },
-];
-
-const processSteps = [
-  { n: "01", t: "Discovery call", d: "A 30-minute conversation. We ask the specific questions that surface what's actually slow, broken, or expensive in your operation." },
-  { n: "02", t: "Written scope & estimate", d: "You get a fixed scope, a fixed price, and a real timeline within 3 working days — no proposal decks, no sales games." },
-  { n: "03", t: "Build in the open", d: "Weekly demos, a shared Notion, and access to staging from day one. You see the work take shape, not just the invoice." },
-  { n: "04", t: "Ship & hand over", d: "We deploy to production, hand over clean code and documentation, and stay on call for two weeks while your team gets comfortable." },
 ];
 
 const faqs = [
@@ -631,144 +624,9 @@ const serviceCards = [
       </svg>
     ),
   },
-  {
-    title: "Mobile Apps",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-8 h-8">
-        <rect x="5" y="2" width="14" height="20" rx="2" ry="2" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M12 18h.01" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    ),
-  },
-];
-
-// Phone-frame card dimensions - increased by 73% height, 30% width + 30% more
-const CARD_WIDTH = 169;   // 130 * 1.3 = 169
-const CARD_HEIGHT = 311;  // 180 * 1.73 = 311
-const CARD_RADIUS = 28;
-
-// Orbit radius - large enough to clear center text block
-const ORBIT_RADIUS_DESKTOP = 440;
-const ORBIT_RADIUS_TABLET = 380;
-
-// 3D Carousel - cards orbit around tilted Y-axis (cylinder at 45 degrees)
-const CARDS_COUNT = 6;
-const ANGLE_STEP = 360 / CARDS_COUNT; // 60 degrees
-const ORBIT_TILT = 45; // degrees - tilt the orbit axis
-
-function GlassCard({ index, service, prefersReduced, isMobile, radius, initialAngle, rotationRef, floatOffset, orbitRotation }) {
-  const currentOrbitAngle = rotationRef.current || 0;
-  const cardAngle = initialAngle + currentOrbitAngle;
-  
-  // Float animation - independent per card
-  const floatY = prefersReduced ? 0 : Math.sin((Date.now() * 0.001 + floatOffset) * 1.8) * 6;
-
-  if (isMobile) {
-    return (
-      <motion.div
-        className="relative flex flex-col items-center p-5 min-w-[160px] max-w-[180px] bg-white/5 backdrop-blur-xl border border-white/10 rounded-[32px] shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all duration-300 hover:scale-105 hover:border-gold/30 hover:shadow-[0_12px_40px_rgba(201,162,75,0.15)]"
-        initial={{ opacity: 0, y: 30, scale: 0.9 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.6, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
-        whileHover={{ scale: 1.05, y: -4 }}
-        style={{ width: CARD_WIDTH, height: CARD_HEIGHT }}
-      >
-        <div className="flex flex-col items-center h-full justify-start pt-6">
-          <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center mb-3 text-gold">
-            {service.icon}
-          </div>
-          <span className="font-display text-sm text-center text-foreground leading-snug px-2">{service.title}</span>
-        </div>
-      </motion.div>
-    );
-  }
-
-  // Each card's position on the tilted cylinder
-  // Cards are placed at 60-degree intervals around the cylinder
-  const cardRotationY = -initialAngle; // Face inward toward center
-  
-  return (
-    <motion.div
-      style={{
-        position: 'absolute',
-        left: '50%',
-        top: '50%',
-        transform: `translate(-50%, -50%) translateX(${Math.sin(initialAngle * Math.PI / 180) * radius}px) translateZ(${Math.cos(initialAngle * Math.PI / 180) * radius}px) rotateY(${cardRotationY}deg)`,
-        transformOrigin: 'center center',
-        willChange: 'transform',
-        width: CARD_WIDTH,
-        height: CARD_HEIGHT,
-      }}
-      initial={{ opacity: 0, scale: 0.8, rotateY: cardRotationY - 180 }}
-      animate={{ opacity: 1, scale: 1, rotateY: cardRotationY }}
-      transition={{ duration: 0.8, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
-      className="relative flex flex-col items-center p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-[32px] shadow-[0_8px_32px_rgba(0,0,0,0.4)] pointer-events-auto"
-      whileHover={{ scale: 1.06, zIndex: 10 }}
-    >
-      <div className="flex flex-col items-center h-full justify-start pt-8">
-        <div className="w-18 h-18 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center mb-4 text-gold">
-          {service.icon}
-        </div>
-        <span className="font-display text-sm text-center text-foreground leading-snug px-3">{service.title}</span>
-      </div>
-    </motion.div>
-  );
-}
-
-// Fan carousel panel data
-const fanPanels = [
-  {
-    id: 'ai',
-    title: 'AI Engineering',
-    rotation: -20,
-    heightPercent: 0.85,
-    zIndex: 20,
-    image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=600&fit=crop',
-    color: 'from-purple-600/30 via-purple-900/20 to-transparent',
-  },
-  {
-    id: 'automation',
-    title: 'Automation',
-    rotation: -35,
-    heightPercent: 0.7,
-    zIndex: 10,
-    image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&h=600&fit=crop',
-    color: 'from-blue-600/30 via-blue-900/20 to-transparent',
-  },
-  {
-    id: 'center',
-    title: 'Full-Stack',
-    rotation: 0,
-    heightPercent: 1,
-    zIndex: 30,
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=1200&fit=crop',
-    color: 'from-emerald-600/30 via-emerald-900/20 to-transparent',
-    isPhoneFrame: true,
-  },
-  {
-    id: 'shopify',
-    title: 'Shopify',
-    rotation: 35,
-    heightPercent: 0.7,
-    zIndex: 10,
-    image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop',
-    color: 'from-pink-600/30 via-pink-900/20 to-transparent',
-  },
-  {
-    id: 'wordpress',
-    title: 'WordPress',
-    rotation: 20,
-    heightPercent: 0.85,
-    zIndex: 20,
-    image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=600&fit=crop',
-    color: 'from-orange-600/30 via-orange-900/20 to-transparent',
-  },
 ];
 
 function PhoneNotch({ className = '' }) {
-  return (
-    <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-24 h-4 md:w-32 md:h-5 bg-black/80 rounded-b-[20px] ${className}`} />
-  );
 }
 
 // Phone-frame marquee — auto-scrolling infinite horizontal loop with coverflow effect
@@ -1041,20 +899,16 @@ function AnimatedStats({ prefersReduced }: { prefersReduced: boolean }) {
     </div>
   );
 }
-  // Hero function - properly wrapped
+// Hero function - properly wrapped
   function Hero({ capabilityIndex, prefersReduced }: { capabilityIndex: number; prefersReduced: boolean }) {
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
   const heroSubtitleRef = useRef<HTMLParagraphElement>(null);
   const heroCtaRef = useRef<HTMLDivElement>(null);
-  const orbitRef = useRef<HTMLDivElement>(null);
-  const rotationRef = useRef(0);
   const [isMobile, setIsMobile] = useState(false);
-  const [isTablet, setIsTablet] = useState(false);
 
   useEffect(() => {
     const checkScreen = () => {
       setIsMobile(window.innerWidth < 768);
-      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
     };
     checkScreen();
     window.addEventListener('resize', checkScreen);
@@ -1101,31 +955,6 @@ function AnimatedStats({ prefersReduced }: { prefersReduced: boolean }) {
     return () => ctx.revert();
   }, [prefersReduced]);
 
-  // Continuous 3D tilted-axis orbit rotation
-  useEffect(() => {
-    if (prefersReduced || isMobile) return;
-
-    let animationId: number;
-    const startTime = Date.now();
-
-    const animate = () => {
-      const elapsed = (Date.now() - startTime) / 1000;
-      rotationRef.current = (elapsed / 80) * 360; // 80s per full rotation
-      if (orbitRef.current) {
-        // Rotate around tilted axis: tilt 45deg on X, then rotate on Z
-        orbitRef.current.style.transform = `rotateX(${ORBIT_TILT}deg) rotateZ(${rotationRef.current}deg)`;
-      }
-      animationId = requestAnimationFrame(animate);
-    };
-
-    animate();
-    return () => cancelAnimationFrame(animationId);
-  }, [prefersReduced, isMobile]);
-
-  const radius = isMobile ? 0 : (isTablet ? ORBIT_RADIUS_TABLET : ORBIT_RADIUS_DESKTOP);
-  const centerX = 0;
-  const centerY = 0;
-
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{ background: '#0A0A0A' }}>
       {/* Rich gradient background */}
@@ -1140,7 +969,7 @@ function AnimatedStats({ prefersReduced }: { prefersReduced: boolean }) {
       }} />
       <div className="absolute inset-0 grid-noise opacity-20" />
 
-<div className="relative z-10 flex flex-col items-center justify-center min-h-screen w-full px-6">
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen w-full px-6">
         {/* Center text block */}
         <div className="text-center z-20 max-w-3xl">
           <div className="flex items-center justify-center gap-3 mb-8 hero-logo">
@@ -1176,55 +1005,11 @@ function AnimatedStats({ prefersReduced }: { prefersReduced: boolean }) {
           </div>
         </div>
 
-        {/* 3D Y-axis orbital carousel */}
-        <div ref={orbitRef} className="relative w-full h-[700px] md:h-[780px] lg:h-[850px] -mt-24 md:-mt-28 lg:-mt-32 flex items-center justify-center pointer-events-none" style={{ position: 'relative', perspective: '1200px' }}>
-          {!isMobile && serviceCards.map((service, i) => {
-            const initialAngle = i * ANGLE_STEP; // 0, 60, 120, 180, 240, 300
-            const floatOffset = i * 0.5;
-            return (
-              <GlassCard
-                key={i}
-                index={i}
-                service={service}
-                prefersReduced={prefersReduced}
-                isMobile={isMobile}
-                centerX={centerX}
-                centerY={centerY}
-                radius={radius}
-                initialAngle={initialAngle}
-                rotationRef={rotationRef}
-                floatOffset={floatOffset}
-                orbitRotation={rotationRef.current}
-              />
-            );
-          })}
-          {isMobile && (
-            <div className="flex gap-4 p-4 md:gap-6 pointer-events-auto max-w-5xl overflow-x-auto pb-4 flex-nowrap" style={{ scrollbarWidth: 'none' }}>
-              {serviceCards.map((service, i) => (
-                <GlassCard
-                  key={i}
-                  index={i}
-                  service={service}
-                  prefersReduced={prefersReduced}
-                  isMobile={true}
-                  centerX={0}
-                  centerY={0}
-                  radius={0}
-                  initialAngle={0}
-                  rotationRef={rotationRef}
-                  floatOffset={0}
-                  orbitRotation={0}
-                />
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-float-gentle z-20">
-        <div className="flex flex-col items-center gap-2 text-xs text-muted-foreground">
-          <span className="uppercase tracking-widest">Scroll</span>
-          <svg className="w-5 h-5 text-gold/50 animate-float-gentle" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-float-gentle z-20">
+          <div className="flex flex-col items-center gap-2 text-xs text-muted-foreground">
+            <span className="uppercase tracking-widest">Scroll</span>
+            <svg className="w-5 h-5 text-gold/50 animate-float-gentle" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
+          </div>
         </div>
       </div>
     </section>
