@@ -13,6 +13,15 @@ import whatsappRag from "@/assets/whatsapp-rag.jpg.asset.json";
 import eshopwebStore from "@/assets/site-shots/eshopweb-store.asset.json";
 import theKaftanCompany from "@/assets/site-shots/the-kaftan-company.asset.json";
 import clouShot from "@/assets/site-shots/clou.asset.json";
+import annaJanelle from "@/assets/site-shots/anna-janelle-jewelry.asset.json";
+import vanSeatCovers from "@/assets/site-shots/van-seat-covers-uk.asset.json";
+import bonusBank from "@/assets/site-shots/bonus-bank.asset.json";
+import aiEngineeringImg from "@/assets/ai-sos.png.asset.json";
+import automationImg from "@/assets/linkedin-automation.jpg.asset.json";
+import fullstackImg from "@/assets/telegram-agent.jpg.asset.json";
+import shopifyImg from "@/assets/site-shots/eshopweb-store.asset.json";
+import wordpressImg from "@/assets/site-shots/clou.asset.json";
+import mobileImg from "@/assets/rag-voice.jpg.asset.json";
 import { motion } from "framer-motion";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -782,32 +791,32 @@ function InfinityLoopCarousel({ prefersReduced }) {
     {
       id: 'ai',
       title: 'AI Engineering',
-      image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=1200&fit=crop',
+      image: assetUrl(aiEngineeringImg),
     },
     {
       id: 'automation',
       title: 'Automation',
-      image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&h=1200&fit=crop',
+      image: assetUrl(automationImg),
     },
     {
       id: 'fullstack',
       title: 'Full-Stack Web',
-      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=1200&fit=crop',
+      image: assetUrl(fullstackImg),
     },
     {
       id: 'shopify',
       title: 'Shopify',
-      image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=1200&fit=crop',
+      image: assetUrl(shopifyImg),
     },
     {
       id: 'wordpress',
       title: 'WordPress & WooCommerce',
-      image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=1200&fit=crop',
+      image: assetUrl(wordpressImg),
     },
     {
       id: 'mobile',
       title: 'Mobile Apps',
-      image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=1200&fit=crop',
+      image: assetUrl(mobileImg),
     },
   ];
 
