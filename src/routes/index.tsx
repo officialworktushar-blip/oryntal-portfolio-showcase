@@ -762,57 +762,46 @@ function PhoneNotch({ className = '' }) {
   );
 }
 
-// Infinity Loop Carousel — horizontal infinite scroll with cursor effect
+// Phone-frame marquee — auto-scrolling infinite horizontal loop
 function InfinityLoopCarousel({ prefersReduced }) {
   const carouselRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
-  const [scrollX, setScrollX] = useState(0);
-  const [velocity, setVelocity] = useState(0);
-  const lastTimeRef = useRef(Date.now());
-  const lastScrollRef = useRef(0);
+  const [isPaused, setIsPaused] = useState(false);
   const animationRef = useRef(null);
-  const isDraggingRef = useRef(false);
-  const startXRef = useRef(0);
-  const startScrollRef = useRef(0);
+  const startTimeRef = useRef(0);
 
-  // Services data matching the 6 services
-  const carouselServices = [
+  // Services data - 6 distinct frames for the marquee
+  const marqueeFrames = [
     {
       id: 'ai',
       title: 'AI Engineering',
       image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=1200&fit=crop',
-      color: 'from-purple-600/30 via-purple-900/20 to-transparent',
     },
     {
       id: 'automation',
       title: 'Automation',
       image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&h=1200&fit=crop',
-      color: 'from-blue-600/30 via-blue-900/20 to-transparent',
     },
     {
       id: 'fullstack',
       title: 'Full-Stack Web',
       image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=1200&fit=crop',
-      color: 'from-emerald-600/30 via-emerald-900/20 to-transparent',
     },
     {
       id: 'shopify',
       title: 'Shopify',
       image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=1200&fit=crop',
-      color: 'from-pink-600/30 via-pink-900/20 to-transparent',
     },
     {
       id: 'wordpress',
       title: 'WordPress & WooCommerce',
       image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=1200&fit=crop',
-      color: 'from-orange-600/30 via-orange-900/20 to-transparent',
     },
     {
       id: 'mobile',
       title: 'Mobile Apps',
       image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=1200&fit=crop',
-      color: 'from-cyan-600/30 via-cyan-900/20 to-transparent',
     },
   ];
 
@@ -826,133 +815,67 @@ function InfinityLoopCarousel({ prefersReduced }) {
     return () => window.removeEventListener('resize', checkScreen);
   }, []);
 
-  // Mouse wheel / trackpad scroll handler
-  const handleWheel = (e) => {
-    if (prefersReduced) return;
-    e.preventDefault();
-    
-    const carousel = carouselRef.current;
-    if (!carousel) return;
-    
-    const delta = e.deltaY * 1.5; // Adjust scroll speed
-    carousel.scrollLeft += delta;
-    
-    // Infinite loop: jump to start when reaching end of second half, or to end when at start
-    const scrollWidth = carousel.scrollWidth;
-    const clientWidth = carousel.clientWidth;
-    const maxScroll = scrollWidth - clientWidth;
-    const halfScroll = scrollWidth / 2; // halfway point (where duplicate starts)
-    
-    if (carousel.scrollLeft >= halfScroll) {
-      // Jump to equivalent position in first half
-      carousel.scrollLeft = carousel.scrollLeft - halfScroll;
-    } else if (carousel.scrollLeft <= 0) {
-      // Jump to equivalent position in second half
-      carousel.scrollLeft = carousel.scrollLeft + halfScroll;
-    }
-    
-    // Update velocity for momentum
-    const now = Date.now();
-    const deltaTime = now - lastTimeRef.current;
-    const deltaScroll = carousel.scrollLeft - lastScrollRef.current;
-    if (deltaTime > 0) {
-      setVelocity(deltaScroll / deltaTime * 16); // pixels per frame
-    }
-    lastTimeRef.current = now;
-    lastScrollRef.current = carousel.scrollLeft;
-  };
-
-  // Momentum scrolling animation
+  // Auto-scroll animation using CSS transform
   useEffect(() => {
     if (prefersReduced) return;
+
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    const track = carousel.querySelector('.marquee-track');
+    if (!track) return;
+
+    // Calculate total width of one set of frames
+    const frameWidth = isMobile ? 180 : 200;
+    const gap = 24; // gap-6 = 24px
+    const frameCount = marqueeFrames.length;
+    const singleSetWidth = frameCount * (frameWidth + gap);
     
-    const animate = () => {
-      const carousel = carouselRef.current;
-      if (!carousel || isDraggingRef.current) {
+    // Duration for one full loop of duplicated set (30-40 seconds)
+    const loopDuration = 35000; // 35 seconds
+
+    let startTime = performance.now();
+    let animationId;
+
+    const animate = (currentTime) => {
+      if (isPaused) {
+        startTimeRef.current = currentTime;
         animationRef.current = requestAnimationFrame(animate);
         return;
       }
+
+      const elapsed = currentTime - startTime;
+      const progress = (elapsed % loopDuration) / loopDuration;
+      const totalWidth = marqueeFrames.length * (isMobile ? 200 : 220) + marqueeFrames.length * 24; // width of one set
+      const translateX = -(progress * totalWidth); // move from 0 to -totalWidth
       
-      if (Math.abs(velocity) > 0.5) {
-        carousel.scrollLeft += velocity;
-        setVelocity(v => v * 0.96); // friction
-        
-        // Infinite loop wrap for momentum
-        const scrollWidth = carousel.scrollWidth;
-        const clientWidth = carousel.clientWidth;
-        const halfScroll = scrollWidth / 2;
-        
-        if (carousel.scrollLeft >= halfScroll) {
-          carousel.scrollLeft -= halfScroll;
-        } else if (carousel.scrollLeft <= 0) {
-          carousel.scrollLeft += halfScroll;
-        }
-      } else {
-        setVelocity(0);
-      }
+      track.style.transform = `translateX(${translateX}px)`;
+      
       animationRef.current = requestAnimationFrame(animate);
     };
+
+    startTimeRef.current = performance.now();
     animationRef.current = requestAnimationFrame(animate);
-    
+
     return () => cancelAnimationFrame(animationRef.current);
-  }, [velocity]);
+  }, [prefersReduced, isMobile]);
 
-  // Touch/drag handlers
-  const handleMouseDown = (e) => {
-    if (prefersReduced) return;
-    isDraggingRef.current = true;
-    startXRef.current = e.clientX;
-    startScrollRef.current = carouselRef.current?.scrollLeft || 0;
-    carouselRef.current?.style.setProperty('cursor', 'grabbing');
-  };
-
-  const handleMouseMove = (e) => {
-    if (!isDraggingRef.current || prefersReduced) return;
-    const carousel = carouselRef.current;
-    if (!carousel) return;
-    const delta = e.clientX - startXRef.current;
-    carousel.scrollLeft = startScrollRef.current - delta;
-    
-    // Infinite loop wrap during drag
-    const scrollWidth = carousel.scrollWidth;
-    const halfScroll = scrollWidth / 2;
-    
-    if (carousel.scrollLeft >= halfScroll) {
-      carousel.scrollLeft -= halfScroll;
-      startScrollRef.current -= halfScroll;
-    } else if (carousel.scrollLeft <= 0) {
-      carousel.scrollLeft += halfScroll;
-      startScrollRef.current += halfScroll;
-    }
-  };
-
-  const handleMouseUp = () => {
-    isDraggingRef.current = false;
-    carouselRef.current?.style.removeProperty('cursor');
-  };
-
-  // Keyboard navigation
-  const handleKeyDown = (e) => {
-    if (prefersReduced) return;
-    const carousel = carouselRef.current;
-    if (!carousel) return;
-    
-    const scrollAmount = 400;
-    if (e.key === 'ArrowLeft') {
-      e.preventDefault();
-      carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-    } else if (e.key === 'ArrowRight') {
-      e.preventDefault();
-      carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    }
-  };
+  useEffect(() => {
+    const checkScreen = () => {
+      setIsMobile(window.innerWidth < 768);
+      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
+    };
+    checkScreen();
+    window.addEventListener('resize', checkScreen);
+    return () => window.removeEventListener('resize', checkScreen);
+  }, []);
 
   // Entrance animation
   useEffect(() => {
     if (prefersReduced) return;
 
     const ctx = gsap.context(() => {
-      gsap.fromTo('.infinity-frame',
+      gsap.fromTo('.marquee-frame',
         { y: 40, opacity: 0 },
         {
           y: 0,
@@ -973,80 +896,69 @@ function InfinityLoopCarousel({ prefersReduced }) {
   }, [prefersReduced]);
 
   // Frame dimensions
-  const frameWidth = 220;
-  const frameHeight = 440;
+  const frameWidth = isMobile ? 180 : 220;
+  const frameHeight = isMobile ? 300 : 340;
 
   // Render 2x the items for infinite loop
-  const items = [...carouselServices, ...carouselServices];
+  const items = [...marqueeFrames, ...marqueeFrames];
 
   return (
-    <section className="relative py-16 px-6" aria-label="Service showcase carousel">
-      <div className="relative mx-auto max-w-7xl">
-        <div className="text-center mb-10">
-          <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-2">What we do</div>
-          <h2 className="font-display text-3xl md:text-5xl leading-tight">
-            Six disciplines. <span className="text-gold italic gradient-text-clamp">One loop.</span>
-          </h2>
-        </div>
-
+    <section className="relative py-12 w-full overflow-hidden" aria-label="Service showcase marquee" style={{ background: 'transparent' }}>
+      {/* No container max-width - full viewport width */}
+      <div 
+        ref={carouselRef}
+        className="relative w-full overflow-hidden"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+        role="region"
+        aria-label="Service showcase marquee"
+      >
+        {/* Gradient fade edges */}
+        <div className="absolute left-0 top-0 bottom-0 w-48 bg-gradient-to-r from-background via-background/80 to-transparent pointer-events-none z-10" />
+        <div className="absolute right-0 top-0 bottom-0 w-48 bg-gradient-to-l from-background via-background/80 to-transparent pointer-events-none z-10" />
+        
         <div 
-          ref={carouselRef}
-          className="relative overflow-hidden"
-          onWheel={handleWheel}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}
-          onKeyDown={handleKeyDown}
-          tabIndex={0}
-          role="region"
-          aria-label="Service showcase carousel"
-          style={{ scrollBehavior: 'auto' }}
+          className="marquee-track flex gap-6 pb-8" 
+          style={{ 
+            minWidth: 'max-content',
+            willChange: 'transform',
+          }}
         >
-          <div 
-            className="flex gap-6 md:gap-8 pb-8" 
-            style={{ minWidth: 'max-content' }}
-          >
-            {items.map((service, i) => (
-              <div
-                key={`${service.id}-${i}`}
-                className="infinity-frame flex-shrink-0 flex flex-col items-center"
-                style={{ width: isMobile ? 200 : frameWidth }}
+          {marqueeFrames.map((frame, i) => (
+            <div
+              key={frame.id}
+              className="marquee-frame flex-shrink-0 flex flex-col items-center"
+              style={{ width: isMobile ? 180 : 220 }}
+            >
+              {/* Phone frame */}
+              <div 
+                className="relative flex flex-col items-center pointer-events-auto"
+                style={{ width: isMobile ? 180 : 220, height: isMobile ? 300 : 340 }}
               >
                 {/* Phone frame */}
-                <div 
-                  className="relative flex flex-col items-center pointer-events-auto"
-                  style={{ width: isMobile ? 200 : 220, height: isMobile ? 400 : frameHeight }}
+                <div
+                  className="relative w-full h-full overflow-hidden rounded-[32px] bg-black border-4 border-gray-800 shadow-[0_20px_60px_rgba(0,0,0,0.6),0_0_0_2px_rgba(201,162,75,0.3),inset_0_0_0_10px_rgba(0,0,0,0.5)]"
+                  style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.6), 0 0 0 2px rgba(201,162,75,0.3), inset 0 0 0 10px rgba(0,0,0,0.5)' }}
                 >
-                  {/* Phone frame */}
-                  <div
-                    className="relative w-full h-full overflow-hidden rounded-[40px] bg-black border-4 border-gray-800 shadow-[0_20px_60px_rgba(0,0,0,0.6),0_0_0_2px_rgba(201,162,75,0.3),inset_0_0_0_10px_rgba(0,0,0,0.5)]"
-                    style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.6), 0 0 0 2px rgba(201,162,75,0.3), inset 0 0 0 10px rgba(0,0,0,0.5)' }}
-                  >
-                    {/* Notch */}
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-4 md:w-32 md:h-5 bg-black/80 rounded-b-[20px]" />
-                    
-                    {/* Screen content */}
-                    <div className="absolute inset-[14px] overflow-hidden rounded-[26px]">
-                      <img
-                        src={carouselServices[i % carouselServices.length].image}
-                        alt={carouselServices[i % carouselServices.length].title}
-                        loading="lazy"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
+                  {/* Notch */}
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-4 md:w-32 md:h-5 bg-black/80 rounded-b-[20px]" />
+                  
+                  {/* Screen content */}
+                  <div className="absolute inset-[14px] overflow-hidden rounded-[26px]">
+                    <img
+                      src={frame.image}
+                      alt={frame.title}
+                      loading="lazy"
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                 </div>
-                
-                <span className="mt-4 font-display text-sm text-center text-foreground">{carouselServices[i % carouselServices.length].title}</span>
               </div>
-            ))}
-          </div>
+              
+              <span className="mt-3 font-display text-sm text-center text-foreground">{frame.title}</span>
+            </div>
+          ))}
         </div>
-        
-        {/* Gradient fade edges */}
-        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background via-background/80 to-transparent pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background via-background/80 to-transparent pointer-events-none" />
       </div>
     </section>
   );
@@ -1183,9 +1095,6 @@ function InfinityLoopCarousel({ prefersReduced }) {
             </Link>
           </div>
         </div>
-
-        {/* Infinity Loop Carousel — horizontal scroll with cursor effect */}
-        <InfinityLoopCarousel prefersReduced={prefersReduced} />
 
         {/* 3D Y-axis orbital carousel */}
         <div ref={orbitRef} className="relative w-full h-[700px] md:h-[780px] lg:h-[850px] -mt-24 md:-mt-28 lg:-mt-32 flex items-center justify-center pointer-events-none" style={{ position: 'relative', perspective: '1200px' }}>
