@@ -970,12 +970,12 @@ function InfinityLoopCarousel({ prefersReduced }) {
             <div
               key={frame.id}
               className="marquee-frame flex-shrink-0 flex flex-col items-center"
-              style={{ width: isMobile ? '72vw' : '30vw', minWidth: isMobile ? 224 : 320, maxWidth: isMobile ? '80vw' : 420 }}
+              style={{ width: isMobile ? '50vw' : '21vw', minWidth: isMobile ? 157 : 224, maxWidth: isMobile ? '56vw' : 294 }}
             >
               {/* Phone frame */}
               <div 
                 className="relative flex flex-col items-center pointer-events-auto w-full"
-                style={{ aspectRatio: '9/16', transform: isMobile ? 'scale(0.7)' : 'none', transformOrigin: 'center top' }}
+                style={{ aspectRatio: '5/6', transform: isMobile ? 'scale(0.7)' : 'none', transformOrigin: 'center top' }}
               >
                 {/* Phone frame */}
                 <div
