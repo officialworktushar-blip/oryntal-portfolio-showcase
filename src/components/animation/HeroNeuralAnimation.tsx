@@ -228,7 +228,7 @@ export function HeroNeuralAnimation({ logoSrc }: HeroNeuralAnimationProps) {
         ))}
 
         {/* Oryntal logo at convergence point */}
-        <g className="logo-frame" transform={`translate(${dimensions.width * 0.78}, ${dimensions.height / 2 - dimensions.height * 0.25})`}>
+        <g className="logo-frame" transform={`translate(${dimensions.width * 0.60}, ${dimensions.height / 2 - dimensions.height * 0.25})`}>
           {/* Outer glow ring */}
           <circle
             className="logo-glow-ring"
@@ -331,6 +331,15 @@ export function HeroNeuralAnimation({ logoSrc }: HeroNeuralAnimationProps) {
             r: 1.5;
             opacity: 0;
             filter: drop-shadow(0 0 2px #C9A24B);
+          }
+        }
+
+        @keyframes logo-float {
+          0%, 100% {
+            transform: translateY(0) scale(1);
+          }
+          50% {
+            transform: translateY(-4px) scale(1.02);
           }
         }
 
