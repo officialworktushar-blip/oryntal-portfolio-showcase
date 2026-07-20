@@ -862,10 +862,9 @@ function InfinityLoopCarousel({ prefersReduced }) {
 
     let startTime = performance.now();
     let animationId;
-    let isPausedRef = false;
 
     const animate = (currentTime) => {
-      if (isPaused) {
+      if (isPausedRef.current) {
         startTime = currentTime;
         animationId = requestAnimationFrame(animate);
         return;
@@ -883,7 +882,7 @@ function InfinityLoopCarousel({ prefersReduced }) {
     animationId = requestAnimationFrame(animate);
 
     return () => cancelAnimationFrame(animationId);
-  }, [prefersReduced, isMobile, isTablet]);
+  }, [prefersReduced]);
 
   // Render 2x the items for infinite loop
   const items = [...marqueeFrames, ...marqueeFrames];
