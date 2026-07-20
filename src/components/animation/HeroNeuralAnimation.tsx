@@ -13,14 +13,14 @@ function generateWirePath(
   time: number = 0
 ): string {
   const startX = 0;
-  const endX = width;
+  const endX = width * 0.82; // Stop before the head frame
   const centerY = height / 2;
   const spread = height * 0.45;
   const startY = centerY - spread + (spread * 2 * index) / (total - 1);
 
   const midX1 = width * 0.25;
-  const midX2 = width * 0.55;
-  const midX3 = width * 0.75;
+  const midX2 = width * 0.5;
+  const midX3 = width * 0.7;
 
   const amplitude = height * 0.06;
   const frequency = 0.015;
@@ -30,9 +30,13 @@ function generateWirePath(
   const y3 = centerY + Math.sin(time * 0.001 + index + 2) * amplitude;
   const y4 = centerY + Math.sin(time * 0.001 + index + 3) * amplitude * 0.8;
 
+  // All wires converge to center-right where head will be
+  const headCenterX = width * 0.85;
+  const headCenterY = centerY;
+
   return `M ${startX} ${startY}
           C ${midX1} ${y1}, ${midX2} ${y2}, ${midX3} ${y3}
-          C ${width * 0.88} ${y4}, ${width * 0.94} ${centerY}, ${endX} ${centerY}`;
+          C ${width * 0.78} ${y4}, ${headCenterX - 20} ${headCenterY}, ${endX} ${centerY}`;
 }
 
 function generateWirePaths(width: number, height: number, time: number): string[] {
@@ -168,12 +172,18 @@ export function HeroNeuralAnimation() {
             <stop offset="100%" stopColor="#ffffff" />
           </linearGradient>
 
-          <radialGradient id="nodeGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#ffffff" stopOpacity={1} />
-            <stop offset="30%" stopColor="#D9B87A" stopOpacity={0.8} />
-            <stop offset="70%" stopColor="#C9A24B" stopOpacity={0.3} />
-            <stop offset="100%" stopColor="#C9A24B" stopOpacity={0} />
+          <radialGradient id="headGlowGradient" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="rgba(201, 162, 75, 0)" />
+            <stop offset="40%" stopColor="rgba(217, 184, 122, 0.2)" />
+            <stop offset="70%" stopColor="rgba(201, 162, 75, 0.4)" />
+            <stop offset="100%" stopColor="rgba(201, 162, 75, 0)" />
           </radialGradient>
+
+          <linearGradient id="headGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="rgba(201, 162, 75, 0.1)" />
+            <stop offset="50%" stopColor="rgba(217, 184, 122, 0.08)" />
+            <stop offset="100%" stopColor="rgba(201, 162, 75, 0.05)" />
+          </linearGradient>
 
           <filter id="glowBlur">
             <feGaussianBlur stdDeviation="4" result="blur" />
@@ -209,28 +219,118 @@ export function HeroNeuralAnimation() {
           />
         ))}
 
-        <circle
-          className="convergence-node"
-          cx={dimensions.width}
-          cy={dimensions.height / 2}
-          r={10}
-          fill="url(#nodeGlow)"
-          filter="url(#glowBlur)"
-          style={{
-            animation: prefersReduced ? "none" : "pulse-node 3s ease-in-out infinite",
-          }}
-        />
-
-        <circle
-          className="convergence-core"
-          cx={dimensions.width}
-          cy={dimensions.height / 2}
-          r={3}
-          fill="#ffffff"
-          style={{
-            animation: prefersReduced ? "none" : "pulse-core 2s ease-in-out infinite",
-          }}
-        />
+        {/* Human head silhouette frame - the convergence point */}
+        <g className="head-frame" transform={`translate(${dimensions.width * 0.82}, ${dimensions.height / 2 - dimensions.height * 0.35})`}>
+          {/* Outer glow ring */}
+          <circle
+            className="head-glow-ring"
+            cx={dimensions.width * 0.18}
+            cy={dimensions.height * 0.35}
+            r={dimensions.width * 0.18}
+            fill="none"
+            stroke="url(#headGlowGradient)"
+            strokeWidth={1.5}
+            style={{
+              filter: "url(#glowBlur)",
+              animation: prefersReduced ? "none" : "head-ring-pulse 4s ease-in-out infinite",
+            }}
+          />
+          
+          {/* Head silhouette - profile view */}
+          <path
+            className="head-silhouette"
+            d={`M ${dimensions.width * 0.02} ${dimensions.height * 0.15}
+               Q ${dimensions.width * 0.01} ${dimensions.height * 0.08} ${dimensions.width * 0.06} ${dimensions.height * 0.03}
+               Q ${dimensions.width * 0.12} ${dimensions.height * 0.01} ${dimensions.width * 0.2} ${dimensions.height * 0.03}
+               Q ${dimensions.width * 0.28} ${dimensions.height * 0.01} ${dimensions.width * 0.34} ${dimensions.height * 0.08}
+               Q ${dimensions.width * 0.38} ${dimensions.height * 0.01} ${dimensions.width * 0.42} ${dimensions.height * 0.03}
+               Q ${dimensions.width * 0.5} ${dimensions.height * 0.01} ${dimensions.width * 0.52} ${dimensions.height * 0.08}
+               Q ${dimensions.width * 0.58} ${dimensions.height * 0.01} ${dimensions.width * 0.64} ${dimensions.height * 0.05}
+               Q ${dimensions.width * 0.7} ${dimensions.height * 0.1} ${dimensions.width * 0.72} ${dimensions.height * 0.2}
+               Q ${dimensions.width * 0.74} ${dimensions.height * 0.3} ${dimensions.width * 0.72} ${dimensions.height * 0.4}
+               Q ${dimensions.width * 0.74} ${dimensions.height * 0.5} ${dimensions.width * 0.72} ${dimensions.height * 0.55}
+               Q ${dimensions.width * 0.7} ${dimensions.height * 0.6} ${dimensions.width * 0.65} ${dimensions.height * 0.65}
+               Q ${dimensions.width * 0.6} ${dimensions.height * 0.7} ${dimensions.width * 0.55} ${dimensions.height * 0.72}
+               Q ${dimensions.width * 0.45} ${dimensions.height * 0.74} ${dimensions.width * 0.35} ${dimensions.height * 0.72}
+               Q ${dimensions.width * 0.25} ${dimensions.height * 0.7} ${dimensions.width * 0.2} ${dimensions.height * 0.65}
+               Q ${dimensions.width * 0.15} ${dimensions.height * 0.6} ${dimensions.width * 0.12} ${dimensions.height * 0.55}
+               Q ${dimensions.width * 0.08} ${dimensions.height * 0.5} ${dimensions.width * 0.1} ${dimensions.height * 0.45}
+               Q ${dimensions.width * 0.05} ${dimensions.height * 0.4} ${dimensions.width * 0.04} ${dimensions.height * 0.35}
+               Q ${dimensions.width * 0.01} ${dimensions.height * 0.3} ${dimensions.width * 0.02} ${dimensions.height * 0.22}
+               Q ${dimensions.width * 0.01} ${dimensions.height * 0.15} ${dimensions.width * 0.02} ${dimensions.height * 0.15}
+               Z`}
+            fill="url(#headGradient)"
+            stroke="#D9B87A"
+            strokeWidth={1}
+            style={{
+              filter: "url(#glowBlur)",
+              opacity: 0.9,
+            }}
+          />
+          
+          {/* Inner neural pattern in head */}
+          <g className="head-neural" style={{ opacity: 0.6 }}>
+            <path
+              d={`M ${dimensions.width * 0.15} ${dimensions.height * 0.25}
+                 Q ${dimensions.width * 0.25} ${dimensions.height * 0.2} ${dimensions.width * 0.35} ${dimensions.height * 0.25}
+                 Q ${dimensions.width * 0.4} ${dimensions.height * 0.3} ${dimensions.width * 0.35} ${dimensions.height * 0.35}`}
+              stroke="#D9B87A"
+              strokeWidth={0.8}
+              fill="none"
+              strokeLinecap="round"
+              style={{
+                filter: "url(#wireGlow)",
+                animation: prefersReduced ? "none" : "neural-pulse 3s ease-in-out infinite",
+              }}
+            />
+            <path
+              d={`M ${dimensions.width * 0.3} ${dimensions.height * 0.35}
+                 Q ${dimensions.width * 0.4} ${dimensions.height * 0.38} ${dimensions.width * 0.45} ${dimensions.height * 0.45}`}
+              stroke="#D9B87A"
+              strokeWidth={0.8}
+              fill="none"
+              strokeLinecap="round"
+              style={{
+                filter: "url(#wireGlow)",
+                animation: prefersReduced ? "none" : "neural-pulse 3s ease-in-out infinite 0.5s",
+              }}
+            />
+            <path
+              d={`M ${dimensions.width * 0.35} ${dimensions.height * 0.45}
+                 Q ${dimensions.width * 0.3} ${dimensions.height * 0.5} ${dimensions.width * 0.25} ${dimensions.height * 0.5}`}
+              stroke="#D9B87A"
+              strokeWidth={0.8}
+              fill="none"
+              strokeLinecap="round"
+              style={{
+                filter: "url(#wireGlow)",
+                animation: prefersReduced ? "none" : "neural-pulse 3s ease-in-out infinite 1s",
+              }}
+            />
+            <path
+              d={`M ${dimensions.width * 0.45} ${dimensions.height * 0.55}
+                 Q ${dimensions.width * 0.5} ${dimensions.height * 0.52} ${dimensions.width * 0.55} ${dimensions.height * 0.5}`}
+              stroke="#D9B87A"
+              strokeWidth={0.8}
+              fill="none"
+              strokeLinecap="round"
+              style={{
+                filter: "url(#wireGlow)",
+                animation: prefersReduced ? "none" : "neural-pulse 3s ease-in-out infinite 1.5s",
+              }}
+            />
+            <circle
+              cx={dimensions.width * 0.52}
+              cy={dimensions.height * 0.45}
+              r={3}
+              fill="#D9B87A"
+              style={{
+                filter: "drop-shadow(0 0 4px #C9A24B) drop-shadow(0 0 8px #C9A24B)",
+                animation: prefersReduced ? "none" : "core-pulse 2s ease-in-out infinite",
+              }}
+            />
+          </g>
+        </g>
 
         {initialPulses.map((pos, i) => (
           <circle
@@ -252,25 +352,40 @@ export function HeroNeuralAnimation() {
       </svg>
 
       <style jsx>{`
-        @keyframes pulse-node {
+        @keyframes head-ring-pulse {
           0%, 100% {
-            r: 10;
-            opacity: 0.6;
+            stroke-width: 1.5;
+            opacity: 0.4;
+            transform: scale(1);
           }
           50% {
-            r: 14;
-            opacity: 1;
+            stroke-width: 2.5;
+            opacity: 0.8;
+            transform: scale(1.05);
           }
         }
 
-        @keyframes pulse-core {
+        @keyframes neural-pulse {
+          0%, 100% {
+            opacity: 0.4;
+            stroke-width: 0.8;
+          }
+          50% {
+            opacity: 1;
+            stroke-width: 1.5;
+          }
+        }
+
+        @keyframes core-pulse {
           0%, 100% {
             r: 3;
-            opacity: 1;
+            opacity: 0.8;
+            filter: drop-shadow(0 0 4px #C9A24B) drop-shadow(0 0 8px #C9A24B);
           }
           50% {
             r: 5;
-            opacity: 0.8;
+            opacity: 1;
+            filter: drop-shadow(0 0 10px #C9A24B) drop-shadow(0 0 20px #C9A24B);
           }
         }
 
@@ -293,8 +408,9 @@ export function HeroNeuralAnimation() {
         }
 
         @media (prefers-reduced-motion: reduce) {
-          .convergence-node,
-          .convergence-core,
+          .head-glow-ring,
+          .head-neural path,
+          .head-neural circle,
           .pulse-dot {
             animation: none !important;
           }
