@@ -319,7 +319,7 @@ export function HeroNeuralAnimation({ logoSrc }: HeroNeuralAnimationProps) {
 
   return (
     <div
-      className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-[45%] max-w-[520px] h-[60vh] max-h-[520px] pointer-events-none"
+      className="hidden md:block relative w-full max-w-[520px] h-[50vh] min-h-[350px] max-h-[520px] pointer-events-none mx-auto"
       style={{ opacity: 0.9 }}
     >
       <svg

@@ -667,21 +667,23 @@ function Hero() {
   return (
     <section className="relative border-b border-gold/20 overflow-hidden">
       <div className="absolute inset-0 grid-noise opacity-20" />
-      <HeroNeuralAnimation logoSrc={assetUrl(logoMark)} />
       <div className="relative mx-auto max-w-7xl px-6 py-24 md:py-32">
-        <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">
-          Our work · 2024 – 2026
+        <HeroNeuralAnimation logoSrc={assetUrl(logoMark)} />
+        <div className="relative max-w-3xl">
+          <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">
+            Our work · 2024 – 2026
+          </div>
+          <h1 className="font-display text-5xl md:text-7xl max-w-4xl leading-[1.05] projects-hero-title">
+            <span className="line block">Real projects.</span>
+            <span className="line block">
+              <span className="text-gold italic gradient-text-clamp">Real live sites.</span>
+            </span>
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg text-muted-foreground projects-hero-subtitle">
+            Browse client work by discipline. Every card links directly to the production site with
+            a real screenshot — no mockups, no stock imagery.
+          </p>
         </div>
-        <h1 className="font-display text-5xl md:text-7xl max-w-4xl leading-[1.05] projects-hero-title">
-          <span className="line block">Real projects.</span>
-          <span className="line block">
-            <span className="text-gold italic gradient-text-clamp">Real live sites.</span>
-          </span>
-        </h1>
-        <p className="mt-6 max-w-2xl text-lg text-muted-foreground projects-hero-subtitle">
-          Browse client work by discipline. Every card links directly to the production site with a
-          real screenshot — no mockups, no stock imagery.
-        </p>
       </div>
     </section>
   );
