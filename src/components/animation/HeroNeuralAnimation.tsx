@@ -314,13 +314,12 @@ export function HeroNeuralAnimation({ logoSrc }: HeroNeuralAnimationProps) {
   const initialPulses = generatePulsePositions(initialPaths, 0);
 
   const isMobile = dimensions.width < 640;
-  const isTablet = dimensions.width >= 640 && dimensions.width < 1024;
 
   if (isMobile) return null;
 
   return (
     <div
-      className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 w-[50%] max-w-[580px] h-[65vh] max-h-[580px] pointer-events-none"
+      className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-[45%] max-w-[520px] h-[60vh] max-h-[520px] pointer-events-none"
       style={{ opacity: 0.9 }}
     >
       <svg
