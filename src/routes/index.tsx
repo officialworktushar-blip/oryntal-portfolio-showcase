@@ -621,8 +621,8 @@ function HomePage() {
     <div ref={scrollRef} className="relative">
       <Hero capabilityIndex={capabilityIndex} prefersReduced={prefersReduced} />
       <TrustedBy />
-      <Services />
       <SelectedWorks />
+      <Services />
       <Differentiators />
       <Process />
       <FAQGrid />
