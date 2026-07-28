@@ -5,7 +5,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState, useMemo, createRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Lenis from "lenis";
 import logoMark from "@/assets/oryntal-mark.asset.json";
 import meet2pro from "@/assets/meet2pro.png.asset.json";
 import qr2review from "@/assets/qr2review.png.asset.json";
@@ -295,7 +294,6 @@ class SplitText {
 }
 
 function HomePage() {
-  const lenisRef = useRef<Lenis | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [capabilityIndex, setCapabilityIndex] = useState(0);
   const [prefersReduced, setPrefersReduced] = useState(false);
@@ -309,28 +307,12 @@ function HomePage() {
   }, []);
 
   useEffect(() => {
-    lenisRef.current = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smooth: true,
-      smoothTouch: false,
-      touchMultiplier: 2,
-    });
-
-    function raf(time: number) {
-      lenisRef.current?.raf(time);
-      ScrollTrigger.update();
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-
     const interval = setInterval(
       () => setCapabilityIndex((p) => (p + 1) % rotatingCapabilities.length),
       3000,
     );
 
     return () => {
-      lenisRef.current?.destroy();
       clearInterval(interval);
       ScrollTrigger.getAll().forEach((t) => t.kill());
     };

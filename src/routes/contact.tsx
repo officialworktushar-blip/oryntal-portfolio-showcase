@@ -4,7 +4,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Lenis from "lenis";
 import ContactHeroAnimation from "@/components/animation/ContactHeroAnimation";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -60,7 +59,6 @@ const services = ["AI", "Automation", "Full Stack", "Shopify", "WordPress", "Mob
 
 function ContactPage() {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const lenisRef = useRef<Lenis | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
   const [budget, setBudget] = useState<string>("");
@@ -118,23 +116,7 @@ function ContactPage() {
   }, []);
 
   useEffect(() => {
-    lenisRef.current = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smooth: true,
-      smoothTouch: false,
-      touchMultiplier: 2,
-    });
-
-    function raf(time: number) {
-      lenisRef.current?.raf(time);
-      ScrollTrigger.update();
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-
     return () => {
-      lenisRef.current?.destroy();
       ScrollTrigger.getAll().forEach((t) => t.kill());
     };
   }, []);

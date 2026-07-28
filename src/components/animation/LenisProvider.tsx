@@ -2,6 +2,10 @@
 
 import { useEffect, useRef, createContext, useContext, ReactNode } from "react";
 import Lenis from "lenis";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface LenisContextType {
   lenis: Lenis | null;
@@ -33,6 +37,7 @@ export function LenisProvider({ children, options = {} }: LenisProviderProps) {
 
     function raf(time: number) {
       lenisRef.current?.raf(time);
+      ScrollTrigger.update();
       requestAnimationFrame(raf);
     }
     requestAnimationFrame(raf);

@@ -60,11 +60,13 @@ export function Header() {
               key={l.to}
               to={l.to}
               activeOptions={{ exact: true }}
-              activeProps={{ className: "text-gold relative" }}
-              inactiveProps={{
-                className: "text-muted-foreground hover:text-gold transition-colors duration-300",
-              }}
-              className="relative text-sm tracking-wider uppercase transition-colors duration-300 animate-fade-in-down"
+              className={({ isActive }) =>
+                `relative text-sm tracking-wider uppercase transition-colors duration-300 animate-fade-in-down ${
+                  isActive
+                    ? "text-gold"
+                    : "text-muted-foreground hover:text-gold"
+                }`
+              }
               style={{ animationDelay: `${100 + idx * 50}ms` }}
             >
               {l.label}

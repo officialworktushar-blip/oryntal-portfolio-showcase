@@ -5,7 +5,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Lenis from "lenis";
 import meet2pro from "@/assets/meet2pro.png.asset.json";
 import qr2review from "@/assets/qr2review.png.asset.json";
 import aiSos from "@/assets/ai-sos.png.asset.json";
@@ -403,7 +402,6 @@ function showcaseCardLabel(category: WebsiteShowcase["category"]) {
 
 function ProjectsPage() {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const lenisRef = useRef<Lenis | null>(null);
   const [filter, setFilter] = useState<Cat>("All");
   const [prefersReduced, setPrefersReduced] = useState(false);
   const [isFiltering, setIsFiltering] = useState(false);
@@ -418,23 +416,7 @@ function ProjectsPage() {
   }, []);
 
   useEffect(() => {
-    lenisRef.current = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smooth: true,
-      smoothTouch: false,
-      touchMultiplier: 2,
-    });
-
-    function raf(time: number) {
-      lenisRef.current?.raf(time);
-      ScrollTrigger.update();
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-
     return () => {
-      lenisRef.current?.destroy();
       ScrollTrigger.getAll().forEach((t) => t.kill());
     };
   }, []);
