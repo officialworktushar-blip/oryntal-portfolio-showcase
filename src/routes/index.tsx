@@ -6,21 +6,20 @@ import { useEffect, useRef, useState, useMemo, createRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import logoMark from "@/assets/oryntal-mark.asset.json";
-import meet2pro from "@/assets/meet2pro.png.asset.json";
-import qr2review from "@/assets/qr2review.png.asset.json";
+import qr2reviewPng from "@/assets/QR2Review.png";
+import aiSosPng from "@/assets/AI SOS.png";
+import aiVoiceAgentPng from "@/assets/AI Voice Agent.png";
+import aiEngineeringPng from "@/assets/AI Engineering.png";
+import automationPng from "@/assets/Automation.png";
+import neuralModelsPng from "@/assets/Neural Models.png";
 import whatsappRag from "@/assets/whatsapp-rag.jpg.asset.json";
 import eshopwebStore from "@/assets/site-shots/eshopweb-store.asset.json";
 import theKaftanCompany from "@/assets/site-shots/the-kaftan-company.asset.json";
 import clouShot from "@/assets/site-shots/clou.asset.json";
-import annaJanelle from "@/assets/site-shots/anna-janelle-jewelry.asset.json";
-import vanSeatCovers from "@/assets/site-shots/van-seat-covers-uk.asset.json";
-import bonusBank from "@/assets/site-shots/bonus-bank.asset.json";
-import aiEngineeringImg from "@/assets/ai-sos.png.asset.json";
 import automationImg from "@/assets/linkedin-automation.jpg.asset.json";
 import fullstackImg from "@/assets/telegram-agent.jpg.asset.json";
 import shopifyImg from "@/assets/site-shots/eshopweb-store.asset.json";
 import wordpressImg from "@/assets/site-shots/clou.asset.json";
-import mobileImg from "@/assets/rag-voice.jpg.asset.json";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -125,20 +124,29 @@ const differentiators = [
 
 const works = [
   {
-    t: "Meet2Pro",
-    c: "AI · LLM Product",
-    image: assetUrl(meet2pro),
-    pain: "Consultants and agency owners lose hours every week converting meeting notes into proposals and follow-ups — and critical commitments slip through the cracks.",
-    fix: "A meeting intelligence agent that transcribes calls, extracts decisions, and drafts proposals and follow-up emails ready to send.",
+    t: "QR2Review",
+    c: "AI · Local Growth",
+    image: qr2reviewPng,
+    pain: "Local businesses struggle to collect real Google reviews — customers forget, the form is friction-heavy, and search visibility quietly erodes.",
+    fix: "One QR scan, one star rating, one AI-written review posted straight to the Google Business Profile.",
     tag: "AI",
     href: "/projects",
   },
   {
-    t: "QR2Review",
-    c: "AI · Local Growth",
-    image: assetUrl(qr2review),
-    pain: "Local businesses struggle to collect real Google reviews — customers forget, the form is friction-heavy, and search visibility quietly erodes.",
-    fix: "One QR scan, one star rating, one AI-written review posted straight to the Google Business Profile.",
+    t: "AI SOS",
+    c: "AI · Safety Tech",
+    image: aiSosPng,
+    pain: "In an emergency, every second counts — but people can't always reach a phone, dial a number, or type a message when they need help most.",
+    fix: "Listens in real time for distress sounds, then instantly shares your live location with trusted contacts or emergency services. Silent. Automatic. Always on.",
+    tag: "AI",
+    href: "/projects",
+  },
+  {
+    t: "AI Voice Agent",
+    c: "AI · Voice AI",
+    image: aiVoiceAgentPng,
+    pain: "Missed calls = lost revenue, but hiring a 24/7 receptionist is expensive and inconsistent at answering product questions.",
+    fix: "A natural-sounding voice agent that retrieves from your knowledge base in real time, books appointments, and forwards qualified calls to your team.",
     tag: "AI",
     href: "/projects",
   },
@@ -841,12 +849,18 @@ function PhoneNotch({ className = "" }) {}
 // Phone-frame marquee — auto-scrolling infinite horizontal loop with coverflow effect
 function InfinityLoopCarousel({ prefersReduced }) {
   const carouselRef = useRef(null);
+  const trackRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const isPausedRef = useRef(false);
-  const animationRef = useRef(null);
   const startTimeRef = useRef(0);
+  const dragOffsetRef = useRef(0);
+  const isDraggingRef = useRef(false);
+  const startXRef = useRef(0);
+  const loopDurationRef = useRef(35000);
+  const singleSetWidthRef = useRef(0);
+  const animationIdRef = useRef<number | null>(null);
 
   // Sync isPaused state to ref for animation loop
   useEffect(() => {
@@ -858,17 +872,17 @@ function InfinityLoopCarousel({ prefersReduced }) {
     {
       id: "ai",
       title: "AI Engineering",
-      image: assetUrl(aiEngineeringImg),
-    },
-    {
-      id: "automation",
-      title: "Automation",
-      image: assetUrl(automationImg),
+      image: aiEngineeringPng,
     },
     {
       id: "fullstack",
       title: "Full-Stack Web",
-      image: assetUrl(fullstackImg),
+      image: assetUrl(theKaftanCompany),
+    },
+    {
+      id: "automation",
+      title: "Automation",
+      image: automationPng,
     },
     {
       id: "shopify",
@@ -876,14 +890,14 @@ function InfinityLoopCarousel({ prefersReduced }) {
       image: assetUrl(shopifyImg),
     },
     {
+      id: "voice",
+      title: "AI Voice Agent",
+      image: aiVoiceAgentPng,
+    },
+    {
       id: "wordpress",
       title: "WordPress & WooCommerce",
       image: assetUrl(wordpressImg),
-    },
-    {
-      id: "mobile",
-      title: "Mobile Apps",
-      image: assetUrl(mobileImg),
     },
   ];
 
@@ -932,34 +946,83 @@ function InfinityLoopCarousel({ prefersReduced }) {
     if (!trackEl || !firstFrame) return;
 
     const frameRect = firstFrame.getBoundingClientRect();
-    const frameWidth = frameRect.width + 24; // width + gap
-    const framesPerSet = marqueeFrames.length; // 6
+    const frameWidth = frameRect.width + 24;
+    const framesPerSet = marqueeFrames.length;
     const singleSetWidth = frameWidth * framesPerSet;
-    const loopDuration = 35000; // 35 seconds per full set
+    const loopDuration = 35000;
 
-    let startTime = performance.now();
+    loopDurationRef.current = loopDuration;
+    singleSetWidthRef.current = singleSetWidth;
+
+    startTimeRef.current = performance.now();
     let animationId;
 
     const animate = (currentTime) => {
       if (isPausedRef.current) {
-        startTime = currentTime;
         animationId = requestAnimationFrame(animate);
         return;
       }
 
-      const elapsed = currentTime - startTime;
+      const elapsed = currentTime - startTimeRef.current;
       const progress = (elapsed % loopDuration) / loopDuration;
-      const translateX = -(progress * singleSetWidth);
+      const autoTranslate = -(progress * singleSetWidth);
+      const translateX = autoTranslate + dragOffsetRef.current;
 
       trackEl.style.transform = `translateX(${translateX}px)`;
       animationId = requestAnimationFrame(animate);
     };
 
-    startTime = performance.now();
     animationId = requestAnimationFrame(animate);
+    animationIdRef.current = animationId;
 
     return () => cancelAnimationFrame(animationId);
   }, [prefersReduced, marqueeFrames.length]);
+
+  const handleMouseDown = (e) => {
+    isDraggingRef.current = true;
+    startXRef.current = e.clientX;
+    setIsPaused(true);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDraggingRef.current) return;
+    const delta = e.clientX - startXRef.current;
+    startXRef.current = e.clientX;
+    dragOffsetRef.current += delta;
+
+    const trackEl = carouselRef.current?.querySelector(".marquee-track");
+    if (!trackEl) return;
+
+    const elapsed = performance.now() - startTimeRef.current;
+    const progress = (elapsed % loopDurationRef.current) / loopDurationRef.current;
+    const autoTranslate = -(progress * singleSetWidthRef.current);
+    trackEl.style.transform = `translateX(${autoTranslate + dragOffsetRef.current}px)`;
+  };
+
+  const handleMouseUp = () => {
+    if (!isDraggingRef.current) return;
+    isDraggingRef.current = false;
+
+    const trackEl = carouselRef.current?.querySelector(".marquee-track");
+    if (trackEl) {
+      const currentTransform = parseFloat(
+        trackEl.style.transform.replace("translateX(", "").replace("px)", "") || "0",
+      );
+      const autoTranslateX = currentTransform - dragOffsetRef.current;
+      const targetElapsed = (-autoTranslateX / singleSetWidthRef.current) * loopDurationRef.current;
+      startTimeRef.current = performance.now() - targetElapsed;
+      dragOffsetRef.current = 0;
+    }
+
+    setIsPaused(false);
+  };
+
+  const handleMouseLeave = () => {
+    if (isDraggingRef.current) {
+      handleMouseUp();
+    }
+    setIsPaused(false);
+  };
 
   // Render 2x the items for infinite loop
   const items = [...marqueeFrames, ...marqueeFrames];
@@ -974,8 +1037,10 @@ function InfinityLoopCarousel({ prefersReduced }) {
       <div
         ref={carouselRef}
         className="relative w-full overflow-hidden"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseLeave}
         role="region"
         aria-label="Service showcase marquee"
       >

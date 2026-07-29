@@ -5,12 +5,12 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import meet2pro from "@/assets/meet2pro.png.asset.json";
-import qr2review from "@/assets/qr2review.png.asset.json";
-import aiSos from "@/assets/ai-sos.png.asset.json";
+import qr2reviewPng from "@/assets/QR2Review.png";
+import aiSosPng from "@/assets/AI SOS.png";
+import aiVoiceAgentPng from "@/assets/AI Voice Agent.png";
+import neuralModelsPng from "@/assets/Neural Models.png";
 import bulkSpamFree from "@/assets/bulk-spam-free.jpg.asset.json";
 import whatsappRag from "@/assets/whatsapp-rag.jpg.asset.json";
-import ragVoice from "@/assets/rag-voice.jpg.asset.json";
 import telegramAgent from "@/assets/telegram-agent.jpg.asset.json";
 import linkedinAutomation from "@/assets/linkedin-automation.jpg.asset.json";
 import socialMediaManager from "@/assets/social-media-manager.jpg.asset.json";
@@ -82,18 +82,9 @@ interface LLMModel {
 
 const llmModels: LLMModel[] = [
   {
-    name: "Meet2Pro",
-    tagline: "From Conversation to Action",
-    image: assetUrl(meet2pro),
-    painPoint:
-      "Consultants and agency owners lose hours every week turning meeting notes into proposals and follow-up emails — and critical details slip through the cracks.",
-    solution:
-      "Transcribes any meeting, extracts key points and decisions, then instantly generates professional proposals and follow-up emails ready to send.",
-  },
-  {
     name: "QR2Review",
     tagline: "Smart Reviews. Better Ranking.",
-    image: assetUrl(qr2review),
+    image: qr2reviewPng,
     painPoint:
       "Local businesses struggle to collect genuine Google reviews — customers forget, the process is friction-heavy, and search ranking suffers as a result.",
     solution:
@@ -102,11 +93,20 @@ const llmModels: LLMModel[] = [
   {
     name: "AI SOS",
     tagline: "Your safety. Our priority.",
-    image: assetUrl(aiSos),
+    image: aiSosPng,
     painPoint:
       "In an emergency, every second counts — but people can't always reach a phone, dial a number, or type a message when they need help most.",
     solution:
       "Listens in real time for distress sounds, then instantly shares your live location with trusted contacts or emergency services. Silent. Automatic. Always on.",
+  },
+  {
+    name: "Neural Models",
+    tagline: "Brain-like intelligence, edge-ready.",
+    image: neuralModelsPng,
+    painPoint:
+      "Most AI models are too generic for specialised tasks — they hallucinate, miss domain context, and can't run reliably without expensive cloud infrastructure.",
+    solution:
+      "Fine-tuned neural models trained on your domain data, deployed at the edge or in the cloud — delivers accurate, context-aware predictions without the overhead.",
   },
 ];
 
@@ -140,7 +140,7 @@ const automations: AutomationItem[] = [
   {
     name: "RAG Voice Agent",
     tagline: "Answers the phone. Knows your business.",
-    image: assetUrl(ragVoice),
+    image: aiVoiceAgentPng,
     painPoint:
       "Missed calls = lost revenue, but hiring a 24/7 receptionist is expensive and inconsistent at answering product questions.",
     solution:
