@@ -5,6 +5,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { z } from "zod";
+import { useLenisContext } from "@/components/animation/LenisProvider";
 import qr2reviewPng from "@/assets/QR2Review.png";
 import aiSosPng from "@/assets/AI SOS.png";
 import aiVoiceAgentPng from "@/assets/AI Voice Agent.png";
@@ -41,7 +43,12 @@ import HeroNeuralAnimation from "@/components/animation/HeroNeuralAnimation";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const projectsSearchSchema = z.object({
+  cat: z.string().optional(),
+});
+
 export const Route = createFileRoute("/projects")({
+  validateSearch: projectsSearchSchema,
   head: () => ({
     meta: [
       { title: "Our Work — AI, Automation, Web, Shopify & WordPress | Oryntal" },
@@ -402,10 +409,35 @@ function showcaseCardLabel(category: WebsiteShowcase["category"]) {
 
 function ProjectsPage() {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [filter, setFilter] = useState<Cat>("All");
+  const { cat } = Route.useSearch();
+  const { lenis } = useLenisContext();
+  const categoryFromSearch: Cat | undefined =
+    cat && (categories as readonly string[]).includes(cat) ? (cat as Cat) : undefined;
+  const [filter, setFilter] = useState<Cat>(
+    categoryFromSearch && categoryFromSearch !== "All" ? categoryFromSearch : "All",
+  );
   const [prefersReduced, setPrefersReduced] = useState(false);
   const [isFiltering, setIsFiltering] = useState(false);
   const cardsContainerRef = useRef<HTMLDivElement>(null);
+
+  // Keep the filter in sync when arriving via a category link (e.g. hero phones)
+  useEffect(() => {
+    if (categoryFromSearch && categoryFromSearch !== "All") {
+      setFilter(categoryFromSearch);
+    }
+  }, [categoryFromSearch]);
+
+  // Smooth-scroll to the filtered projects content when landing from a category link
+  useEffect(() => {
+    if (!categoryFromSearch || !lenis) return;
+    const id = window.setTimeout(() => {
+      const target = document.getElementById("projects-content");
+      if (target) {
+        lenis.scrollTo(target, { offset: -16 });
+      }
+    }, 300);
+    return () => window.clearTimeout(id);
+  }, [categoryFromSearch, lenis]);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -682,6 +714,7 @@ function FilterBar({
 }) {
   return (
     <section
+      id="projects-content"
       className="py-10 border-b border-gold/20 sticky top-0 bg-background/95 backdrop-blur-xl z-40 transition-opacity duration-300"
       style={{ opacity: isFiltering ? 0.6 : 1 }}
     >

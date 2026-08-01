@@ -4,8 +4,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import ContactHeroAnimation from "@/components/animation/ContactHeroAnimation";
-
 gsap.registerPlugin(ScrollTrigger);
 
 // SplitText-style utility for GSAP
@@ -54,14 +52,12 @@ export const Route = createFileRoute("/contact")({
   component: ContactPage,
 });
 
-const budgets = ["< $10k", "$10–25k", "$25–60k", "$60k+", "Retainer"];
 const services = ["AI", "Automation", "Full Stack", "Shopify", "WordPress", "Mobile App"];
 
 function ContactPage() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [submitted, setSubmitted] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
-  const [budget, setBudget] = useState<string>("");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -90,7 +86,6 @@ function ContactPage() {
       newErrors.email = "Invalid email format";
     if (!formData.message.trim()) newErrors.message = "Message is required";
     if (selected.length === 0) newErrors.services = "Select at least one service";
-    if (!budget) newErrors.budget = "Select a budget range";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -156,11 +151,6 @@ function ContactPage() {
             ".service-chip",
             { scale: 1, opacity: 1, stagger: 0.05, duration: 0.5, ease: "back.out(1.7)" },
             "-=0.3",
-          )
-          .to(
-            ".budget-option",
-            { scale: 1, opacity: 1, stagger: 0.05, duration: 0.5, ease: "back.out(1.7)" },
-            "-=0.2",
           );
       }
     }, scrollRef);
@@ -224,8 +214,6 @@ function ContactPage() {
         showSuccess={showSuccess}
         selected={selected}
         setSelected={setSelected}
-        budget={budget}
-        setBudget={setBudget}
         formData={formData}
         setFormData={setFormData}
         focusedField={focusedField}
@@ -244,7 +232,6 @@ function Hero() {
     <section className="relative border-b border-gold/20 overflow-hidden">
       <div className="absolute inset-0 grid-noise opacity-20" />
       <div className="absolute inset-0 bg-gradient-to-br from-gold/5 via-transparent to-transparent" />
-      <ContactHeroAnimation />
       <div className="relative mx-auto max-w-4xl px-6 py-24 md:py-32">
         <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">Contact</div>
         <h1 className="font-display text-5xl md:text-7xl leading-[1.05] contact-hero-title">
@@ -267,8 +254,6 @@ function FormSection({
   showSuccess,
   selected,
   setSelected,
-  budget,
-  setBudget,
   formData,
   setFormData,
   focusedField,
@@ -281,8 +266,6 @@ function FormSection({
   showSuccess: boolean;
   selected: string[];
   setSelected: (s: string[]) => void;
-  budget: string;
-  setBudget: (s: string) => void;
   formData: Record<string, string>;
   setFormData: (d: Record<string, string>) => void;
   focusedField: string | null;
@@ -389,38 +372,6 @@ function FormSection({
                   </div>
                   {errors.services && (
                     <p className="mt-2 text-sm text-destructive">{errors.services}</p>
-                  )}
-                </div>
-
-                <div className="contact-form-field">
-                  <label className="block text-xs uppercase tracking-widest text-gold mb-3">
-                    Budget
-                  </label>
-                  <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Budget range">
-                    {budgets.map((b, i) => (
-                      <label key={b} className="budget-option cursor-pointer">
-                        <input
-                          type="radio"
-                          name="budget"
-                          value={b}
-                          checked={budget === b}
-                          onChange={() => setBudget(b)}
-                          className="peer sr-only"
-                        />
-                        <span
-                          className={`block px-4 py-2.5 rounded-full text-xs uppercase tracking-widest border transition-all duration-300 ${
-                            budget === b
-                              ? "bg-gold-gradient text-primary-foreground border-transparent shadow-gold"
-                              : "border-gold/30 text-muted-foreground hover:text-gold hover:border-gold hover:bg-gold/5"
-                          } magnetic`}
-                        >
-                          {b}
-                        </span>
-                      </label>
-                    ))}
-                  </div>
-                  {errors.budget && (
-                    <p className="mt-2 text-sm text-destructive">{errors.budget}</p>
                   )}
                 </div>
 

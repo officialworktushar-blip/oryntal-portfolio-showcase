@@ -858,6 +858,8 @@ function InfinityLoopCarousel({ prefersReduced }) {
   const dragOffsetRef = useRef(0);
   const isDraggingRef = useRef(false);
   const startXRef = useRef(0);
+  const dragDistanceRef = useRef(0);
+  const wasDraggedRef = useRef(false);
   const loopDurationRef = useRef(35000);
   const singleSetWidthRef = useRef(0);
   const animationIdRef = useRef<number | null>(null);
@@ -872,31 +874,37 @@ function InfinityLoopCarousel({ prefersReduced }) {
     {
       id: "ai",
       title: "AI Engineering",
+      category: "AI",
       image: aiEngineeringPng,
     },
     {
       id: "fullstack",
       title: "Full-Stack Web",
+      category: "Full Stack",
       image: assetUrl(theKaftanCompany),
     },
     {
       id: "automation",
       title: "Automation",
+      category: "Automation",
       image: automationPng,
     },
     {
       id: "shopify",
       title: "Shopify",
+      category: "Shopify",
       image: assetUrl(shopifyImg),
     },
     {
       id: "voice",
       title: "AI Voice Agent",
+      category: "AI",
       image: aiVoiceAgentPng,
     },
     {
       id: "wordpress",
       title: "WordPress & WooCommerce",
+      category: "WordPress",
       image: assetUrl(wordpressImg),
     },
   ];
@@ -981,6 +989,8 @@ function InfinityLoopCarousel({ prefersReduced }) {
   const handleMouseDown = (e) => {
     isDraggingRef.current = true;
     startXRef.current = e.clientX;
+    dragDistanceRef.current = 0;
+    wasDraggedRef.current = false;
     setIsPaused(true);
   };
 
@@ -989,6 +999,8 @@ function InfinityLoopCarousel({ prefersReduced }) {
     const delta = e.clientX - startXRef.current;
     startXRef.current = e.clientX;
     dragOffsetRef.current += delta;
+    dragDistanceRef.current += Math.abs(delta);
+    if (dragDistanceRef.current > 8) wasDraggedRef.current = true;
 
     const trackEl = carouselRef.current?.querySelector(".marquee-track");
     if (!trackEl) return;
@@ -1024,6 +1036,13 @@ function InfinityLoopCarousel({ prefersReduced }) {
     setIsPaused(false);
   };
 
+  const handleFrameClick = (e: { preventDefault: () => void }) => {
+    if (wasDraggedRef.current) {
+      e.preventDefault();
+      wasDraggedRef.current = false;
+    }
+  };
+
   // Render 2x the items for infinite loop
   const items = [...marqueeFrames, ...marqueeFrames];
 
@@ -1052,8 +1071,12 @@ function InfinityLoopCarousel({ prefersReduced }) {
           }}
         >
           {items.map((frame, i) => (
-            <div
-              key={frame.id}
+            <Link
+              key={`${frame.id}-${i}`}
+              to="/projects"
+              search={{ cat: frame.category }}
+              onClick={handleFrameClick}
+              aria-label={`View ${frame.title} projects`}
               className="marquee-frame flex-shrink-0 flex flex-col items-center"
               style={{
                 width: isMobile ? "50vw" : "21vw",
@@ -1063,21 +1086,15 @@ function InfinityLoopCarousel({ prefersReduced }) {
             >
               {/* Phone frame */}
               <div
-                className="relative flex flex-col items-center pointer-events-auto w-full"
+                className="phone-card relative flex flex-col items-center pointer-events-auto w-full"
                 style={{
                   aspectRatio: "5/7",
-                  transform: isMobile ? "scale(0.7)" : "none",
+                  transform: isMobile ? "scale(0.7)" : undefined,
                   transformOrigin: "center top",
                 }}
               >
                 {/* Phone frame */}
-                <div
-                  className="relative w-full h-full overflow-hidden rounded-[32px] bg-black border-4 border-gray-800 shadow-[0_20px_60px_rgba(0,0,0,0.6),0_0_0_2px_rgba(201,162,75,0.3),inset_0_0_0_10px_rgba(0,0,0,0.5)]"
-                  style={{
-                    boxShadow:
-                      "0 20px 60px rgba(0,0,0,0.6), 0 0 0 2px rgba(201,162,75,0.3), inset 0 0 0 10px rgba(0,0,0,0.5)",
-                  }}
-                >
+                <div className="relative w-full h-full overflow-hidden rounded-[32px] bg-black border-4 border-gray-800">
                   {/* Notch */}
                   <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-4 md:w-32 md:h-5 bg-black/80 rounded-b-[20px]" />
 
@@ -1096,7 +1113,7 @@ function InfinityLoopCarousel({ prefersReduced }) {
               <span className="mt-3 font-display text-sm text-center text-foreground">
                 {frame.title}
               </span>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
@@ -1234,23 +1251,31 @@ function Hero({
 
       if (!title || !subtitle || !cta) return;
 
-      // Split headline into words - "Powered by AI." should be gold
-      const words = ["Your team,", "minus the", "busywork.", "Powered by AI."];
-      title.innerHTML = words
+      // Split headline into two lines - the second line should be gold
+      const lines = [
+        ["AI", "does", "the", "grind."],
+        ["You", "do", "the", "work", "that", "matters."],
+      ];
+      title.innerHTML = lines
         .map(
-          (word, i) =>
-            `<span class="hero-word" style="display:inline-block; overflow:hidden;"><span style="display:inline-block;">${word}</span><span style="display:inline-block;">${i < words.length - 1 ? "\u00A0" : ""}</span></span>`,
+          (line) =>
+            `<span class="hero-line" style="display:block;">${line
+              .map(
+                (word, wi) =>
+                  `<span class="hero-word" style="display:inline-block; overflow:hidden;"><span style="display:inline-block;">${word}</span><span style="display:inline-block;">${wi < line.length - 1 ? "\u00A0" : ""}</span></span>`,
+              )
+              .join("")}</span>`,
         )
         .join("");
 
       const wordSpans = title.querySelectorAll(".hero-word > span:first-child");
       const ctaButtons = cta.querySelectorAll("a");
 
-      // Mark "Powered by AI." for gold color
-      const poweredByAISpan = title.querySelector(".hero-word:last-child > span:first-child");
-      if (poweredByAISpan) {
-        poweredByAISpan.classList.add("text-gold");
-        poweredByAISpan.style.fontStyle = "italic";
+      // Mark the second line for gold color
+      const goldLine = title.querySelector<HTMLElement>(".hero-line:nth-child(2)");
+      if (goldLine) {
+        goldLine.classList.add("text-gold");
+        goldLine.style.fontStyle = "italic";
       }
 
       gsap.set([...wordSpans], { y: 40, opacity: 0 });
@@ -1292,7 +1317,7 @@ function Hero({
 
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen w-full px-6">
         {/* Center text block */}
-        <div className="text-center z-20 max-w-3xl">
+        <div className="text-center z-20 max-w-3xl lg:max-w-4xl">
           <div className="flex items-center justify-center gap-3 mb-8 hero-logo">
             <img
               src={assetUrl(logoMark)}
@@ -1306,13 +1331,15 @@ function Hero({
 
           <h1
             ref={heroTitleRef}
-            className="font-display text-3xl md:text-5xl lg:text-[4.75rem] leading-[1.02] tracking-tight hero-title"
+            className="font-display text-[clamp(1.25rem,6.25vw,1.875rem)] md:text-5xl lg:text-[4.75rem] leading-[1.02] tracking-tight hero-title"
           >
-            Your team, minus the busywork. Powered by AI.
+            AI does the grind.
+            <br />
+            <span className="text-gold italic">You do the work that matters.</span>
           </h1>
 
           {/* Phone-frame marquee — full-width auto-scrolling strip */}
-          <div className="relative w-screen -mx-6 mt-8 mb-10 left-1/2 -translate-x-1/2">
+          <div className="relative w-screen -mx-6 -mt-2 mb-20 md:-mt-6 md:mb-24 lg:-mt-[38px] lg:mb-[110px] left-1/2 -translate-x-1/2">
             <InfinityLoopCarousel prefersReduced={prefersReduced} />
           </div>
 

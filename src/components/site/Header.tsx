@@ -73,13 +73,6 @@ export function Header() {
               <span className="absolute bottom-0 left-0 w-0 h-px bg-gold transition-all duration-300 group-hover:w-full" />
             </Link>
           ))}
-          <Link
-            to="/contact"
-            className="btn-primary animate-fade-in-down"
-            style={{ animationDelay: `${100 + links.length * 50}ms` }}
-          >
-            Get Estimate
-          </Link>
         </nav>
         <button
           className="md:hidden text-foreground animate-fade-in-down"
@@ -124,14 +117,6 @@ export function Header() {
               {l.label}
             </Link>
           ))}
-          <Link
-            to="/contact"
-            onClick={() => setOpen(false)}
-            className="btn-primary w-full mt-4 animate-fade-in-up"
-            style={{ animationDelay: `${links.length * 80}ms` }}
-          >
-            Get Estimate
-          </Link>
         </div>
       )}
     </header>
