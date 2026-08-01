@@ -124,6 +124,33 @@ const differentiators = [
 
 const works = [
   {
+    t: "AI Engineering",
+    c: "AI · Systems",
+    image: automationPng,
+    pain: "Founders lose weeks wiring together scattered AI tools, brittle scripts, and manual glue code that breaks the moment volume grows.",
+    fix: "Production AI engineering — LLM agents, RAG pipelines, and fine-tuned models scoped, built, and deployed as systems you actually own.",
+    tag: "AI",
+    href: "/projects",
+  },
+  {
+    t: "The Kaftan Company",
+    c: "Shopify · Fashion DTC",
+    image: assetUrl(theKaftanCompany),
+    pain: "A premium fashion label needed a storefront worthy of its product — the previous theme flattened the brand and buried seasonal drops.",
+    fix: "A custom Shopify 2.0 build organised around collection storytelling and a checkout tuned for a premium fashion buyer.",
+    tag: "Shopify",
+    href: "https://www.thekaftancompany.com/",
+  },
+  {
+    t: "Clou",
+    c: "WordPress · WooCommerce",
+    image: assetUrl(clouShot),
+    pain: "A design-led product brand needed an e-commerce experience as refined as its catalogue — the previous site diluted the brand and hurt conversion.",
+    fix: "A WordPress + WooCommerce build with cinematic product presentation, clean catalogue depth, and a checkout designed for considered purchases.",
+    tag: "WordPress",
+    href: "https://clou.nl/",
+  },
+  {
     t: "QR2Review",
     c: "AI · Local Growth",
     image: qr2reviewPng,
@@ -167,24 +194,6 @@ const works = [
     fix: "A conversion-led e-commerce build with clear category structure, promotional surfaces, and a fast, mobile-first checkout.",
     tag: "Full Stack",
     href: "https://eshopweb.store/",
-  },
-  {
-    t: "The Kaftan Company",
-    c: "Shopify · Fashion DTC",
-    image: assetUrl(theKaftanCompany),
-    pain: "A premium fashion label needed a storefront worthy of its product — the previous theme flattened the brand and buried seasonal drops.",
-    fix: "A custom Shopify 2.0 build organised around collection storytelling and a checkout tuned for a premium fashion buyer.",
-    tag: "Shopify",
-    href: "https://www.thekaftancompany.com/",
-  },
-  {
-    t: "Clou",
-    c: "WordPress · WooCommerce",
-    image: assetUrl(clouShot),
-    pain: "A design-led product brand needed an e-commerce experience as refined as its catalogue — the previous site diluted the brand and hurt conversion.",
-    fix: "A WordPress + WooCommerce build with cinematic product presentation, clean catalogue depth, and a checkout designed for considered purchases.",
-    tag: "WordPress",
-    href: "https://clou.nl/",
   },
 ];
 
