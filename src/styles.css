@@ -572,10 +572,7 @@
 /* Phone showcase cards (hero marquee) */
 .phone-card {
   cursor: pointer;
-  box-shadow:
-    0 20px 60px rgba(0, 0, 0, 0.6),
-    0 0 0 2px rgba(201, 162, 75, 0.3),
-    inset 0 0 0 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
   transition:
     transform 0.32s ease,
     filter 0.32s ease,
@@ -584,10 +581,7 @@
 .phone-card:hover {
   transform: scale(1.03);
   filter: brightness(1.08);
-  box-shadow:
-    0 28px 80px rgba(0, 0, 0, 0.75),
-    0 0 0 2px rgba(201, 162, 75, 0.5),
-    inset 0 0 0 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.75);
 }
 
 /* Button variants */
